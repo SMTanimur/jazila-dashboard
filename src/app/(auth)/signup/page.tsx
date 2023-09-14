@@ -12,6 +12,7 @@ import {
 
 import { Shell } from '@/components/shells/shell';
 import AnimatedCharacters from '@/components/ui/animated-characters';
+import { SignUpForm } from '@/components/forms/signup-form';
 
 
 export const metadata: Metadata = {
@@ -44,7 +45,7 @@ export default async function SignUpPage() {
               </span>
             </div>
           </div>
-          {/* <SignUpForm /> */}
+          <SignUpForm />
         </CardContent>
         <CardFooter>
           <div className='text-sm text-muted-foreground'>

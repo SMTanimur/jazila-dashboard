@@ -2,8 +2,7 @@
 import { AUTH_TOKEN_KEY } from '@/constants';
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const isServer = typeof window === 'undefined';

@@ -14,6 +14,7 @@ import {
 import { Shell } from '@/components/shells/shell';
 import { BaseClientUrl } from '@/configs/settings';
 import AnimatedCharacters from '@/components/ui/animated-characters';
+import { SignInForm } from '@/components/forms/signin-form';
 
 
 export const metadata: Metadata = {
@@ -45,7 +46,7 @@ export default async function SignInPage() {
               </span>
             </div>
           </div>
-          {/* <SignInForm /> */}
+          <SignInForm />
         </CardContent>
         <CardFooter className='flex flex-wrap items-center justify-between gap-2'>
           <div className='text-sm text-muted-foreground'>
