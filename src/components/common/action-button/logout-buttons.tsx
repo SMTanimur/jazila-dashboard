@@ -8,13 +8,14 @@ import { useMounted } from "@/hooks/use-mounted"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Icons } from "@/components/ui/icons"
+import { useAuth } from "@/hooks/auth/useAuth"
 
 
 
 export function LogOutButtons() {
   const router = useRouter()
   const mounted = useMounted()
-  // const {logout,LogoutLoading,IsLogoutError}=useAuth()
+  const {logout,LogoutLoading,IsLogoutError}=useAuth()
   const [isPending, startTransition] = React.useTransition()
 
   return (
@@ -25,12 +26,12 @@ export function LogOutButtons() {
             aria-label="Log out"
             size="sm"
             className="w-full"
-            // disabled={LogoutLoading}
-            // onClick={()=>logout()}
+            disabled={LogoutLoading}
+            onClick={()=>logout()}
           >
-            {/* {LogoutLoading && (
+            {LogoutLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )} */}
+            )}
             Log out
           </Button>
     

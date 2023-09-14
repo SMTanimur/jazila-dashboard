@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Icons } from '@/components/ui/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { dashboardConfig } from '@/configs/dashboard';
+import { adminDashboardConfig } from '@/configs/dashboard';
 import Link from 'next/link';
 
 
@@ -46,7 +46,7 @@ export default async function DashboardLayout({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <SidebarMobile
-                items={dashboardConfig.sidebarNav}
+                items={adminDashboardConfig.sidebarNav}
                 className='p-1'
               />
             </DropdownMenuGroup>
@@ -61,7 +61,7 @@ export default async function DashboardLayout({
         </DropdownMenu>
         <aside className='fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block'>
           <ScrollArea className='py-6 pr-6 lg:py-8'>
-            <SidebarNav items={dashboardConfig.sidebarNav} className='p-1' />
+            <SidebarNav items={adminDashboardConfig.sidebarNav} className='p-1' />
           </ScrollArea>
         </aside>
         <main className='flex w-full flex-col overflow-hidden'>{children}</main>

@@ -17,14 +17,15 @@ import {
 } from '../ui/dropdown-menu';
 import { Icons } from '../ui/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { useMe } from '@/hooks/user/useMe';
 
 interface SiteHeaderProps {
   user: IUser | null;
 }
 
 export function SiteHeader() {
-  // const { me } = useMe();
-  const me:any = null;
+  const { me } = useMe();
+
   return (
     <header className='sticky top-0 z-40 w-full border-b bg-background'>
       <div className='container flex h-16 items-center'>
