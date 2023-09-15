@@ -89,7 +89,8 @@ export function useAuth() {
       success: data => {
         setAuthorized(true);
         setToken(data.token);
-        router.push(`${window.location.origin}/`);
+
+        router.push(`${window.location.origin}/seller/dashboard`);
         return <b>{data.message}</b>;
       },
       error: error => {

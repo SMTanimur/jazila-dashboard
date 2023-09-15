@@ -64,7 +64,7 @@ export function SiteHeader() {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                      <Link href={me?.role == 'admin' ? '/admin/dashboard/profile' : '/profile'}>
+                      <Link href={me?.role == 'admin' ? '/admin/dashboard/profile' : '/seller/profile'}>
                         <Icons.user
                           className='mr-2 h-4 w-4'
                           aria-hidden='true'
@@ -74,7 +74,7 @@ export function SiteHeader() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href={me?.role == 'admin' ? '/admin/dashboard' : '/'}>
+                      <Link href={me?.role == 'admin' ? '/admin/dashboard' : '/seller/dashboard'}>
                         <Icons.terminal
                           className='mr-2 h-4 w-4'
                           aria-hidden='true'

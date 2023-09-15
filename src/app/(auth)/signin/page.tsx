@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/card';
 
 import { Shell } from '@/components/shells/shell';
-import { BaseClientUrl } from '@/configs/settings';
 import AnimatedCharacters from '@/components/ui/animated-characters';
 import { SignInForm } from '@/components/forms/signin-form';
 
