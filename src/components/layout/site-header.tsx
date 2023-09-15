@@ -64,33 +64,23 @@ export function SiteHeader() {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                      <Link href='/dashboard/account'>
+                      <Link href={me?.role == 'admin' ? '/admin/dashboard/profile' : '/profile'}>
                         <Icons.user
                           className='mr-2 h-4 w-4'
                           aria-hidden='true'
                         />
-                        Account
+                        Profile
                         <DropdownMenuShortcut>⇧⌘A</DropdownMenuShortcut>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href='/dashboard/account'>
+                      <Link href={me?.role == 'admin' ? '/admin/dashboard' : '/'}>
                         <Icons.terminal
                           className='mr-2 h-4 w-4'
                           aria-hidden='true'
                         />
                         Dashboard
                         <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild disabled>
-                      <Link href='/dashboard/settings'>
-                        <Icons.settings
-                          className='mr-2 h-4 w-4'
-                          aria-hidden='true'
-                        />
-                        Settings
-                        <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
