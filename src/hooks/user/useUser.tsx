@@ -1,20 +1,15 @@
 'use client';
 import { userClient } from '@/services/user.service';
-import { IUser } from '@/types';
 import { TProfile, profileSchema } from '@/validations/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { useMe } from './useMe';
 import { useCurrentUser } from './useCurrentUser';
-
 export function useUser() {
   const { currentUser: user } = useCurrentUser();
-  const router = useRouter();
+
 
   const queryClient = useQueryClient();
   const {
@@ -35,10 +30,11 @@ export function useUser() {
   });
 
   const attemptEditProfile = async (data: TProfile) => {
-    toast.promise(editProfileMutation(data), {
+    toast.promise( editProfileMutation(data), {
       loading: 'updating...',
       success: data => {
         queryClient.invalidateQueries(['me']);
+        queryClient.invalidateQueries(['currentUser']);
         return <b>{data.message}</b>;
       },
       error: error => {

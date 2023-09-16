@@ -101,6 +101,8 @@ export type TLogin = z.infer<typeof loginSchema>;
 export const profileSchema = authSchema.omit({
   password: true,
   passwordConfirm: true,
+  role:true,
+  
 });
 export type TProfile = z.infer<typeof profileSchema>;
 

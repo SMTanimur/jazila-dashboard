@@ -1,4 +1,4 @@
-'use client';
+
 
 import React from 'react';
 
@@ -7,9 +7,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import dynamic from 'next/dynamic';
 import { useCurrentUser } from '@/hooks/user/useCurrentUser';
 import { IUser } from '@/types';
+import ProfileForm from '@/components/forms/ProfileForm';
 
 const AvatarEditForm = dynamic(() => import('./AvatarEditForm'));
-const ProfileForm = dynamic(() => import('@/components/forms/ProfileForm'));
 
 const ProfileEditComponent = () => {
   const { currentUser,isLoading } = useCurrentUser();
