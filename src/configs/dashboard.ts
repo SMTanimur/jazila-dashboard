@@ -57,6 +57,31 @@ export const dashboardConfig: DashboardConfig = {
    
   ],
 };
+export const sellerAccountConfig: DashboardConfig = {
+  sidebarNav: [
+  
+    {
+      title: 'Profile',
+      href: '/seller/profile',
+      icon: 'user',
+      items: [],
+    },
+
+    {
+      title: 'Chat Customer',
+      href: '/seller/customer-chat',
+      icon: 'message',
+      items: [],
+    },
+    {
+      title: 'Chat Support',
+      href: 'seller/support-chat',
+      icon: 'message',
+      items: [],
+    },
+   
+  ],
+};
 export const adminDashboardConfig: DashboardConfig = {
   sidebarNav: [
     {

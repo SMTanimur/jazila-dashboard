@@ -3,7 +3,6 @@ import Link from 'next/link';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { MainNav } from './main-nav';
-import { MobileNav } from './mobile-nav';
 import { IUser } from '@/types';
 import {
   DropdownMenu,
@@ -18,26 +17,32 @@ import {
 import { Icons } from '../ui/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useMe } from '@/hooks/user/useMe';
+import { MobileNav } from './mobile-nav';
 
 interface SiteHeaderProps {
   user: IUser | null;
+  isAdmin: boolean;
+  isSellerStoreLayout?: boolean;
 }
 
-export function SiteHeader() {
-  const { me } = useMe();
+export function SiteHeader({
+  user,
+  isAdmin,
+  isSellerStoreLayout,
+}: SiteHeaderProps) {
+
 
   return (
     <header className='sticky top-0 z-40 w-full border-b bg-background'>
       <div className='container flex h-16 items-center'>
         <MainNav />
         <MobileNav
-        // mainNavItems={siteConfig.mainNav}
-        // sidebarNavItems={dashboardConfig.sidebarNav}
+          isAdmin={isAdmin}
+          isSellerStoreLayout={isSellerStoreLayout}
         />
         <div className='flex flex-1 items-center justify-end space-x-4'>
           <nav className='flex items-center space-x-2'>
-
-            {me ? (
+            {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -45,26 +50,32 @@ export function SiteHeader() {
                     className='relative h-8 w-8 rounded-full'
                   >
                     <Avatar className='h-8 w-8'>
-                      <AvatarImage src={me?.avatar} alt={me.lastName} />
-                      <AvatarFallback>{me.lastName}</AvatarFallback>
+                      <AvatarImage src={user?.avatar} alt={user.lastName} />
+                      <AvatarFallback>{user.lastName}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className='w-56' align='end' forceMount>
+                <DropdownMenuContent className='w-56 mt-3' align='end' forceMount>
                   <DropdownMenuLabel className='font-normal'>
                     <div className='flex flex-col space-y-1'>
                       <p className='text-sm font-medium leading-none'>
-                        {me.firstName} {me.lastName}
+                        {user?.firstName} {user?.lastName}
                       </p>
                       <p className='text-xs leading-none text-muted-foreground'>
-                        {me.email}
+                        {user.email}
                       </p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                      <Link href={me?.role == 'admin' ? '/admin/dashboard/profile' : '/seller/profile'}>
+                      <Link
+                        href={
+                          user?.role == 'admin'
+                            ? '/admin/dashboard/profile'
+                            : '/seller/profile'
+                        }
+                      >
                         <Icons.user
                           className='mr-2 h-4 w-4'
                           aria-hidden='true'
@@ -74,7 +85,13 @@ export function SiteHeader() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href={me?.role == 'admin' ? '/admin/dashboard' : '/seller/dashboard'}>
+                      <Link
+                        href={
+                          user?.role == 'admin'
+                            ? '/admin/dashboard'
+                            : '/seller/dashboard'
+                        }
+                      >
                         <Icons.terminal
                           className='mr-2 h-4 w-4'
                           aria-hidden='true'

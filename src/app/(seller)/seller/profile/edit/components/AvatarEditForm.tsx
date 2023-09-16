@@ -8,14 +8,16 @@ import { CameraIcon } from 'lucide-react';
 import { useFileHandler } from '@/hooks/useFileHandler';
 import { IImage, IUser } from '@/types';
 import { Button } from '@/components/ui/button';
-import { useMe } from '@/hooks/user/useMe';
 import { useUser } from '@/hooks/user/useUser';
-import { useCurrentUser } from '@/hooks/user/useCurrentUser';
+
 
 const initImageState = { id: '', file: null, url: '' };
 
-const AvatarEditForm = () => {
-  const { currentUser: me } = useCurrentUser();
+type Props = {
+  user: IUser;
+}
+const AvatarEditForm = ({user:me}:Props) => {
+ 
 
   const { attemptEditProfile, editProfileLoading } = useUser();
   const profilePicture = useFileHandler<IImage>('single', initImageState);

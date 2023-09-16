@@ -1,18 +1,16 @@
-import ProfileForm from '@/components/forms/ProfileForm';
+"use client"
 import { Shell } from '@/components/shells/shell';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Metadata } from 'next';
+
+
 import dynamic from 'next/dynamic';
 import React from 'react';
 import ProfileEditComponent from './components/ProfileEditComponent';
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/common/shared/page-header';
+import { useCurrentUser } from '@/hooks/user/useCurrentUser';
 
-export const metadata: Metadata = {
-  title: 'Profile Edit',
-  description: 'Manage your account Information',
-};
 
 const ProfileEdit = () => {
+ 
   return (
     <Shell variant={'sidebar'} >
       <PageHeader id='profileEdit-header' aria-labelledby='profileEdit-header-heading'>

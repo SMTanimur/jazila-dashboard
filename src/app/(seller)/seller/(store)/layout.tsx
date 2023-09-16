@@ -1,9 +1,10 @@
+
 'use client';
+import { SidebarMobile } from '@/components/layout/sidebar-mobile';
+import { SidebarNav } from '@/components/layout/sidebar-nav';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteHeader } from '@/components/layout/site-header';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +25,9 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default  function DashboardLayout({
+  children,
+}: DashboardLayoutProps) {
   const { currentUser } = useCurrentUser();
 
   return (
@@ -32,19 +35,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <SiteHeader
         isAdmin={currentUser?.role == 'admin' ? true : false}
         user={currentUser as IUser}
-        isSellerStoreLayout={false}
+        isSellerStoreLayout={true}
       />
       <div className='container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10'>
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger
-            asChild
-            className='md:hidden my-5'
-          ></DropdownMenuTrigger>
+        <DropdownMenu>
           <DropdownMenuContent className='w-56' align='end' forceMount>
             <DropdownMenuLabel className='font-normal'>
               <div className='flex flex-col space-y-1'></div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <SidebarMobile
+                items={dashboardConfig.sidebarNav}
+                className='p-1'
+              />
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href='/signout'>
@@ -53,28 +58,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu> */}
-        <aside className='fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block  '>
+        </DropdownMenu>
+        <aside className='fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block'>
           <ScrollArea className='py-6 pr-6 lg:py-8'>
-            <div className='flex flex-col justify-center'>
-              <div className='flex flex-col justify-center items-center gap-3'>
-                <Avatar className='w-[100px] h-[100px]'>
-                  <AvatarImage
-                    src={currentUser?.avatar}
-                    alt={currentUser?.lastName}
-                  />
-                  <AvatarFallback>{currentUser?.lastName}</AvatarFallback>
-                </Avatar>
-                <div className='flex flex-col items-center gap-1'>
-                  <p className='text-2xl font-semibold leading-none tracking-tight'>
-                    {currentUser?.firstName} {currentUser?.lastName}
-                  </p>
-                  <h6 className='text-sm text-muted-foreground'>
-                    {currentUser?.email}
-                  </h6>
-                </div>
-              </div>
-            </div>
+            <SidebarNav items={dashboardConfig.sidebarNav} className='p-1' />
           </ScrollArea>
         </aside>
         <main className='flex w-full flex-col overflow-hidden'>{children}</main>

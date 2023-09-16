@@ -10,9 +10,10 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useMe } from './useMe';
+import { useCurrentUser } from './useCurrentUser';
 
 export function useUser() {
-  const { me: user } = useMe();
+  const { currentUser: user } = useCurrentUser();
   const router = useRouter();
 
   const queryClient = useQueryClient();
