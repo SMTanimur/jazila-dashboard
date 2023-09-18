@@ -27,7 +27,6 @@ type addressFormProps = {
   initialValues?: IAddress;
 };
 const AddressEditForm = ({ initialValues }: addressFormProps) => {
-  console.log(initialValues);
   const queryClient = useQueryClient();
   const {
     mutateAsync: addressUpdateMutation,

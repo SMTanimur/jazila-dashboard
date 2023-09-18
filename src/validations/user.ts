@@ -49,9 +49,7 @@ const userSchema = z.object({
 });
 
 const AddressSchema = z.object({
-  default: z.boolean({
-    invalid_type_error: 'Default must be a valid boolean',
-  }),
+ 
 
   street: z
     .string({
