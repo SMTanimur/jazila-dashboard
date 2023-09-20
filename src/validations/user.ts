@@ -48,10 +48,8 @@ const userSchema = z.object({
     .min(8, { message: 'Password  is must be 2 or more characters long' }),
 });
 
-const AddressSchema = z.object({
- 
-
-  street: z
+export const AddressSchema = z.object({
+  street_address: z
     .string({
       required_error: 'Street Address is required',
       invalid_type_error: 'Street Address must be a valid string',

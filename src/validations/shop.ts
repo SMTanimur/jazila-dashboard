@@ -1,29 +1,34 @@
 import { z } from 'zod';
 import { TImage } from './image';
+import { AddressSchema } from './user';
 
+export const paymentInfo = z.object({
+  account: z.string().optional(),
 
+  name: z.string().optional(),
 
-export const paymentInfo = z
+  bank: z.string().optional(),
+  email: z
+    .string({
+      required_error: 'Email is required',
+      invalid_type_error: 'Email must be a string',
+    })
+    .trim()
+    .email({ message: 'Invalid email address' })
+    .optional(),
+});
+
+export const IBalance = z.object({
+  id: z.string().optional(),
+  payment_info: paymentInfo,
+});
+
+export const IShopSettings = z
   .object({
-    account: z.string().optional(),
-
-    name: z.string().optional(),
-
-    bank: z.string().optional(),
-    email: z
-      .string({
-        required_error: 'Email is required',
-        invalid_type_error: 'Email must be a string',
-      })
-      .trim()
-      .email({ message: 'Invalid email address' })
-     .optional(),
+    contact: z.string().optional(),
+    website: z.string().optional(),
   })
-
-  export const IBalance = z.object({
-    id: z.string().optional(),
-    payment_info: paymentInfo,
-  });
+  .optional();
 export const ShopSchema = z.object({
   name: z
     .string({
@@ -46,9 +51,8 @@ export const ShopSchema = z.object({
 
   cover_image: TImage,
   balance: IBalance,
+  address: AddressSchema,
+  settings: IShopSettings,
 });
 
 export type TShop = z.infer<typeof ShopSchema>;
-
-
- 

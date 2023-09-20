@@ -1,4 +1,5 @@
 import { type Icons } from '@/components/ui/icons';
+import { type FileWithPath } from 'react-dropzone';
 
 export interface NavItem {
   title: string;
@@ -67,6 +68,7 @@ export interface IShop {
 }
 
 export interface IBalance {
+  _id?: string;
   admin_commission_rate?: number;
   seller_commission_rate?: number;
   admin_commission?: number;
@@ -81,6 +83,10 @@ export interface IPaymentInfo {
   name?: string;
   email?: string;
   bank?: string;
+}
+
+export type FileWithPreview = FileWithPath & {
+  preview: string
 }
 
 export interface IShopAddress {
@@ -141,7 +147,6 @@ export interface ICategory {
   is_active: boolean;
 }
 
-
 export interface IImage {
   id: string;
   url: string;
@@ -149,11 +154,13 @@ export interface IImage {
 }
 
 export interface IFileHandler<T> {
-  imageFile: T,
+  imageFile: T;
   setImageFile: React.Dispatch<React.SetStateAction<T>>;
   isFileLoading: boolean;
-  onFileChange: (event: React.ChangeEvent<HTMLInputElement>, callback?: (file?: IImage) => void) => void;
+  onFileChange: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    callback?: (file?: IImage) => void
+  ) => void;
   removeImage: (id: string) => void;
   clearFiles: () => void;
 }
-
