@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import {
   useDropzone,
   type Accept,
@@ -14,47 +13,48 @@ import type {
   UseFormSetValue,
 } from 'react-hook-form';
 import { toast } from 'sonner';
-
 import 'cropperjs/dist/cropper.css';
-
 import Image from 'next/image';
-
-import { cn, formatBytes } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { IUploadedImage, deleteImages } from '@/services/upload.service';
-import { useUploadMutation } from '@/hooks/upload/useUpload';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/icons';
+import { cn, formatBytes } from '@/lib/utils';
+import { useUploadMutation } from '@/hooks/upload/useUpload';
 
 // FIXME Your proposed upload exceeds the maximum allowed size, this should trigger toast.error too
 
-interface FileDialogProps<
+interface FilesDialogProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 > extends React.HTMLAttributes<HTMLDivElement> {
   name: TName;
   setValue: UseFormSetValue<TFieldValues>;
+  accept?: Accept;
   maxSize?: number;
   maxFiles?: number;
   multiple: boolean;
-  files: IUploadedImage
-  setFiles: React.Dispatch<React.SetStateAction<IUploadedImage | null>>;
+  files: IUploadedImage[] 
+  setFiles: React.Dispatch<React.SetStateAction<IUploadedImage[] | null>>;
 }
 
-export function FileDialog<TFieldValues extends FieldValues>({
+export function FilesDialog<TFieldValues extends FieldValues>({
   name,
   setValue,
+  accept = {
+    'image/*': [],
+  },
   maxSize = 1024 * 1024 * 2,
   maxFiles = 1,
   files,
   setFiles,
-  multiple = false,
+  multiple = true,
   className,
   ...props
-}: FileDialogProps<TFieldValues>) {
+}: FilesDialogProps<TFieldValues>) {
   const { mutate: upload, isLoading } = useUploadMutation(multiple);
   const onDrop = React.useCallback(
-    async (acceptedFiles: any, rejectedFiles: any) => {
+    async (acceptedFiles: any, rejectedFiles: FileRejection[]) => {
       const formData = new FormData();
       if (acceptedFiles.length) {
         for (const key of Object.keys(acceptedFiles)) {
@@ -66,24 +66,26 @@ export function FileDialog<TFieldValues extends FieldValues>({
         {
           onSuccess: (data: any) => {
             console.log(data);
-           
-              setFiles(data);
-           
+            if (multiple) {
+              setFiles(files?.concat(data));
+            } else {
+              setFiles([data]);
+            }
           },
         }
       );
       // setFiles((prev) => [...(prev ?? []), fileWithPreview])
 
-      if (rejectedFiles) {
-        // rejectedFiles.forEach(({ errors }) => {
-        //   if (errors[0]?.code === 'file-too-large') {
-        //     toast.error(
-        //       `File is too large. Max size is ${formatBytes(maxSize)}`
-        //     );
-        //     return;
-        //   }
-        //   errors[0]?.message && toast.error(errors[0].message);
-        // });
+      if (rejectedFiles.length > 0) {
+        rejectedFiles.forEach(({ errors }) => {
+          if (errors[0]?.code === 'file-too-large') {
+            toast.error(
+              `File is too large. Max size is ${formatBytes(maxSize)}`
+            );
+            return;
+          }
+          errors[0]?.message && toast.error(errors[0].message);
+        });
       }
     },
 
@@ -98,9 +100,7 @@ export function FileDialog<TFieldValues extends FieldValues>({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
-    },
+    accept,
     maxSize,
     maxFiles,
     multiple,
@@ -110,8 +110,7 @@ export function FileDialog<TFieldValues extends FieldValues>({
   React.useEffect(() => {
     return () => {
       if (!files) return;
-      files.img_url && URL.revokeObjectURL(files.img_url);
-      // files.forEach(file => URL.revokeObjectURL(file.img_url));
+      files.forEach(file => URL.revokeObjectURL(file.img_url));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -173,19 +172,20 @@ export function FileDialog<TFieldValues extends FieldValues>({
         <p className='text-center text-sm font-medium text-muted-foreground'>
           You can upload up to {maxFiles} {maxFiles === 1 ? 'file' : 'files'}
         </p>
-        {files ? (
+        {files?.length ? (
           <div className='grid gap-5'>
-           
+            {files?.map((file, i) => (
               <FileCard
-              
+                key={i}
+                i={i}
                 files={files}
                 setFiles={setFiles}
-               
+                file={file}
               />
-     
+            ))}
           </div>
         ) : null}
-        {files ? (
+        {files?.length ? (
           <Button
             type='button'
             variant='outline'
@@ -204,20 +204,21 @@ export function FileDialog<TFieldValues extends FieldValues>({
 }
 
 interface FileCardProps {
- 
-  files: IUploadedImage 
-  setFiles: React.Dispatch<React.SetStateAction<IUploadedImage | null>>;
+  i: number;
+  file: IUploadedImage;
+  files: IUploadedImage[] | null;
+  setFiles: React.Dispatch<React.SetStateAction<IUploadedImage[] | null>>;
 }
 
-function FileCard({  files, setFiles }: FileCardProps) {
+function FileCard({ i, file, files, setFiles }: FileCardProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
 
   const handleDelete = async (image: IUploadedImage) => {
-    const images = files?.img_id === image.img_id ? null : files;
+    const images = files?.filter(file => file.img_id !== image.img_id);
 
     try {
-      setFiles(images as IUploadedImage);
+      setFiles(images as IUploadedImage[]);
     
       await deleteImages(image.img_id);
     } catch (error: any) {}
@@ -237,8 +238,8 @@ function FileCard({  files, setFiles }: FileCardProps) {
     <div className='relative flex items-center justify-between gap-2.5'>
       <div className='flex items-center gap-2'>
         <Image
-          src={ files?.img_url}
-          alt={files?.img_id}
+          src={ file.img_url}
+          alt={file.img_id}
           className='h-10 w-10 shrink-0 rounded-md'
           width={40}
           height={40}
@@ -246,7 +247,7 @@ function FileCard({  files, setFiles }: FileCardProps) {
         />
         <div className='flex flex-col'>
           <p className='line-clamp-1 text-sm font-medium text-muted-foreground'>
-            {files?.img_id}
+            {file.img_id}
           </p>
           {/* <p className="text-xs text-slate-500">
             {(file.size / 1024 / 1024).toFixed(2)}MB
@@ -261,9 +262,9 @@ function FileCard({  files, setFiles }: FileCardProps) {
           size='icon'
           className='h-7 w-7'
           onClick={() => {
-            console.log(files,'file')
+            console.log(file,'file')
             if (!files) return;
-            handleDelete(files)
+            handleDelete(file)
           }}
         >
           <Icons.close className='h-4 w-4 text-white' aria-hidden='true' />

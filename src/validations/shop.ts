@@ -42,13 +42,7 @@ export const ShopSchema = z.object({
       invalid_type_error: 'Description  must be a valid string',
     })
     .min(8, { message: 'Description  is must be 2 or more characters long' }),
-
-  slug: z.string({
-    required_error: 'Slug is required',
-    invalid_type_error: 'Country must be a valid string',
-  }),
   logo: TImage,
-
   cover_image: TImage,
   balance: IBalance,
   address: AddressSchema,
