@@ -3,6 +3,7 @@ import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteHeader } from '@/components/layout/site-header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 import {
   DropdownMenu,
@@ -34,28 +35,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         user={currentUser as IUser}
         isSellerStoreLayout={false}
       />
-      <div className='container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10'>
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger
-            asChild
-            className='md:hidden my-5'
-          ></DropdownMenuTrigger>
-          <DropdownMenuContent className='w-56' align='end' forceMount>
-            <DropdownMenuLabel className='font-normal'>
-              <div className='flex flex-col space-y-1'></div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href='/signout'>
-                <Icons.logout className='mr-2 h-4 w-4' aria-hidden='true' />
-                Log out
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu> */}
+      <div className='container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-10'>
+      
         <aside className='fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block  '>
           <ScrollArea className='py-6 pr-6 lg:py-8'>
+            <Card className='p-2 py-4'>
             <div className='flex flex-col justify-center'>
               <div className='flex flex-col justify-center items-center gap-3'>
                 <Avatar className='w-[100px] h-[100px]'>
@@ -75,6 +59,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </div>
               </div>
             </div>
+            </Card>
           </ScrollArea>
         </aside>
         <main className='flex w-full flex-col overflow-hidden'>{children}</main>

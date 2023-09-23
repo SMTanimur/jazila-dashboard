@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
   LOGOUT: 'logout',
   LOGIN: 'login',
   GOOGLE:'google',
+  SHOPS:'shops',
   ADDRESSES: 'addresses',
   ME: 'me',
   TOKEN: 'token',

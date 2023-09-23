@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import React from 'react';
 import ProfileEditComponent from './components/ProfileEditComponent';
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/common/shared/page-header';
-import { useCurrentUser } from '@/hooks/user/useCurrentUser';
+
 
 
 const ProfileEdit = () => {

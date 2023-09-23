@@ -1,6 +1,6 @@
 import { type Icons } from '@/components/ui/icons';
 import { type FileWithPath } from 'react-dropzone';
-
+export declare type Maybe<T> = T | null;
 export interface NavItem {
   title: string;
   href?: string;
@@ -60,6 +60,7 @@ export interface IShop {
   products_count: number;
   slug: string;
   cover_image: ImageInfo;
+  owner: IUser;
   balance: IBalance;
   address: IShopAddress;
   _id: string;
@@ -86,8 +87,8 @@ export interface IPaymentInfo {
 }
 
 export type FileWithPreview = FileWithPath & {
-  preview: string
-}
+  preview: string;
+};
 
 export interface IShopAddress {
   street_address: string;
@@ -163,4 +164,11 @@ export interface IFileHandler<T> {
   ) => void;
   removeImage: (id: string) => void;
   clearFiles: () => void;
+}
+
+export enum SortOrder {
+  /** Sort records in ascending order. */
+  Asc = 'asc',
+  /** Sort records in descending order. */
+  Desc = 'desc',
 }

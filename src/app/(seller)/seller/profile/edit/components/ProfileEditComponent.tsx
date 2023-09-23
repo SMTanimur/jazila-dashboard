@@ -8,12 +8,15 @@ import dynamic from 'next/dynamic';
 import { useCurrentUser } from '@/hooks/user/useCurrentUser';
 import { IUser } from '@/types';
 import ProfileForm from '@/components/forms/ProfileForm';
+import AccountEditLoading from '../loading';
 
 const AvatarEditForm = dynamic(() => import('./AvatarEditForm'));
 
 const ProfileEditComponent = () => {
   const { currentUser,isLoading } = useCurrentUser();
- 
+  if(isLoading){
+    return AccountEditLoading()
+  }
   return (
     <React.Fragment>
       <Card>

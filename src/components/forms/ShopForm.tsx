@@ -15,18 +15,17 @@ import {
   FormMessage,
   UncontrolledFormMessage,
 } from '../ui/form';
-import { useShop } from '@/hooks/shops/useShop';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { Icons } from '../ui/icons';
-import { useFileHandler } from '@/hooks/useFileHandler';
-import FileInput from '../common/shared/file-input';
+
 import { FileDialog } from '../common/shared/file-dialog';
 import { Zoom } from '../common/shared/zoom-image';
 import { IUploadedImage } from '@/services/upload.service';
 import Image from 'next/image';
-import { FilesDialog } from '../common/shared/files-dialog';
+import { useShop } from '@/hooks/shops/useShop';
+
 interface ShopFormProps {
   initialData?: IShop | null;
 }
@@ -43,6 +42,8 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
           ...initialData,
         }
       : defaultValues,
+
+     
     // defaultValues: {
     //   name: initialData?.name || '',
     //   description: initialData?.description || '',
@@ -75,8 +76,12 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
     //   },
     // },
   });
-  console.log(shopForm.getValues('logo'), 'logo');
 
+
+  const handleSubmit = async (data: TShop) => {
+     
+  }
+ 
   return (
     <React.Fragment>
       <Form {...shopForm}>
