@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useCurrentUser } from '../user/useCurrentUser';
 
-const initImageState = { id: '', file: null, url: '' };
 export function useShop() {
   const { currentUser } = useCurrentUser();
   const router = useRouter();
@@ -20,17 +19,21 @@ export function useShop() {
     isLoading: shopCreateLoading,
     isError: IsShopCreateError,
   } = useMutation(shopClient.createShop);
+  const {
+    mutateAsync: shopUpdateMutation,
+    isLoading: shopUpdateLoading,
+    isError: IsShopUpdateError,
+  } = useMutation(shopClient.updateShop);
 
   const attemptShopCreate = async (data: TShop) => {
     toast.promise(shopCreateMutation(data), {
       loading: 'updating...',
       success: data => {
         queryClient.invalidateQueries(['me']);
+        queryClient.invalidateQueries(['shops']);
         queryClient.invalidateQueries(['currentUser']);
         router.push(
-          currentUser?.role == 'seller'
-            ? '/seller/dashboard'
-            : '/admin'
+          currentUser?.role == 'seller' ? '/seller/dashboard' : '/admin'
         );
         return <b>{data.message}</b>;
       },
@@ -48,5 +51,9 @@ export function useShop() {
     attemptShopCreate,
     shopCreateLoading,
     IsShopCreateError,
+    shopUpdateMutation,
+    shopUpdateLoading,
+    IsShopUpdateError,
+
   };
 }

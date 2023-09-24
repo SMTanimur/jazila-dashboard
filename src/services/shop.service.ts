@@ -4,12 +4,22 @@ import { PaginatorInfo } from '@/types/utils';
 import { HttpClient } from '@/utils/api/http';
 import { TShop } from '@/validations/shop';
 
+export interface IShopUpdateVariables {
+  variables: {
+    id: string;
+    input: TShop;
+  };
+}
 export const shopClient = {
   createShop: (variables: TShop) => {
     return HttpClient.post<{ message: string }>(`/shops`, variables);
   },
 
-  getShops: async ({queryKey}:QueryParamsType) => {
+  updateShop: ({ variables: { id, input } }: IShopUpdateVariables) => {
+    return HttpClient.put<{ message: string }>(`/shops/${id}`, input);
+  },
+
+  getShops: async ({ queryKey }: QueryParamsType) => {
     const [_key, params] = queryKey;
     const {
       page,
@@ -29,7 +39,7 @@ export const shopClient = {
     });
   },
 
-  getShop: async (slug:string) => {
+  getShop: async (slug: string) => {
     return HttpClient.get<IShop>(`/shops/${slug}`);
-  }
+  },
 };

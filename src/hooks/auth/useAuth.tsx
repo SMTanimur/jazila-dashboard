@@ -1,6 +1,5 @@
 import { useToken } from '@/hooks/use-token';
 import { userClient } from '@/services/user.service';
-import { getFormErrors } from '@/utils/api/http';
 import { authorizationAtom } from '@/utils/authorization-atom';
 import {
   TChangePassword,

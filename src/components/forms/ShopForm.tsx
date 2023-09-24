@@ -25,17 +25,27 @@ import { Zoom } from '../common/shared/zoom-image';
 import { IUploadedImage } from '@/services/upload.service';
 import Image from 'next/image';
 import { useShop } from '@/hooks/shops/useShop';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ShopFormProps {
   initialData?: IShop | null;
 }
 const defaultValues = {};
 const ShopForm = ({ initialData }: ShopFormProps) => {
-  const { IsShopCreateError, attemptShopCreate, shopCreateLoading } = useShop();
+  const {
+    IsShopCreateError,
+    attemptShopCreate,
+    shopCreateLoading,
+    IsShopUpdateError,
+    shopUpdateLoading,
+    shopUpdateMutation,
+  } = useShop();
   const [files, setFiles] = React.useState<IUploadedImage | null>(null);
   const [coverImage, setCoverImage] = React.useState<IUploadedImage | null>(
     null
   );
+  const queryClient = useQueryClient();
   const shopForm = useForm<TShop>({
     resolver: zodResolver(ShopSchema),
     defaultValues: initialData
@@ -77,15 +87,42 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
     // },
   });
 
-  const handleSubmit = async (data: TShop) => {};
+  const attemptShopUpdate = async (data: TShop) => {
+    toast.promise(
+      shopUpdateMutation({
+        variables: { id: initialData?._id as string, input: data },
+      }),
+      {
+        loading: 'updating...',
+        success: data => {
+          queryClient.invalidateQueries(['me']);
+          queryClient.invalidateQueries(['shops']);
+          queryClient.invalidateQueries(['currentUser']);
+
+          return <b>{data.message}</b>;
+        },
+        error: error => {
+          const {
+            response: { data },
+          }: any = error ?? {};
+
+          return <b> {data?.message}</b>;
+        },
+      }
+    );
+  };
 
   return (
     <React.Fragment>
       <Form {...shopForm}>
         <form
           className='grid gap-10 w-full'
-          onSubmit={(...args) =>
-            void shopForm.handleSubmit(attemptShopCreate)(...args)
+          onSubmit={
+            initialData
+              ? (...args) =>
+                  void shopForm.handleSubmit(attemptShopUpdate)(...args)
+              : (...args) =>
+                  void shopForm.handleSubmit(attemptShopCreate)(...args)
           }
         >
           <div className='flex flex-col items-center gap-4 w-full lg:flex-row'>
@@ -103,8 +140,8 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                         <Zoom>
                           <Image
                             src={
-                              (initialData?.logo.img_url as any) ||
-                              files?.img_url
+                              files?.img_url ||
+                              (initialData?.logo.img_url as any)
                             }
                             alt={
                               (initialData?.logo.img_id as any) || files?.img_id
@@ -123,7 +160,11 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                         maxFiles={1}
                         maxSize={1024 * 1024 * 4}
                         multiple={false}
-                        files={files as IUploadedImage}
+                        files={
+                          initialData
+                            ? initialData.logo
+                            : (files as IUploadedImage)
+                        }
                         setFiles={setFiles}
                       />
                     </FormControl>
@@ -154,8 +195,8 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                         <Zoom>
                           <Image
                             src={
-                              (initialData?.cover_image.img_url as any) ||
-                              coverImage?.img_url
+                              coverImage?.img_url ||
+                              (initialData?.cover_image.img_url as any)
                             }
                             alt={
                               (initialData?.cover_image.img_id as any) ||
@@ -175,7 +216,11 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                         maxFiles={1}
                         maxSize={1024 * 1024 * 4}
                         multiple={false}
-                        files={coverImage as IUploadedImage}
+                        files={
+                          initialData
+                            ? initialData.cover_image
+                            : (coverImage as IUploadedImage)
+                        }
                         setFiles={setCoverImage}
                       />
                     </FormControl>
@@ -198,7 +243,6 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                 <div className='my-4'>
                   <FormField
                     control={shopForm.control}
-                  
                     name='name'
                     render={({ field }) => (
                       <FormItem>
@@ -430,12 +474,20 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
             </div>
           </div>
           <div className='flex items-end justify-end'>
-            <Button disabled={shopCreateLoading} className='w-[200px] '>
-              {shopCreateLoading && (
+            <Button
+              disabled={shopUpdateLoading || shopCreateLoading}
+              className='w-[200px] '
+            >
+              {}
+              {shopCreateLoading || shopUpdateLoading ? (
                 <Icons.spinner
                   className='mr-2 h-4 w-4 animate-spin'
                   aria-hidden='true'
                 />
+              ) : (
+                <React.Fragment>
+                  <span>{initialData ? 'Update' : 'Save'}</span>
+                </React.Fragment>
               )}
               Save
               <span className='sr-only'>Save</span>

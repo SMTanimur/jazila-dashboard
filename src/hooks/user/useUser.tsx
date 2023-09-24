@@ -2,7 +2,6 @@
 import { userClient } from '@/services/user.service';
 import { TProfile, profileSchema } from '@/validations/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
