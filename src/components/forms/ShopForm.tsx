@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { Card } from '../ui/card';
-import {   IShop } from '@/types';
+import { IShop } from '@/types';
 import { useForm } from 'react-hook-form';
 import { ShopSchema, TShop } from '@/validations/shop';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,8 +33,9 @@ const defaultValues = {};
 const ShopForm = ({ initialData }: ShopFormProps) => {
   const { IsShopCreateError, attemptShopCreate, shopCreateLoading } = useShop();
   const [files, setFiles] = React.useState<IUploadedImage | null>(null);
-  const [coverImage, setCoverImage] = React.useState<IUploadedImage | null>(null);
-
+  const [coverImage, setCoverImage] = React.useState<IUploadedImage | null>(
+    null
+  );
   const shopForm = useForm<TShop>({
     resolver: zodResolver(ShopSchema),
     defaultValues: initialData
@@ -43,7 +44,6 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
         }
       : defaultValues,
 
-     
     // defaultValues: {
     //   name: initialData?.name || '',
     //   description: initialData?.description || '',
@@ -77,11 +77,8 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
     // },
   });
 
+  const handleSubmit = async (data: TShop) => {};
 
-  const handleSubmit = async (data: TShop) => {
-     
-  }
- 
   return (
     <React.Fragment>
       <Form {...shopForm}>
@@ -101,19 +98,22 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                 <div className='my-4'>
                   <FormItem className='flex w-full flex-col gap-1.5'>
                     <FormLabel>Logo</FormLabel>
-                    {files ? (
+                    {initialData?.logo || files ? (
                       <div className='flex items-center gap-2'>
-                       
-                          <Zoom >
-                            <Image
-                              src={files.img_url}
-                              alt={files.img_id}
-                              className='h-20 w-20 shrink-0 rounded-md object-cover object-center'
-                              width={80}
-                              height={80}
-                            />
-                          </Zoom>
-                    
+                        <Zoom>
+                          <Image
+                            src={
+                              (initialData?.logo.img_url as any) ||
+                              files?.img_url
+                            }
+                            alt={
+                              (initialData?.logo.img_id as any) || files?.img_id
+                            }
+                            className='h-20 w-20 shrink-0 rounded-md object-cover object-center'
+                            width={80}
+                            height={80}
+                          />
+                        </Zoom>
                       </div>
                     ) : null}
                     <FormControl>
@@ -147,21 +147,25 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
             <div className='lg:w-2/3 w-full'>
               <Card className='p-8  w-full'>
                 <div className='my-4'>
-                <FormItem className='flex w-full flex-col gap-1.5'>
+                  <FormItem className='flex w-full flex-col gap-1.5'>
                     <FormLabel>Cover Image</FormLabel>
-                    {coverImage ? (
+                    {initialData?.cover_image || coverImage ? (
                       <div className='flex items-center gap-2'>
-                       
-                          <Zoom >
-                            <Image
-                              src={coverImage.img_url}
-                              alt={coverImage.img_id}
-                              className='h-20 w-20 shrink-0 rounded-md object-cover object-center'
-                              width={80}
-                              height={80}
-                            />
-                          </Zoom>
-                    
+                        <Zoom>
+                          <Image
+                            src={
+                              (initialData?.cover_image.img_url as any) ||
+                              coverImage?.img_url
+                            }
+                            alt={
+                              (initialData?.cover_image.img_id as any) ||
+                              coverImage?.img_id
+                            }
+                            className='h-20 w-20 shrink-0 rounded-md object-cover object-center'
+                            width={80}
+                            height={80}
+                          />
+                        </Zoom>
                       </div>
                     ) : null}
                     <FormControl>
@@ -194,6 +198,7 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                 <div className='my-4'>
                   <FormField
                     control={shopForm.control}
+                  
                     name='name'
                     render={({ field }) => (
                       <FormItem>

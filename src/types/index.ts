@@ -65,6 +65,7 @@ export interface IShop {
   address: IShopAddress;
   _id: string;
   logo: ImageInfo;
+  createdAt: Date;
   settings?: IShopSettings;
 }
 

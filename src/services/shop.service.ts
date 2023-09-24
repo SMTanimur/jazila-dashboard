@@ -27,5 +27,9 @@ export const shopClient = {
         search: text,
       },
     });
+  },
+
+  getShop: async (slug:string) => {
+    return HttpClient.get<IShop>(`/shops/${slug}`);
   }
 };

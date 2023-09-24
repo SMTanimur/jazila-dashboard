@@ -71,6 +71,8 @@ import {
   Store,
   GalleryVerticalEnd,
   PencilRuler,
+  Phone,
+  PercentIcon,
 } from 'lucide-react';
 
 export type Icon = LucideIcon | any;
@@ -102,6 +104,8 @@ export const Icons = {
   circle: Circle,
   check: Check,
   plus: BadgePlus,
+  phone: Phone,
+  percent:PercentIcon,
   add: Plus,
   addCircle: PlusCircle,
   remove: Minus,

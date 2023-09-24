@@ -10,6 +10,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { defaultMetadata } from '@/lib/seo';
 import { fontMono, fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
+import RouterProvider from '@/shared/providers/router-provider';
 
 export const metadata: Metadata = defaultMetadata;
 
@@ -31,7 +32,9 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <GoogleProvider>
             <QueryProvider>
+            <RouterProvider>
               {children}
+             </RouterProvider>
               <TailwindIndicator />
               <Analytics />
             </QueryProvider>
