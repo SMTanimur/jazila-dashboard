@@ -23,6 +23,9 @@ export async function middleware(req: NextRequest) {
   if (userToken && req.nextUrl.pathname === '/signup') {
     return NextResponse.redirect(new URL(`${host}/`));
   }
+  if (userToken && req.nextUrl.pathname === '/admin-login') {
+    return NextResponse.redirect(new URL(`${host}/`));
+  }
   // Add a closing bracket here
   if (!userToken && req.nextUrl.pathname.includes('/admin')) {
     return NextResponse.redirect(new URL(`${host}/signin`));

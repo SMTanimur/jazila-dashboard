@@ -2,24 +2,12 @@
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteHeader } from '@/components/layout/site-header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Icons } from '@/components/ui/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { dashboardConfig } from '@/configs/dashboard';
 import { useCurrentUser } from '@/hooks/user/useCurrentUser';
 import { IUser } from '@/types';
-import Link from 'next/link';
+
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

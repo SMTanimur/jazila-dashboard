@@ -1,59 +1,53 @@
-import { type SidebarNavItem } from '@/types';
+import {type ShopSidebarNavItem, type SidebarNavItem } from '@/types';
+import { ROUTES } from './routes';
 
 export interface DashboardConfig {
   sidebarNav: SidebarNavItem[];
 }
+export interface ShopDashboardConfig {
+  sidebarNav: ShopSidebarNavItem[];
+}
 
-export const dashboardConfig: DashboardConfig = {
+export const dashboardConfig: ShopDashboardConfig = {
   sidebarNav: [
     {
       title: 'Dashboard',
-      href: '/seller/dashboard',
+      href: (shop: string) => `${ROUTES.DASHBOARD}${shop}`,
       icon: 'dashboard',
       items: [],
     },
     {
-      title: 'Profile',
-      href: '/seller/profile',
+      title: 'Attributes',
+      href: (shop: string) => `/${shop}${ROUTES.ATTRIBUTES}`,
       icon: 'user',
       items: [],
     },
     {
       title: 'Products',
-      href: '/seller/products',
+      href: (shop: string) => `/${shop}${ROUTES.PRODUCTS}`,
       icon: 'products',
       items: [],
     },
-    {
-      title: 'Change Password',
-      href: '/seller/profile/change-password',
-      icon: 'lock',
-      items: [],
-    },
+   
     {
       title: 'Orders',
-      href: '/seller/orders',
+      href: (shop: string) => `/${shop}${ROUTES.ORDERS}`,
       icon: 'order',
       items: [],
     },
     {
-      title: 'Payments',
-      href: '/seller/payments',
-      icon: 'dollarSign',
+      title: 'Reviews',
+      href: (shop: string) => `/${shop}${ROUTES.REVIEWS}`,
+      icon: 'review',
       items: [],
     },
     {
-      title: 'Chat Customer',
-      href: '/seller/customer-chat',
-      icon: 'message',
+      title: 'Withdrawals',
+      href: (shop: string) => `/${shop}${ROUTES.WITHDRAWS}`,
+      icon: 'gem',
       items: [],
     },
-    {
-      title: 'Chat Support',
-      href: 'seller/support-chat',
-      icon: 'message',
-      items: [],
-    },
+
    
   ],
 };

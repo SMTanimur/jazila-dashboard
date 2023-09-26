@@ -60,6 +60,14 @@ export function useAuth() {
       role: 'seller',
     },
   });
+  const adminLoginForm = useForm<TLogin>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      role: 'admin',
+    },
+  });
   const changePasswordForm = useForm<TChangePassword>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
@@ -90,6 +98,25 @@ export function useAuth() {
         setToken(data.token);
 
         router.push(`${window.location.origin}/seller/dashboard`);
+        return <b>{data.message}</b>;
+      },
+      error: error => {
+        const {
+          response: { data },
+        }: any = error ?? {};
+
+        return <b> {data?.message}</b>;
+      },
+    });
+  };
+  const attemptToAdminLogin = async (data: TLogin) => {
+    toast.promise(loginMutation(data), {
+      loading: 'login...',
+      success: data => {
+        setAuthorized(true);
+        setToken(data.token);
+
+        router.push(`${window.location.origin}/admin`);
         return <b>{data.message}</b>;
       },
       error: error => {
@@ -197,5 +224,7 @@ export function useAuth() {
     attemptToChangePassword,
     changePasswordLoading,
     IsChangePasswordError,
+    adminLoginForm,
+    attemptToAdminLogin,
   };
 }

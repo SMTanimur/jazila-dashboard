@@ -17,9 +17,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 type MobileNavProps = {
   isAdmin: boolean;
+  shop?: string;
   isSellerStoreLayout?: boolean;
 };
-export function MobileNav({ isAdmin, isSellerStoreLayout }: MobileNavProps) {
+export function MobileNav({
+  isAdmin,
+  isSellerStoreLayout,
+  shop,
+}: MobileNavProps) {
   const { currentUser } = useCurrentUser();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -99,7 +104,7 @@ export function MobileNav({ isAdmin, isSellerStoreLayout }: MobileNavProps) {
                           <Link
                             aria-label={item.title}
                             key={index}
-                            href={item.href}
+                            href={item.href(shop as string)}
                             // disabled={me?.provider !== 'google'}
                             target={item.external ? '_blank' : ''}
                             rel={item.external ? 'noreferrer' : ''}
@@ -107,7 +112,7 @@ export function MobileNav({ isAdmin, isSellerStoreLayout }: MobileNavProps) {
                             <span
                               className={cn(
                                 'group flex w-full items-center rounded-md border border-transparent px-2 py-1 hover:bg-muted hover:text-foreground',
-                                pathname === item.href
+                                pathname === item.href(shop as string)
                                   ? 'bg-muted font-medium text-foreground'
                                   : 'text-muted-foreground',
                                 item.disabled &&

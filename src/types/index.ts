@@ -11,8 +11,21 @@ export interface NavItem {
   description?: string;
 }
 
+export interface ShopSideItem {
+  title: string;
+  href?: (shop: string) => string;
+  disabled?: boolean;
+  external?: boolean;
+  icon?: keyof typeof Icons;
+  label?: string;
+  description?: string;
+}
+
 export interface NavItemWithChildren extends NavItem {
   items: NavItemWithChildren[];
+}
+export interface NavShopItemWithChildren extends ShopSideItem {
+  items: NavShopItemWithChildren[];
 }
 
 export interface NavItemWithOptionalChildren extends NavItem {
@@ -31,6 +44,7 @@ export interface FooterItem {
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
+export type ShopSidebarNavItem = NavShopItemWithChildren;
 
 export interface IUser {
   firstName: string;

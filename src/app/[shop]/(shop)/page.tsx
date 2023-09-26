@@ -38,8 +38,8 @@ const StorePage = ({ params: { shop } }: Params) => {
       amount: data?.balance?.current_balance!,
     }
   );
-  if(isLoading){
-    return ProductListSkeleton()
+  if (isLoading) {
+    return ProductListSkeleton();
   }
   return (
     <Shell variant={'sidebar'}>
@@ -125,32 +125,29 @@ const StorePage = ({ params: { shop } }: Params) => {
           {/* Cover Photo */}
 
           <div className='order-1 xl:order-2 col-span-12 xl:col-span-8 3xl:col-span-9 rounded h-full overflow-hidden'>
-          <Card className='shadow-md p-4 h-[450px]'>
-          <div className=' relative bg-light min-h-[400px]'>
-         
-            {data?.cover_image && (
-              <Image
-                src={data?.cover_image.img_url}
-                layout='fill'
-                alt={'cover image'}
-                objectFit='contain'
-              />
-            )}
+            <Card className='shadow-md p-4 h-[450px]'>
+              <div className=' relative bg-light min-h-[400px]'>
+                {data?.cover_image && (
+                  <Image
+                    src={data?.cover_image.img_url}
+                    layout='fill'
+                    alt={'cover image'}
+                    objectFit='contain'
+                  />
+                )}
 
-            {/* {hasAccess(adminAndOwnerOnly, permissions) && ( */}
-            <Button size={'lg'} className='absolute top-1 end-1'>
-              <Link href={`/${shop}/edit`} className='flex items-center'>
-                <Icons.edit className='w-4 me-2' />
-                <span> Edit Shop</span>
-              </Link>
-            </Button>
-  
-            {/* )} */}
-          </div>
+                {/* {hasAccess(adminAndOwnerOnly, permissions) && ( */}
+                <Button size={'lg'} className='absolute top-1 end-1'>
+                  <Link href={`/${shop}/edit`} className='flex items-center'>
+                    <Icons.edit className='w-4 me-2' />
+                    <span> Edit Shop</span>
+                  </Link>
+                </Button>
+
+                {/* )} */}
+              </div>
             </Card>
           </div>
-         
-          
 
           {/* Mini Dashboard */}
           <div className='order-4 xl:order-3 col-span-12 xl:col-span-9 '>

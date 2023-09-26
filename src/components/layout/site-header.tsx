@@ -16,18 +16,20 @@ import {
 } from '../ui/dropdown-menu';
 import { Icons } from '../ui/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { useMe } from '@/hooks/user/useMe';
+
 import { MobileNav } from './mobile-nav';
 
 interface SiteHeaderProps {
   user: IUser | null;
   isAdmin: boolean;
+  shop?: string;
   isSellerStoreLayout?: boolean;
 }
 
 export function SiteHeader({
   user,
   isAdmin,
+  shop,
   isSellerStoreLayout,
 }: SiteHeaderProps) {
 
@@ -38,6 +40,7 @@ export function SiteHeader({
         <MainNav />
         <MobileNav
           isAdmin={isAdmin}
+          shop={shop}
           isSellerStoreLayout={isSellerStoreLayout}
         />
         <div className='flex flex-1 items-center justify-end space-x-4'>
@@ -77,7 +80,7 @@ export function SiteHeader({
                       <Link
                         href={
                           user?.role == 'admin'
-                            ? '/admin/dashboard/profile'
+                            ? '/admin/profile'
                             : '/seller/profile'
                         }
                       >
