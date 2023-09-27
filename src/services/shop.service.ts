@@ -1,6 +1,7 @@
 import { IShop } from '@/types';
 import { QueryParamsType, ShopsQueryOptionsType } from '@/types/custom.types';
 import { PaginatorInfo } from '@/types/utils';
+import { API_ENDPOINTS } from '@/utils/api/api-endpoints';
 import { HttpClient } from '@/utils/api/http';
 import { TShop } from '@/validations/shop';
 
@@ -21,6 +22,8 @@ export const shopClient = {
 
   getShops: async ({ queryKey }: QueryParamsType) => {
     const [_key, params] = queryKey;
+    
+    
     const {
       page,
       text,
@@ -28,7 +31,11 @@ export const shopClient = {
       orderBy = 'updatedAt',
       sortedBy = 'desc',
     } = params as ShopsQueryOptionsType;
-    return HttpClient.get<PaginatorInfo<IShop>>(`/shops`, {
+
+    const url = `${API_ENDPOINTS.SHOPS}?${
+      text ? `&search=${text}` : ''
+    }&searchJoin=and&limit=${limit}&page=${page}&orderBy=${orderBy}&sortedBy=${sortedBy}`;
+    return HttpClient.get<PaginatorInfo<IShop>>(url, {
       params: {
         page,
         limit,
@@ -42,4 +49,8 @@ export const shopClient = {
   getShop: async (slug: string) => {
     return HttpClient.get<IShop>(`/shops/${slug}`);
   },
+
+  deleteShop: async (id: string) => {
+    return HttpClient.delete<{ message: string }>(`/shops/${id}`);
+  }
 };

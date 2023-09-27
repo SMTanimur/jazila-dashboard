@@ -20,6 +20,11 @@ export function useShop() {
     isError: IsShopCreateError,
   } = useMutation(shopClient.createShop);
   const {
+    mutateAsync: shopDeleteMutation,
+    isLoading: shopDeleteLoading,
+    isError: IsShopDeleteError,
+  } = useMutation(shopClient.deleteShop);
+  const {
     mutateAsync: shopUpdateMutation,
     isLoading: shopUpdateLoading,
     isError: IsShopUpdateError,
@@ -46,6 +51,25 @@ export function useShop() {
       },
     });
   };
+  const attemptToDeleteShop = async (id:string) => {
+    toast.promise(shopDeleteMutation(id), {
+      loading: 'Deleting...',
+      success: data => {
+        queryClient.invalidateQueries(['me']);
+        queryClient.invalidateQueries(['shops']);
+        queryClient.invalidateQueries(['currentUser']);
+  
+        return <b>{data.message}</b>;
+      },
+      error: error => {
+        const {
+          response: { data },
+        }: any = error ?? {};
+
+        return <b> {data?.message}</b>;
+      },
+    });
+  };
 
   return {
     attemptShopCreate,
@@ -54,6 +78,9 @@ export function useShop() {
     shopUpdateMutation,
     shopUpdateLoading,
     IsShopUpdateError,
+    IsShopDeleteError,
+    shopDeleteLoading,
+    attemptToDeleteShop
 
   };
 }

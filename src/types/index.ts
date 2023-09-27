@@ -1,6 +1,23 @@
 import { type Icons } from '@/components/ui/icons';
 import { type FileWithPath } from 'react-dropzone';
 export declare type Maybe<T> = T | null;
+
+
+export interface Option {
+  label: string;
+  value: string;
+}
+
+
+export interface DataTableSearchableColumn<TData> {
+  id: keyof TData;
+  title: string;
+}
+
+export interface DataTableFilterableColumn<TData>
+  extends DataTableSearchableColumn<TData> {
+  options: Option[];
+}
 export interface NavItem {
   title: string;
   href?: string;
@@ -81,6 +98,18 @@ export interface IShop {
   logo: ImageInfo;
   createdAt: Date;
   settings?: IShopSettings;
+}
+
+export interface IPaginatorInfo {
+  totalDocs: number;
+  limit: number;
+  totalPages: number;
+  page: number;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage?: any;
+  nextPage?: any;
 }
 
 export interface IBalance {
