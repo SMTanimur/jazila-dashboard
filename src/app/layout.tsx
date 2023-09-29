@@ -11,6 +11,8 @@ import { defaultMetadata } from '@/lib/seo';
 import { fontMono, fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import RouterProvider from '@/shared/providers/router-provider';
+import GlobalAlerts from '@/shared/providers/GlobalAlerts';
+import GlobalModals from '@/shared/providers/GlobalModals';
 
 export const metadata: Metadata = defaultMetadata;
 
@@ -33,6 +35,8 @@ export default function RootLayout({
           <GoogleProvider>
             <QueryProvider>
             <RouterProvider>
+              <GlobalAlerts/>
+              <GlobalModals/>
               {children}
              </RouterProvider>
               <TailwindIndicator />

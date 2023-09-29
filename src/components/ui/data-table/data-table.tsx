@@ -31,7 +31,6 @@ import {
 } from '@/components/ui/table';
 import { useDebounce } from '@/hooks/use-debounce';
 import { DataTableToolbar } from './data-table-toolbar';
-import { DataTablePagination } from './data-table-pagination';
 import Pagination from '../pagination';
 
 interface DataTableProps<TData, TValue> {
@@ -58,10 +57,7 @@ export function DataTable<TData, TValue>({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  console.log(paginationInfo);
-  // Search params
-  const page = searchParams?.get('page') ?? '1';
-  const per_page = searchParams?.get('per_page') ?? '10';
+ 
   const sort = searchParams?.get('sort');
   const [column, order] = sort?.split('.') ?? [];
 
@@ -91,28 +87,6 @@ export function DataTable<TData, TValue>({
     []
   );
 
-  // Handle server-side pagination
-
-  const [{ pageIndex, pageSize }, setPagination] =
-    React.useState<PaginationState>({
-      pageIndex: paginationInfo!.pagingCounter - 1,
-      pageSize: Number(paginationInfo!.totalPages),
-    });
-
-  const pagination = React.useMemo(
-    () => ({
-      pageIndex,
-      pageSize,
-    }),
-    [pageIndex, pageSize]
-  );
-
-  React.useEffect(() => {
-    setPagination({
-      pageIndex: Number(page) - 1,
-      pageSize: Number(per_page),
-    });
-  }, [page, per_page]);
 
   // Handle server-side sorting
   const [sorting, setSorting] = React.useState<SortingState>([
@@ -121,22 +95,6 @@ export function DataTable<TData, TValue>({
       desc: order === 'desc',
     },
   ]);
-
-  React.useEffect(() => {
-    router.push(
-      `${pathname}?${createQueryString({
-        page,
-        sort: sorting[0]?.id
-          ? `${sorting[0]?.id}.${sorting[0]?.desc ? 'desc' : 'asc'}`
-          : null,
-      })}`,
-      {
-        scroll: false,
-      }
-    );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sorting]);
 
   // Handle server-side filtering
   const debouncedSearchableColumnFilters = JSON.parse(
@@ -238,7 +196,6 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
     enableRowSelection: true,
-    onPaginationChange: setPagination,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -319,7 +276,7 @@ export function DataTable<TData, TValue>({
           <Pagination
             total={paginationInfo?.totalDocs}
             current={paginationInfo?.pagingCounter}
-            pageSize={paginationInfo?.page}
+            pageSize={paginationInfo?.limit}
             onChange={onPagination}
           />
         </div>

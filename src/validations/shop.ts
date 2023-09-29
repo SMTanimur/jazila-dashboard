@@ -50,3 +50,18 @@ export const ShopSchema = z.object({
 });
 
 export type TShop = z.infer<typeof ShopSchema>;
+
+export const ShopApproveSchema = z.object({
+  id: z.string({
+    required_error: 'Shop id is required',
+    invalid_type_error: 'Shop id must be a valid string',
+  }),
+  admin_commission_rate: z.number(),
+});
+
+export type TShopApprove = z.infer<typeof ShopApproveSchema>;
+export const disApproveSchema = ShopApproveSchema.omit({
+  admin_commission_rate: true,
+});
+
+export type TShopDisApprove = z.infer<typeof disApproveSchema>;

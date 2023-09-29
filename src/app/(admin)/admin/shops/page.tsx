@@ -21,19 +21,20 @@ const ShopsPage = () => {
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 
   const { data, isLoading } = useShopsQuery({
-    limit: 1,
+    limit: 10,
     page: page,
     text: searchTerm,
+    sortedBy,
+    orderBy,
   });
 
-
-  if(isLoading) return <Loader text='Loading...'/>
+  if (isLoading) return <Loader text='Loading...' />;
   function handleSearch({ searchText }: { searchText: string }) {
     setSearchTerm(searchText);
   }
 
   function handlePagination(current: any) {
-    setPage(current );
+    setPage(current);
   }
 
   return (
@@ -45,7 +46,12 @@ const ShopsPage = () => {
           <Search onSearch={handleSearch} className=' w-full md:w-[70%] ' />
         </PageHeader>
       </Card>
-       <ShopsTable onPagination={handlePagination} data={data as any} />
+      <ShopsTable
+        onPagination={handlePagination}
+        data={data as any}
+        onOrder={setOrder}
+        onSort={setColumn}
+      />
     </Shell>
   );
 };

@@ -11,11 +11,11 @@ import {
 } from '@/components/ui/card';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useShopsQuery } from '@/hooks/shops/useGetShops';
+import { useMyShopsQuery } from '@/hooks/shops/useGetMyShops';
 import React from 'react';
 
 const Dashboard = () => {
-  const { data } = useShopsQuery({ limit: 10 });
+  const { data } = useMyShopsQuery({ limit: 10 });
   return (
     <div className='p-3'>
       <Tabs defaultValue='my-shops' className='w-full'>

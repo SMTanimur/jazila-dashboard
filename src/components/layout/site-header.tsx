@@ -46,7 +46,7 @@ export function SiteHeader({
         <div className='flex flex-1 items-center justify-end space-x-4'>
           <nav className='flex items-center space-x-2'>
             <Button className='mx-1 rounded-lg'>
-              <Link href={ user && user.role =='admin' ? '/admin' :'/seller/shop/create'}>
+              <Link href={ user && user.role =='admin' ? '/admin/shops/create' :'/seller/shop/create'}>
                 Create-shop
               </Link>
             </Button>

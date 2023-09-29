@@ -16,39 +16,80 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { IPaginatorInfo, IPaymentInfo, IShop } from '@/types';
+import { IPaginatorInfo, IPaymentInfo, IShop, SortOrder } from '@/types';
 import { DataTableColumnHeader } from '../ui/data-table/data-table-column-header';
 import { Icons } from '../ui/icons';
 import { DataTable } from '../ui/data-table/data-table';
 import { useShop } from '@/hooks/shops/useShop';
 import { Badge } from '../ui/badge';
 import { PaginatorInfo } from '@/types/utils';
+import { useGlobalAlertStateStore } from '@/store/alerts';
+import { Modal } from '../ui/Modal';
+import ApproveShopView from './approve-shop-view';
+import { useGlobalModalStateStore } from '@/store/modal';
+import { Tooltip } from '../common/Tooltip';
 
-type ShopsTableProps= {
-  data: PaginatorInfo<IShop> 
+type ShopsTableProps = {
+  data: PaginatorInfo<IShop>;
   onPagination: (current: number) => void;
-}
-export function ShopsTable({ data,onPagination  }: ShopsTableProps) {
+  onSort: (current: any) => void;
+  onOrder: (current: string) => void;
+};
+export function ShopsTable({
+  data,
+  onPagination,
+  onSort,
+  onOrder,
+}: ShopsTableProps) {
   const [isPending, startTransition] = React.useTransition();
   const [selectedRowIds, setSelectedRowIds] = React.useState<string[]>([]);
+  const setShowShopAlert = useGlobalAlertStateStore(
+    state => state.setShowAlert
+  );
+
+  const setShopModal = useGlobalModalStateStore(
+    state => state.setShopApproveModal
+  );
+  const showShopModal = useGlobalModalStateStore(state => state.modalData);
+  const [sortingObj, setSortingObj] = React.useState<{
+    sort: SortOrder;
+    column: string | null;
+  }>({
+    sort: SortOrder.Desc,
+    column: null,
+  });
+
+  const onHeaderClick = (column: string | null) => ({
+    onClick: () => {
+      onSort((currentSortDirection: SortOrder) =>
+        currentSortDirection === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc
+      );
+      onOrder(column!);
+
+      setSortingObj({
+        sort:
+          sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc,
+        column: column,
+      });
+    },
+  });
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const shopData =data.docs
+  const shopData = data.docs;
   const { attemptToDeleteShop, shopDeleteLoading } = useShop();
 
-  const paginateInfo:IPaginatorInfo={
-    hasNextPage:data.hasNextPage,
-    hasPrevPage:data.hasPrevPage,
-    limit:data.limit,
-    nextPage:data.nextPage,
-    page:data.page,
-    pagingCounter:data.pagingCounter,
-    prevPage:data.prevPage,
-    totalDocs:data.totalDocs,
-    totalPages:data.totalPages,
-
-  }
+  const paginateInfo: IPaginatorInfo = {
+    hasNextPage: data.hasNextPage,
+    hasPrevPage: data.hasPrevPage,
+    limit: data.limit,
+    nextPage: data.nextPage,
+    page: data.page,
+    pagingCounter: data.pagingCounter,
+    prevPage: data.prevPage,
+    totalDocs: data.totalDocs,
+    totalPages: data.totalPages,
+  };
 
   // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo<ColumnDef<IShop, unknown>[]>(
@@ -61,7 +102,9 @@ export function ShopsTable({ data,onPagination  }: ShopsTableProps) {
             onCheckedChange={value => {
               table.toggleAllPageRowsSelected(!!value);
               setSelectedRowIds(prev =>
-                prev.length === shopData.length ? [] : shopData.map(row => row._id)
+                prev.length === shopData.length
+                  ? []
+                  : shopData.map(row => row._id)
               );
             }}
             aria-label='Select all'
@@ -104,18 +147,21 @@ export function ShopsTable({ data,onPagination  }: ShopsTableProps) {
       },
       {
         accessorKey: 'name',
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title='Name' />
-        ),
+        header: ({ column }) => {
+          const owner = column.getAutoSortDir() as IShop['name'];
+          return (
+            <Button variant='ghost' onClick={() => onHeaderClick(owner)}>
+              <DataTableColumnHeader column={column} title='Name' />
+            </Button>
+          );
+        },
       },
       {
         accessorKey: 'owner',
         header: ({ column }) => {
-          console.log(column, 'column');
           return <DataTableColumnHeader column={column} title='Owner Name' />;
         },
         cell: ({ cell }) => {
-          
           const owner = cell.getValue() as IShop['owner'];
           return (
             <Badge variant='outline' className='capitalize'>
@@ -123,7 +169,6 @@ export function ShopsTable({ data,onPagination  }: ShopsTableProps) {
             </Badge>
           );
         },
-        
       },
       {
         accessorKey: 'products_count',
@@ -131,7 +176,7 @@ export function ShopsTable({ data,onPagination  }: ShopsTableProps) {
           <DataTableColumnHeader column={column} title='Products' />
         ),
       },
-      
+
       {
         accessorKey: 'orders_count',
         header: ({ column }) => (
@@ -147,59 +192,84 @@ export function ShopsTable({ data,onPagination  }: ShopsTableProps) {
         cell: ({ cell }) => {
           const isActive = cell.getValue() as IShop['is_active'];
           return (
-            <Badge  className={cn('capitalize',isActive ? 'bg-green-400 ' : 'bg-red-500')}  >
+            <Badge
+              className={cn(
+                'capitalize',
+                isActive ? 'bg-green-400 ' : 'bg-red-500'
+              )}
+            >
               {isActive ? 'Active' : 'Inactive'}
             </Badge>
           );
-
         },
         enableColumnFilter: false,
       },
+
       {
         id: 'actions',
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title='Actions' />
+        ),
         cell: ({ row }) => (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                aria-label='Open menu'
-                variant='ghost'
-                className='flex h-8 w-8 p-0 data-[state=open]:bg-muted'
-              >
-                <Icons.moreHorizontal className='h-4 w-4' aria-hidden='true' />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end' className='w-[160px]'>
-              <DropdownMenuItem
-                onClick={() => {
-                  const current = new URLSearchParams(
-                    Array.from(searchParams.entries())
-                  );
-                  current.set('edit', row.original._id);
-                  const search = current.toString();
-                  const query = search ? `?${search}` : '';
-                  router.push(`${pathname}${query}`);
-                }}
-              >
-                <span>Edit</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/${row.original.slug}`}>View</Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => {
-                  startTransition(() => {
-                    row.toggleSelected(false);
+          <div className='flex items-center gap-2'>
+            <div className=''>
+              {row.original.is_active ? (
+                <Tooltip content={'DisApproved'} placement='top'>
+                <Button
+                  onClick={() => setShowShopAlert(true, row.original._id)}
+                  variant={'danger'}
+                  size={'icon'}
+                >
+                  <Icons.close className='w-4' />
+                </Button>
+                </Tooltip>
+              ) : (
+                <Tooltip content={'Approved'} placement='top'>
+                <div className='relative'>
+                  <Button
+                    onClick={() => setShopModal(true, row.original._id)}
+                    size={'icon'}
+                  >
+                    <Icons.check className='w-4' />
+                  </Button>
+                </div>
+                </Tooltip>
+                
+              )}
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  aria-label='Open menu'
+                  variant='ghost'
+                  className='flex h-8 w-8 p-0 data-[state=open]:bg-muted'
+                >
+                  <Icons.moreHorizontal
+                    className='h-4 w-4'
+                    aria-hidden='true'
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end' className='w-[160px]'>
+                <DropdownMenuItem asChild>
+                  <Link href={`/${row.original.slug}`}>View</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    startTransition(() => {
+                      row.toggleSelected(false);
 
-                    attemptToDeleteShop(row.original._id);
-                  });
-                }}
-                disabled={shopDeleteLoading}
-              >
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                      attemptToDeleteShop(row.original._id);
+                    });
+                  }}
+                  disabled={shopDeleteLoading}
+                >
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         ),
       },
     ],
@@ -229,13 +299,6 @@ export function ShopsTable({ data,onPagination  }: ShopsTableProps) {
       data={data.docs}
       onPagination={onPagination}
       paginationInfo={paginateInfo}
-   
-      searchableColumns={[
-        {
-          id: 'name',
-          title: 'names',
-        },
-      ]}
       newRowLink={`/dashboard/stores/products/new`}
       deleteRowsAction={() => void deleteSelectedRows()}
     />
