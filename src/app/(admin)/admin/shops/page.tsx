@@ -10,7 +10,7 @@ import { Card } from '@/components/ui/card';
 import Loader from '@/components/ui/loader/loader';
 import { useShopsQuery } from '@/hooks/shops/useGetShops';
 import { IPaginatorInfo, IShop, SortOrder } from '@/types';
-import { PaginatorInfo } from '@/types/utils';
+
 
 import React, { useState } from 'react';
 

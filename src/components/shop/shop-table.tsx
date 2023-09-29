@@ -195,7 +195,7 @@ export function ShopsTable({
             <Badge
               className={cn(
                 'capitalize',
-                isActive ? 'bg-green-400 ' : 'bg-red-500'
+                isActive ? 'bg-green-600 ' : 'bg-red-500'
               )}
             >
               {isActive ? 'Active' : 'Inactive'}

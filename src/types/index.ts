@@ -28,6 +28,11 @@ export interface NavItem {
   description?: string;
 }
 
+export interface TypesIcon{
+  value: keyof typeof Icons;
+  label: string;
+}
+
 export interface ShopSideItem {
   title: string;
   href?: (shop: string) => string;

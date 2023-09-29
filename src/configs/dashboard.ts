@@ -109,6 +109,12 @@ export const adminDashboardConfig: DashboardConfig = {
       items: [],
     },
     {
+      title: 'Groups',
+      href: '/admin/groups',
+      icon: 'group',
+      items: [],
+    },
+    {
       title: 'Chats Seller',
       href: '/admin/seller-chat',
       icon: 'message',
