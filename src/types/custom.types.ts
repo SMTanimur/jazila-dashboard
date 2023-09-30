@@ -73,13 +73,7 @@ export type TypesQueryOptionsType = {
   orderBy?: string;
   sortedBy?: SortOrder;
 };
-export type StaffsQueryOptionsType = {
-  page?: number;
-  shop_id?: string;
-  limit?: number;
-  orderBy?: string;
-  sortedBy?: SortOrder;
-};
+
 
 export type QueryOptionsType = {
   page?: number;

@@ -65,9 +65,8 @@ export function FilesDialog<TFieldValues extends FieldValues>({
         formData, // it will be an array of uploaded attachments
         {
           onSuccess: (data: any) => {
-            console.log(data);
             if (multiple) {
-              setFiles(files?.concat(data));
+              setFiles(data);
             } else {
               setFiles([data]);
             }

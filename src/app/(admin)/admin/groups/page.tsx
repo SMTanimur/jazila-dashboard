@@ -9,12 +9,17 @@ import { Shell } from '@/components/shells/shell';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Icons } from '@/components/ui/icons';
+import { useGetTypesQuery } from '@/hooks/group/useGetTypes';
 import Link from 'next/link';
 
 import React, { useState } from 'react';
 
 const GroupsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const {data}=useGetTypesQuery({
+    limit:10,
+    text:searchTerm
+  })
   function handleSearch({ searchText }: { searchText: string }) {
     setSearchTerm(searchText);
   }

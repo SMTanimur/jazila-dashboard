@@ -1,37 +1,73 @@
 import { TypesIcon } from "@/types";
 
-export const typeIconList:TypesIcon[] = [
+export const typeIconList = [
+  // {
+  //   value: 'furniture',
+  //   label: 'Fruits and Vegetable',
+  // },
+  // {
+  //   value: 'facial',
+  //   label: 'Facial Care',
+  // },
+  // {
+  //   value: 'handbag',
+  //   label: 'Hand Bag',
+  // },
+  // {
+  //   value: 'dress',
+  //   label: 'Dress Icon',
+  // },
+  // {
+  //   value: 'furniture',
+  //   label: 'Furniture Icon',
+  // },
+  // {
+  //   value: 'book',
+  //   label: 'Book Icon',
+  // },
+  // {
+  //   value: 'medicine',
+  //   label: 'Medicine Icon',
+  // },
+
+  // {
+  //   value: 'bakery',
+  //   label: 'Bakery',
+  // },
   {
-    value: 'furniture',
+    value: 'FruitsVegetable',
     label: 'Fruits and Vegetable',
   },
   {
-    value: 'facial',
+    value: 'FacialCare',
     label: 'Facial Care',
   },
   {
-    value: 'handbag',
+    value: 'Handbag',
     label: 'Hand Bag',
   },
   {
-    value: 'dress',
+    value: 'DressIcon',
     label: 'Dress Icon',
   },
   {
-    value: 'furniture',
+    value: 'FurnitureIcon',
     label: 'Furniture Icon',
   },
   {
-    value: 'book',
+    value: 'BookIcon',
     label: 'Book Icon',
   },
   {
-    value: 'medicine',
+    value: 'MedicineIcon',
     label: 'Medicine Icon',
   },
-
   {
-    value: 'bakery',
+    value: 'Restaurant',
+    label: 'Restaurant',
+  },
+  {
+    value: 'Bakery',
     label: 'Bakery',
   },
 ];

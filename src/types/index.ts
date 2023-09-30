@@ -2,12 +2,10 @@ import { type Icons } from '@/components/ui/icons';
 import { type FileWithPath } from 'react-dropzone';
 export declare type Maybe<T> = T | null;
 
-
 export interface Option {
   label: string;
   value: string;
 }
-
 
 export interface DataTableSearchableColumn<TData> {
   id: keyof TData;
@@ -23,12 +21,12 @@ export interface NavItem {
   href?: string;
   disabled?: boolean;
   external?: boolean;
-  icon?: keyof typeof Icons;
+  icon?: keyof typeof Icons 
   label?: string;
   description?: string;
 }
 
-export interface TypesIcon{
+export interface TypesIcon {
   value: keyof typeof Icons;
   label: string;
 }
@@ -195,6 +193,22 @@ export interface ICategory {
   description: string;
   slug: string;
   is_active: boolean;
+}
+export interface IBanner {
+  _id: string;
+  type: IType;
+  title: string;
+  description: string;
+  image: ImageInfo;
+}
+
+export interface IType {
+  _id: string;
+  name: string;
+  icon: string;
+  slug: string;
+  banners: IBanner[];
+  promotional_sliders: ImageInfo[];
 }
 
 export interface IImage {

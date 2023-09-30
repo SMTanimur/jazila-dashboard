@@ -28,8 +28,6 @@ export function useShop() {
     state => state.setShopApproveModal
   );
   const shopApproveData = useGlobalModalStateStore(state => state.modalData);
-  const shopAlertData = useGlobalAlertStateStore(state => state.alertData);
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const shopApproveForm = useForm<TShopApprove>({
@@ -39,12 +37,7 @@ export function useShop() {
       id: shopApproveData as string,
     },
   });
-  const shopDisApproveForm = useForm<TShopDisApprove>({
-    resolver: zodResolver(disApproveSchema),
-    defaultValues: {
-      id: shopAlertData as string,
-    },
-  });
+  
   const {
     mutateAsync: shopCreateMutation,
     isLoading: shopCreateLoading,
@@ -81,9 +74,6 @@ export function useShop() {
         queryClient.invalidateQueries(['me']);
         queryClient.invalidateQueries(['shops']);
         queryClient.invalidateQueries(['currentUser']);
-        router.push(
-          currentUser?.role == 'seller' ? '/seller/dashboard' : '/admin'
-        );
         return <b>{data.message}</b>;
       },
       error: error => {
