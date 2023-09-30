@@ -33,6 +33,11 @@ export function useGroup() {
     isError: IsGroupCreateError,
   } = useMutation(groupClient.groupCreate);
   const {
+    mutateAsync: GroupDeleteMutation,
+    isLoading: GroupDeleteLoading,
+    isError: IsGroupDeleteError,
+  } = useMutation(groupClient.deleteGroup);
+  const {
     mutateAsync: GroupUpdateMutation,
     isLoading: GroupUpdateLoading,
     isError: IsGroupUpdateError,
@@ -41,6 +46,23 @@ export function useGroup() {
   const attemptGroupCreate = async (data: TGroup) => {
     toast.promise(GroupCreateMutation(data), {
       loading: 'creating...',
+      success: data => {
+        queryClient.invalidateQueries(['types']);
+       router.push('/admin/groups');
+        return <b>{data.message}</b>;
+      },
+      error: error => {
+        const {
+          response: { data },
+        }: any = error ?? {};
+
+        return <b> {data?.message}</b>;
+      },
+    });
+  };
+  const attemptGroupDelete = async (id:string) => {
+    toast.promise(GroupDeleteMutation(id), {
+      loading: 'deleting...',
       success: data => {
         queryClient.invalidateQueries(['types']);
        router.push('/admin/groups');
@@ -64,6 +86,10 @@ export function useGroup() {
     GroupUpdateLoading,
     IsGroupUpdateError,
     GroupUpdateMutation,
+    attemptGroupDelete,
+    GroupDeleteLoading,
+    IsGroupDeleteError,
+    
    
   };
 }

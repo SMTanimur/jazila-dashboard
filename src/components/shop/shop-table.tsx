@@ -24,8 +24,6 @@ import { useShop } from '@/hooks/shops/useShop';
 import { Badge } from '../ui/badge';
 import { PaginatorInfo } from '@/types/utils';
 import { useGlobalAlertStateStore } from '@/store/alerts';
-import { Modal } from '../ui/Modal';
-import ApproveShopView from './approve-shop-view';
 import { useGlobalModalStateStore } from '@/store/modal';
 import { Tooltip } from '../common/Tooltip';
 

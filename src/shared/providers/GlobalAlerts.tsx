@@ -1,6 +1,8 @@
 
+import { DeleteGroup } from '@/components/group/group-delete';
 import { DisApproveShop } from '@/components/shop/disapprove-shop-view';
 import type { FC } from 'react';
+
 
 
 
@@ -10,6 +12,7 @@ import type { FC } from 'react';
   return (
     <div>
       <DisApproveShop/>
+      <DeleteGroup/>
     </div>
   );
 };

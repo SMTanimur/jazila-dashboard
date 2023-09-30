@@ -76,6 +76,7 @@ import {
   Gem,
   Mailbox,
   Boxes,
+  Pencil,
 } from 'lucide-react';
 
 export type Icon = LucideIcon | any;
@@ -136,6 +137,7 @@ export const Icons = {
   search: Search,
   filter: Filter,
   alarm: AlarmClock,
+  pencil:Pencil,
   calendar: CalendarDays,
   user: User,
   card: CreditCard,

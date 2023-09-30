@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { Dialog, Transition } from '@headlessui/react';
 import type { FC, ReactNode } from 'react';
 import { Fragment } from 'react';
@@ -9,6 +10,7 @@ interface AlertProps {
   title: ReactNode;
   description?: ReactNode;
   show: boolean;
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   isDestructive?: boolean;
   isPerformingAction?: boolean;
   confirmText?: string;
@@ -21,6 +23,7 @@ const Alert: FC<AlertProps> = ({
   title,
   description,
   show,
+  size = 'sm',
   isDestructive = false,
   isPerformingAction = false,
   confirmText,
@@ -60,12 +63,18 @@ const Alert: FC<AlertProps> = ({
             leaveFrom='opacity-100 translate-y-0 sm:scale-100'
             leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
           >
-            <div className='inline-block w-full scale-100 space-y-6 rounded-xl bg-white p-5 text-left align-bottom shadow-xl transition-all dark:bg-gray-800 sm:max-w-sm sm:align-middle'>
+            <div
+              className={cn(
+                { 'sm:max-w-5xl': size === 'lg' },
+                { 'sm:max-w-3xl': size === 'md' },
+                { 'sm:max-w-lg': size === 'sm' },
+                { 'sm:max-w-sm': size === 'xs' },
+                'inline-block w-full scale-100 rounded-xl  bg-white text-left align-bottom shadow-xl transition-all dark:bg-gray-800 sm:my-8 sm:align-middle space-y-5 p-6 '
+              )}
+            >
               <div className='space-y-2'>
                 <b className='text-xl'>{title}</b>
-                {description ? (
-                  <p >{description}</p>
-                ) : null}
+                {description ? <p>{description}</p> : null}
               </div>
               <div>{children}</div>
               <div className='flex justify-between items-center space-x-3'>

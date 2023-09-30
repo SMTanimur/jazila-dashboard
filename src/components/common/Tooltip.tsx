@@ -6,24 +6,36 @@ import type { FC, ReactNode } from 'react';
 interface TooltipProps {
   children: ReactNode;
   content: ReactNode;
-  placement?: 'top' | 'right';
+  placement?:
+    | 'top'
+    | 'right'
+    | 'bottom'
+    | 'left'
+    | 'top-start'
+    | 'top-end'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left-start'
+    | 'left-end'
+    | 'right-start'
+    | 'right-end';
   className?: string;
   withDelay?: boolean;
 }
 
- export const Tooltip: FC<TooltipProps> = ({
+export const Tooltip: FC<TooltipProps> = ({
   children,
   content,
   placement = 'right',
   className = '',
-  withDelay = false
+  withDelay = false,
 }) => {
   return (
     <Tippy
       placement={placement}
       duration={0}
       delay={[withDelay ? 500 : 0, 0]}
-      className="hidden !rounded-lg !text-xs !leading-6 tracking-wide sm:block"
+      className='hidden !rounded-lg !text-xs !leading-6 tracking-wide sm:block'
       content={<span className={className}>{content}</span>}
     >
       <span>{children}</span>

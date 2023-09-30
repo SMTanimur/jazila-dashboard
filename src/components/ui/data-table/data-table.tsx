@@ -187,19 +187,13 @@ export function DataTable<TData, TValue>({
     columns,
     state: {
       sorting,
-      pagination: {
-        pageIndex: paginationInfo!.pagingCounter,
-        pageSize: paginationInfo!.totalPages,
-      },
-      columnVisibility,
-      rowSelection,
-      columnFilters,
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
+
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
