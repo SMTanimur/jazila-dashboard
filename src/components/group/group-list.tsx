@@ -18,6 +18,7 @@ import { useGlobalAlertStateStore } from '@/store/alerts';
 
 import { Tooltip } from '../common/Tooltip';
 import { ArrowUpDown } from 'lucide-react';
+import { useGroup } from '@/hooks/group/useGorup';
 
 type ShopsTableProps = {
   data: PaginatorInfo<IType>;
@@ -33,7 +34,7 @@ export function GroupsTable({
 }: ShopsTableProps) {
   const [selectedRowIds, setSelectedRowIds] = React.useState<string[]>([]);
   const setShowGroupAlert = useGlobalAlertStateStore(
-    state => state.setShowAlert
+    state => state.setShowGroupAlert
   );
 
   const [sortingObj, setSortingObj] = React.useState<{
@@ -62,7 +63,7 @@ export function GroupsTable({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const groupData = data.docs as IType[];
-  const { attemptToDeleteShop, shopDeleteLoading } = useShop();
+  const { attemptGroupDelete, GroupDeleteLoading } = useGroup();
 
   const paginateInfo: IPaginatorInfo = {
     hasNextPage: data?.hasNextPage,
@@ -157,7 +158,7 @@ export function GroupsTable({
               />
             </Tooltip>
             <Tooltip content={'Edit'} placement='bottom-end'>
-              <Link href={`/admin/groups/${row.original.slug}edit`}>
+              <Link href={`/admin/groups/${row.original.slug}/edit`}>
                 <Icons.pencil className='w-8 text-stone-300' />
               </Link>
             </Tooltip>
@@ -165,12 +166,12 @@ export function GroupsTable({
         ),
       },
     ],
-    [data, shopDeleteLoading, pathname, router, searchParams]
+    [data, GroupDeleteLoading, pathname, router, searchParams]
   );
 
   function deleteSelectedRows() {
     toast.promise(
-      Promise.all(selectedRowIds.map(id => attemptToDeleteShop(id))),
+      Promise.all(selectedRowIds.map(id => attemptGroupDelete(id))),
       {
         loading: 'Deleting...',
         success: () => {
@@ -191,7 +192,7 @@ export function GroupsTable({
       data={data?.docs}
       onPagination={onPagination}
       paginationInfo={paginateInfo}
-      newRowLink={`/dashboard/stores/products/new`}
+      newRowLink={`/admin/groups/create`}
       deleteRowsAction={() => void deleteSelectedRows()}
     />
   );

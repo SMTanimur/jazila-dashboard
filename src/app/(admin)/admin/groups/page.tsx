@@ -42,7 +42,7 @@ const GroupsPage = () => {
     <Shell variant={'sidebar'}>
       <Card className='p-10'>
         <PageHeader className='flex flex-col md:flex-row gap-4 items-center md:justify-between'>
-          <PageHeaderHeading>Shops</PageHeaderHeading>
+          <PageHeaderHeading>Groups</PageHeaderHeading>
           <div className='w-full md:w-[70%] flex flex-col md:flex-row items-center gap-4'>
             <Search onSearch={handleSearch} />
             <Button className='w-[200px] rounded-lg ' size={'lg'}>

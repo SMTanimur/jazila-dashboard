@@ -9,6 +9,13 @@ interface GlobalAlertState {
     alertData: any
   ) => void;
 
+  showGroupAlert: boolean;
+  groupAlertData: any
+  setShowGroupAlert: (
+    showGroupAlert: boolean,
+    groupAlertData: any
+  ) => void;
+
 }
 
 export const useGlobalAlertStateStore = create<GlobalAlertState>((set) => ({
@@ -17,4 +24,9 @@ export const useGlobalAlertStateStore = create<GlobalAlertState>((set) => ({
   forceShop: false,
   setShowAlert: (showAlert, alertData) =>
     set(() => ({ showAlert, alertData })),
+
+  showGroupAlert: false,
+  groupAlertData: null,
+  setShowGroupAlert: (showGroupAlert, groupAlertData) =>
+    set(() => ({ showGroupAlert, groupAlertData })),
 }));

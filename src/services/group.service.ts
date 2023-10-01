@@ -22,7 +22,7 @@ export const groupClient = {
   },
 
   updateGroup: ({ variables: { id, input } }: IGroupUpdateVariables) => {
-    return HttpClient.put<{ message: string }>(`/types/${id}`, input);
+    return HttpClient.patch<{ message: string }>(`/types/${id}`, input);
   },
 
   getGroups: async ({ queryKey }: QueryParamsType) => {
@@ -49,5 +49,9 @@ export const groupClient = {
     return HttpClient.delete<{ message: string }>(
       `${API_ENDPOINTS.TYPES}/${id}`
     );
+  },
+
+  getGroup: async (slug: string) => {
+    return HttpClient.get<IType>(`${API_ENDPOINTS.TYPES}/${slug}`);
   },
 };

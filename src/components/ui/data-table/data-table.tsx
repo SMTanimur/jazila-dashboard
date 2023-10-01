@@ -16,7 +16,6 @@ import {
   useReactTable,
   type ColumnDef,
   type ColumnFiltersState,
-  type PaginationState,
   type SortingState,
   type VisibilityState,
 } from '@tanstack/react-table';
@@ -186,7 +185,11 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     state: {
+    
       sorting,
+      columnVisibility,
+      rowSelection,
+      columnFilters,
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,

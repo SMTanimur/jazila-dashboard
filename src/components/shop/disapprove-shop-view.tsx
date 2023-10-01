@@ -18,9 +18,10 @@ export const DisApproveShop: FC = () => {
   const ShopAlertData = useGlobalAlertStateStore(state => state.alertData);
 
   return (
-    <div className="min-w-[400px]">
+  
     <Alert
       title={`Are you sure ?`}
+      icon={<Icons.CheckMarkCircle className='w-12 text-primary'/>}
       description={'DisApproved this shop '}
       confirmText={`Submit`}
       show={showShopAlert}
@@ -29,14 +30,11 @@ export const DisApproveShop: FC = () => {
       isPerformingAction={shopDisApproveLoading}
       onConfirm={() => attemptToDisApproveShop({id:ShopAlertData})}
       onClose={() => setShowShopAlert(false, null)}
-    >
-      <div className="flex justify-center gap-4">
-
-      
-      <Icons.CheckMarkCircle className='w-12 text-primary'/>
-      </div>
+    />
+    
      
-      </Alert>
-      </div>
+     
+    
+     
   );
 };

@@ -8,6 +8,7 @@ import { Fragment } from 'react';
 
 interface AlertProps {
   title: ReactNode;
+  icon?:ReactNode;
   description?: ReactNode;
   show: boolean;
   size?: 'xs' | 'sm' | 'md' | 'lg';
@@ -23,6 +24,7 @@ const Alert: FC<AlertProps> = ({
   title,
   description,
   show,
+  icon,
   size = 'sm',
   isDestructive = false,
   isPerformingAction = false,
@@ -69,18 +71,26 @@ const Alert: FC<AlertProps> = ({
                 { 'sm:max-w-3xl': size === 'md' },
                 { 'sm:max-w-lg': size === 'sm' },
                 { 'sm:max-w-sm': size === 'xs' },
-                'inline-block w-full scale-100 rounded-xl  bg-white text-left align-bottom shadow-xl transition-all dark:bg-gray-800 sm:my-8 sm:align-middle space-y-5 p-6 '
+                'inline-block w-full scale-100 rounded-xl  h-full bg-white text-left align-bottom shadow-xl transition-all dark:bg-gray-800 sm:my-8 sm:align-middle  p-10 '
               )}
             >
-              <div className='space-y-2'>
+              <div className='gap-y-14'>
+
+              
+              <div className='flex flex-col items-center  space-y-7'>
+              {icon}
+              
                 <b className='text-xl'>{title}</b>
                 {description ? <p>{description}</p> : null}
+            
+               
               </div>
+          
               <div>{children}</div>
-              <div className='flex justify-between items-center space-x-3'>
+              <div className='flex justify-between items-center space-x-3 mt-8  '>
                 {onConfirm ? (
                   <Button
-                    className='w-full'
+                    className='w-full rounded-lg'
                     size='lg'
                     variant={isDestructive ? 'danger' : 'default'}
                     disabled={isPerformingAction}
@@ -90,13 +100,14 @@ const Alert: FC<AlertProps> = ({
                   </Button>
                 ) : null}
                 <Button
-                  className='w-full'
+                  className='w-full rounded-lg'
                   size='lg'
                   variant='secondary'
                   onClick={onClose}
                 >
                   Cancel
                 </Button>
+              </div>
               </div>
             </div>
           </Transition.Child>

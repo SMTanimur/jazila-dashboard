@@ -38,6 +38,7 @@ import { Textarea } from '../ui/textarea';
 import { FileDialog } from '../common/shared/file-dialog';
 import { Button } from '../ui/button';
 import { Icons } from '../ui/icons';
+import { useRouter } from 'next/navigation';
 
 export const updatedIcons = typeIconList.map((item: any) => {
   item.label = (
@@ -72,7 +73,7 @@ interface GroupFormProps {
 
 const GroupForm = ({ initialData }: GroupFormProps) => {
   const [imageSlider, setImageSlider] = React.useState<IUploadedImage[] | null>(
-    null
+    initialData?.promotional_sliders ? initialData.promotional_sliders : null
   );
   const [files, setFiles] = React.useState<IUploadedImage | null>(null);
   const queryClient = useQueryClient();
@@ -82,7 +83,8 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
       ...initialData,
     },
   });
- console.log(imageSlider,'image')
+  const router = useRouter();
+  console.log(imageSlider, 'image');
   const {
     GroupCreateLoading,
     GroupUpdateLoading,
@@ -104,6 +106,8 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
         loading: 'updating...',
         success: data => {
           queryClient.invalidateQueries(['types']);
+          router.push('/admin/groups');
+
           return <b>{data.message}</b>;
         },
         error: error => {
@@ -118,7 +122,7 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
   };
 
   const onSubmit = async (values: TGroup) => {
-    const input:any = {
+    const input: any = {
       name: values.name!,
       ...(values.promotional_sliders
         ? {
@@ -133,21 +137,17 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
           }
         : {}),
       banners: values.banners?.map(banner => ({
-      
         description: banner?.description,
         title: banner?.title,
-
         image: {
           img_id: banner?.image?.img_id,
           img_url: banner?.image?.img_url,
         },
       })),
     };
-    if (!initialData) {
-      attemptGroupCreate(input);
-    }
+
+    attemptGroupCreate(input);
   };
-  console.log(groupForm.getValues('banners'));
   return (
     <React.Fragment>
       <Form {...groupForm}>
@@ -175,7 +175,7 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input  {...field} />
+                          <Input {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -240,23 +240,6 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                 <div className='my-4'>
                   <FormItem className='flex w-full flex-col gap-1.5'>
                     <FormLabel>Promotional Sliders</FormLabel>
-                    {initialData?.promotional_sliders.length ? (
-                      <div className='flex items-center gap-2'>
-                        {initialData?.promotional_sliders.map(
-                          (image, index) => (
-                            <Zoom key={index}>
-                              <Image
-                                src={image.img_url}
-                                alt={image.img_id}
-                                className='h-20 w-20 shrink-0 rounded-md object-cover object-center'
-                                width={80}
-                                height={80}
-                              />
-                            </Zoom>
-                          )
-                        )}
-                      </div>
-                    ) : null}
                     {imageSlider?.length ? (
                       <div className='flex items-center gap-2'>
                         {imageSlider?.map((image, index) => (
@@ -278,12 +261,7 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                         name='promotional_sliders'
                         maxFiles={5}
                         maxSize={1024 * 1024 * 4}
-                        multiple={true}
-                        files={
-                          initialData
-                            ? initialData?.promotional_sliders
-                            : (imageSlider as IUploadedImage[])
-                        }
+                        files={imageSlider as IUploadedImage[]}
                         setFiles={setImageSlider}
                       />
                     </FormControl>
@@ -369,6 +347,26 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                               </Zoom>
                             </div>
                           ) : null}
+
+                          {initialData?.banners &&
+                          initialData?.banners[index]?.image ? (
+                            <div className='flex items-center gap-2'>
+                              <Zoom>
+                                <Image
+                                  src={
+                                    initialData?.banners[index]?.image.img_url
+                                  }
+                                  alt={
+                                    initialData?.banners[index]?.image.img_id
+                                  }
+                                  className='h-20 w-20 shrink-0 rounded-md object-cover object-center'
+                                  width={80}
+                                  height={80}
+                                />
+                              </Zoom>
+                            </div>
+                          ) : null}
+
                           <FormControl>
                             <FileDialog
                               setValue={groupForm.setValue}
@@ -376,12 +374,22 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                               maxFiles={1}
                               maxSize={1024 * 1024 * 4}
                               multiple={false}
-                              files={files as IUploadedImage}
+                              files={
+                                initialData?.banners &&
+                                initialData?.banners[index]!.image
+                                  ? initialData.banners[index].image
+                                  : (files as IUploadedImage)
+                              }
                               setFiles={setFiles}
                             />
                           </FormControl>
-                          <UncontrolledFormMessage
+                          {/* <UncontrolledFormMessage
                             message={`${groupForm.formState.errors.banners}.${index}.image.message`}
+                          /> */}
+                          <UncontrolledFormMessage
+                            message={
+                              groupForm?.formState?.errors.banners?.message
+                            }
                           />
                         </FormItem>
                       </div>
@@ -416,13 +424,11 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
             </div>
           </div>
 
-
           <div className='flex items-end justify-end'>
             <Button
               disabled={GroupUpdateLoading || GroupCreateLoading}
               className='w-[200px] '
             >
-            
               {GroupUpdateLoading || GroupCreateLoading ? (
                 <Icons.spinner
                   className='mr-2 h-4 w-4 animate-spin'
@@ -433,7 +439,6 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                   <span>{initialData ? 'Update' : 'Save'}</span>
                 </React.Fragment>
               )}
-          
             </Button>
           </div>
         </form>

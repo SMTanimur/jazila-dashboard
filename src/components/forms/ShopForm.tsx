@@ -27,6 +27,8 @@ import Image from 'next/image';
 import { useShop } from '@/hooks/shops/useShop';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
+import { useCurrentUser } from '@/hooks/user/useCurrentUser';
+import { useRouter } from 'next/navigation';
 
 interface ShopFormProps {
   initialData?: IShop | null;
@@ -45,6 +47,8 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
   const [coverImage, setCoverImage] = React.useState<IUploadedImage | null>(
     null
   );
+  const router = useRouter()
+  const {currentUser}=useCurrentUser()
   const queryClient = useQueryClient();
   const shopForm = useForm<TShop>({
     resolver: zodResolver(ShopSchema),
@@ -98,7 +102,11 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
           queryClient.invalidateQueries(['me']);
           queryClient.invalidateQueries(['shops']);
           queryClient.invalidateQueries(['currentUser']);
-
+           if(currentUser?.role==='admin'){
+             router.push('/admin/shops')
+           }else{
+              router.push('/seller/dashboard')
+           }
           return <b>{data.message}</b>;
         },
         error: error => {
@@ -489,7 +497,6 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                   <span>{initialData ? 'Update' : 'Save'}</span>
                 </React.Fragment>
               )}
-              Save
               <span className='sr-only'>Save</span>
             </Button>
           </div>

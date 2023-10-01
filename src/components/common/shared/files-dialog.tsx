@@ -33,8 +33,8 @@ interface FilesDialogProps<
   accept?: Accept;
   maxSize?: number;
   maxFiles?: number;
-  multiple: boolean;
-  files: IUploadedImage[] 
+  multiple?: boolean;
+  files: IUploadedImage[];
   setFiles: React.Dispatch<React.SetStateAction<IUploadedImage[] | null>>;
 }
 
@@ -45,7 +45,7 @@ export function FilesDialog<TFieldValues extends FieldValues>({
     'image/*': [],
   },
   maxSize = 1024 * 1024 * 2,
-  maxFiles = 1,
+  maxFiles = 5,
   files,
   setFiles,
   multiple = true,
@@ -65,10 +65,10 @@ export function FilesDialog<TFieldValues extends FieldValues>({
         formData, // it will be an array of uploaded attachments
         {
           onSuccess: (data: any) => {
-            if (multiple) {
+            if (!files) {
               setFiles(data);
             } else {
-              setFiles([data]);
+              setFiles(files.concat(data));
             }
           },
         }
@@ -212,13 +212,12 @@ interface FileCardProps {
 function FileCard({ i, file, files, setFiles }: FileCardProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
-
   const handleDelete = async (image: IUploadedImage) => {
     const images = files?.filter(file => file.img_id !== image.img_id);
 
     try {
       setFiles(images as IUploadedImage[]);
-    
+
       await deleteImages(image.img_id);
     } catch (error: any) {}
   };
@@ -237,7 +236,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
     <div className='relative flex items-center justify-between gap-2.5'>
       <div className='flex items-center gap-2'>
         <Image
-          src={ file.img_url}
+          src={file.img_url}
           alt={file.img_id}
           className='h-10 w-10 shrink-0 rounded-md'
           width={40}
@@ -254,16 +253,15 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
         </div>
       </div>
       <div className='flex items-center gap-2'>
-       
         <Button
           type='button'
           variant='outline'
           size='icon'
           className='h-7 w-7'
           onClick={() => {
-            console.log(file,'file')
+            console.log(file, 'file');
             if (!files) return;
-            handleDelete(file)
+            handleDelete(file);
           }}
         >
           <Icons.close className='h-4 w-4 text-white' aria-hidden='true' />
