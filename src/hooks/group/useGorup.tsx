@@ -16,7 +16,7 @@ import { useCurrentUser } from '../user/useCurrentUser';
 import { useGlobalAlertStateStore } from '@/store/alerts';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useGlobalModalStateStore } from '@/store/modal';
+
 import { TGroup, groupsSchema } from '@/validations/groups';
 import { groupClient } from '@/services/group.service';
 
@@ -26,6 +26,10 @@ export function useGroup() {
   const queryClient = useQueryClient();
 
  
+  const setShowGroupAlert = useGlobalAlertStateStore(
+    state => state.setShowGroupAlert
+  );
+
  
   const {
     mutateAsync: GroupCreateMutation,
@@ -65,6 +69,7 @@ export function useGroup() {
       loading: 'deleting...',
       success: data => {
         queryClient.invalidateQueries(['types']);
+        setShowGroupAlert(false,null)
        router.push('/admin/groups');
         return <b>{data.message}</b>;
       },

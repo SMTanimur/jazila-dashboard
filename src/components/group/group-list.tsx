@@ -153,7 +153,7 @@ export function GroupsTable({
           <div className='flex items-center gap-2'>
             <Tooltip content={'Delete'} placement='bottom-end'>
               <Icons.trash
-                className='w-8 text-red-500'
+                className='w-8 text-red-500 cursor-auto'
                 onClick={() => setShowGroupAlert(true, row.original._id)}
               />
             </Tooltip>
