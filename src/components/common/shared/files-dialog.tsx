@@ -15,7 +15,11 @@ import type {
 import { toast } from 'sonner';
 import 'cropperjs/dist/cropper.css';
 import Image from 'next/image';
-import { IUploadedImage, deleteImages } from '@/services/upload.service';
+import {
+  IUploadedImage,
+  deleteAllImages,
+  deleteImages,
+} from '@/services/upload.service';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/icons';
@@ -65,10 +69,14 @@ export function FilesDialog<TFieldValues extends FieldValues>({
         formData, // it will be an array of uploaded attachments
         {
           onSuccess: (data: any) => {
+            console.log(files)
             if (!files) {
               setFiles(data);
-            } else {
-              setFiles(files.concat(data));
+            }else if (multiple){
+              setFiles(files.concat(data))
+            }
+            else {
+              setFiles(data);
             }
           },
         }
@@ -190,7 +198,13 @@ export function FilesDialog<TFieldValues extends FieldValues>({
             variant='outline'
             size='sm'
             className='mt-2.5 w-full'
-            onClick={() => setFiles(null)}
+            onClick={async () => {
+              let images = [];
+              images = files.map(file => file.img_id);
+              console.log(images, 'images');
+              await deleteAllImages({ public_id: images });
+              setFiles(null);
+            }}
           >
             <Icons.trash className='mr-2 h-4 w-4' aria-hidden='true' />
             Remove All
@@ -210,27 +224,14 @@ interface FileCardProps {
 }
 
 function FileCard({ i, file, files, setFiles }: FileCardProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
-
   const handleDelete = async (image: IUploadedImage) => {
     const images = files?.filter(file => file.img_id !== image.img_id);
 
     try {
       setFiles(images as IUploadedImage[]);
-
-      await deleteImages(image.img_id);
+      await deleteImages({ public_id: image.img_id });
     } catch (error: any) {}
   };
-
-  React.useEffect(() => {
-    function handleKeydown(e: KeyboardEvent) {
-      if (e.key === 'Enter') {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener('keydown', handleKeydown);
-    return () => document.removeEventListener('keydown', handleKeydown);
-  }, []);
 
   return (
     <div className='relative flex items-center justify-between gap-2.5'>
@@ -259,8 +260,6 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
           size='icon'
           className='h-7 w-7'
           onClick={() => {
-            console.log(file, 'file');
-            if (!files) return;
             handleDelete(file);
           }}
         >

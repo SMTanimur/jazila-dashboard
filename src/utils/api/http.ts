@@ -1,8 +1,6 @@
-
 import { AUTH_TOKEN_KEY } from '@/constants';
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
-
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const isServer = typeof window === 'undefined';
@@ -76,8 +74,8 @@ export class HttpClient {
     return response.data;
   }
 
-  static async delete<T>(url: string) {
-    const response = await http.delete<T>(url);
+  static async delete<T>(url: string, data?: unknown) {
+    const response = await http.delete<T>(url, data as any);
     return response.data;
   }
 

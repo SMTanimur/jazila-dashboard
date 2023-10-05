@@ -1,8 +1,20 @@
 import { HttpClient } from '@/utils/api/http';
+import { TDeleteImage, TDeleteImages } from '@/validations/upload';
 
 export interface IUploadedImage {
   img_id: string;
   img_url: string;
+}
+
+export interface IUploadDeletesVariables {
+  variables: {
+    public_id: string[];
+  };
+}
+export interface IUploadVariables {
+  variables: {
+    public_id: string;
+  };
 }
 
 export const uploadImage = async (formData: FormData) => {
@@ -28,6 +40,9 @@ export const uploadImages = async (formData: FormData) => {
     }
   );
 };
-export const deleteImages = async (publicId: string) => {
-  return HttpClient.patch(`/upload`, publicId);
+export const deleteImages = (data: TDeleteImage) => {
+  return HttpClient.put(`/upload`, data);
+};
+export const deleteAllImages =  (data: TDeleteImages) => {
+  return HttpClient.put(`/upload/all`, data);
 };

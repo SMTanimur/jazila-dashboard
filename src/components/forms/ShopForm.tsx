@@ -19,8 +19,6 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { Icons } from '../ui/icons';
-
-import { FileDialog } from '../common/shared/file-dialog';
 import { Zoom } from '../common/shared/zoom-image';
 import { IUploadedImage } from '@/services/upload.service';
 import Image from 'next/image';
@@ -29,6 +27,7 @@ import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCurrentUser } from '@/hooks/user/useCurrentUser';
 import { useRouter } from 'next/navigation';
+import FileDialog from '../common/shared/file-dialog';
 
 interface ShopFormProps {
   initialData?: IShop | null;
@@ -43,12 +42,8 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
     shopUpdateLoading,
     shopUpdateMutation,
   } = useShop();
-  const [files, setFiles] = React.useState<IUploadedImage | null>(null);
-  const [coverImage, setCoverImage] = React.useState<IUploadedImage | null>(
-    null
-  );
-  const router = useRouter()
-  const {currentUser}=useCurrentUser()
+  const router = useRouter();
+  const { currentUser } = useCurrentUser();
   const queryClient = useQueryClient();
   const shopForm = useForm<TShop>({
     resolver: zodResolver(ShopSchema),
@@ -102,11 +97,11 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
           queryClient.invalidateQueries(['me']);
           queryClient.invalidateQueries(['shops']);
           queryClient.invalidateQueries(['currentUser']);
-           if(currentUser?.role==='admin'){
-             router.push('/admin/shops')
-           }else{
-              router.push('/seller/dashboard')
-           }
+          if (currentUser?.role === 'admin') {
+            router.push('/admin/shops');
+          } else {
+            router.push('/seller/dashboard');
+          }
           return <b>{data.message}</b>;
         },
         error: error => {
@@ -143,24 +138,7 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                 <div className='my-4'>
                   <FormItem className='flex w-full flex-col gap-1.5'>
                     <FormLabel>Logo</FormLabel>
-                    {initialData?.logo || files ? (
-                      <div className='flex items-center gap-2'>
-                        <Zoom>
-                          <Image
-                            src={
-                              files?.img_url ||
-                              (initialData?.logo.img_url as any)
-                            }
-                            alt={
-                              (initialData?.logo.img_id as any) || files?.img_id
-                            }
-                            className='h-20 w-20 shrink-0 rounded-md object-cover object-center'
-                            width={80}
-                            height={80}
-                          />
-                        </Zoom>
-                      </div>
-                    ) : null}
+                
                     <FormControl>
                       <FileDialog
                         setValue={shopForm.setValue}
@@ -168,12 +146,7 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                         maxFiles={1}
                         maxSize={1024 * 1024 * 4}
                         multiple={false}
-                        files={
-                          initialData
-                            ? initialData.logo
-                            : (files as IUploadedImage)
-                        }
-                        setFiles={setFiles}
+                        value={initialData ? initialData.logo as IUploadedImage : null}
                       />
                     </FormControl>
                     <UncontrolledFormMessage
@@ -198,25 +171,7 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                 <div className='my-4'>
                   <FormItem className='flex w-full flex-col gap-1.5'>
                     <FormLabel>Cover Image</FormLabel>
-                    {initialData?.cover_image || coverImage ? (
-                      <div className='flex items-center gap-2'>
-                        <Zoom>
-                          <Image
-                            src={
-                              coverImage?.img_url ||
-                              (initialData?.cover_image.img_url as any)
-                            }
-                            alt={
-                              (initialData?.cover_image.img_id as any) ||
-                              coverImage?.img_id
-                            }
-                            className='h-20 w-20 shrink-0 rounded-md object-cover object-center'
-                            width={80}
-                            height={80}
-                          />
-                        </Zoom>
-                      </div>
-                    ) : null}
+                  
                     <FormControl>
                       <FileDialog
                         setValue={shopForm.setValue}
@@ -224,12 +179,12 @@ const ShopForm = ({ initialData }: ShopFormProps) => {
                         maxFiles={1}
                         maxSize={1024 * 1024 * 4}
                         multiple={false}
-                        files={
+                        value={
                           initialData
                             ? initialData.cover_image
-                            : (coverImage as IUploadedImage)
+                            : null
                         }
-                        setFiles={setCoverImage}
+                        
                       />
                     </FormControl>
                     <UncontrolledFormMessage

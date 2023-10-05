@@ -58,7 +58,7 @@ const GroupsPage = () => {
         </PageHeader>
       </Card>
 
-      <section>
+      <section className='w-full'>
         <GroupsTable
           onPagination={handlePagination}
           data={data as PaginatorInfo<IType>}
