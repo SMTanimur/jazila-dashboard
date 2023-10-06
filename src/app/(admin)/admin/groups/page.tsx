@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/components/button';
 import {
   PageHeader,
   PageHeaderDescription,
@@ -7,7 +8,6 @@ import {
 import Search from '@/components/common/shared/search';
 import { GroupsTable } from '@/components/group/group-list';
 import { Shell } from '@/components/shells/shell';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Icons } from '@/components/ui/icons';
 import Loader from '@/components/ui/loader/loader';
@@ -40,12 +40,16 @@ const GroupsPage = () => {
   }
   return (
     <Shell variant={'sidebar'}>
-      <Card className='p-10'>
+      <Card className='p-6'>
         <PageHeader className='flex flex-col md:flex-row gap-4 items-center md:justify-between'>
           <PageHeaderHeading>Groups</PageHeaderHeading>
           <div className='w-full md:w-[70%] flex flex-col md:flex-row items-center gap-4'>
             <Search onSearch={handleSearch} />
-            <Button className='w-[200px] rounded-lg ' size={'lg'}>
+            <Button
+              className='w-[200px] dark:text-white dark:hover:text-stone-950 text-stone-950 rounded-lg '
+              size={'lg'}
+              intent={'white-outline'}
+            >
               <Link
                 href={'/admin/groups/create'}
                 className='flex items-center gap-1'
@@ -58,14 +62,12 @@ const GroupsPage = () => {
         </PageHeader>
       </Card>
 
-      <section className='w-full'>
         <GroupsTable
           onPagination={handlePagination}
           data={data as PaginatorInfo<IType>}
           onOrder={setOrder}
           onSort={setColumn}
         />
-      </section>
     </Shell>
   );
 };
