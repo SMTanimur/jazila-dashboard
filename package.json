@@ -69,6 +69,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.4",
     "react-medium-image-zoom": "^5.1.8",
+    "react-select": "^5.7.7",
     "react-wrap-balancer": "^1.1.0",
     "sonner": "^0.7.1",
     "tailwind-merge": "^1.14.0",
@@ -82,6 +83,7 @@
     "@types/js-cookie": "^3.0.3",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/lodash": "^4.14.198",
-    "@types/nprogress": "^0.2.1"
+    "@types/nprogress": "^0.2.1",
+    "@types/react-select": "^5.0.1"
   }
 }

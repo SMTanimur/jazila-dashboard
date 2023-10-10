@@ -21,14 +21,6 @@ import {
 import { Card } from '../ui/card';
 import { Input } from '../ui/input';
 import * as typeIcons from '../icons/type';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../ui/select';
 import { getIcon } from '@/utils/get-icon';
 import { IUploadedImage } from '@/services/upload.service';
 import { Zoom } from '../common/shared/zoom-image';

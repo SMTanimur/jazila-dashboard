@@ -190,9 +190,15 @@ export interface IProduct {
 
 export interface ICategory {
   name: string;
-  description: string;
   slug: string;
-  is_active: boolean;
+  _id: string;
+  image: ImageInfo;
+  type: IType;
+  parent?: ICategory;
+  children?: ICategory[];
+  createdAt: Date;
+  updatedAt: Date;
+  
 }
 export interface IBanner {
   _id: string;
