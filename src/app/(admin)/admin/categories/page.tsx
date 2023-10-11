@@ -1,32 +1,59 @@
 'use client';
-import { Button } from '@/components/button';
+import CategoryList from '@/components/category/category-list';
 import {
   PageHeader,
   PageHeaderHeading,
 } from '@/components/common/shared/page-header';
 import Search from '@/components/common/shared/search';
 import { Shell } from '@/components/shells/shell';
+import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/icons';
+import Loader from '@/components/ui/loader/loader';
+import { useGetCategoriesQuery } from '@/hooks/category/useGetCategories';
+import { SortOrder } from '@/types';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
 const CategoriesPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [type, setType] = useState('');
+  const [page, setPage] = useState(1);
 
+  const [orderBy, setOrder] = useState('createdAt');
+  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  const [visible, setVisible] = useState(false);
+
+  const toggleVisible = () => {
+    setVisible((v) => !v);
+  };
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useGetCategoriesQuery({
+    limit: 20,
+    page,
+    type,
+    text: searchTerm,
+    orderBy,
+    sortedBy,
+  });
+
+  if (loading) return <Loader text={'Loading'} />;
+  // if (error) return <ErrorMessage message={error.message} />;
   function handleSearch({ searchText }: { searchText: string }) {
     setSearchTerm(searchText);
+  }
+  function handlePagination(current: any) {
+    setPage(current);
   }
   return (
     <Shell variant={'sidebar'}>
       <PageHeader className='flex flex-col md:flex-row gap-4 items-center md:justify-between'>
         <PageHeaderHeading>Categories</PageHeaderHeading>
         <div className='w-full md:w-[70%] flex flex-col md:flex-row items-center gap-4'>
-          <Search onSearch={handleSearch} />
-          <Button
-            className='w-[200px] dark:text-white dark:hover:text-stone-950 text-stone-950 rounded-lg '
-            size={'lg'}
-            intent={'white-outline'}
-          >
+          <Search onSearch={handleSearch} placeholder='Search By Name' />
+          <Button className='w-[200px] px-0 ' size={'default'}>
             <Link
               href={'/admin/categories/create'}
               className='flex items-center gap-1'
@@ -37,6 +64,11 @@ const CategoriesPage = () => {
           </Button>
         </div>
       </PageHeader>
+      <CategoryList
+        categories={data!}
+        onPagination={handlePagination}
+       
+      />
     </Shell>
   );
 };

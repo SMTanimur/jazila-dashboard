@@ -5,10 +5,10 @@ import { PaginatorInfo } from "@/types/utils";
 import { API_ENDPOINTS } from "@/utils/api/api-endpoints";
 import { useQuery } from "@tanstack/react-query";
 
- export const useGetCategoriesQuery = (options: CategoriesQueryOptionsType) => {
+ export const useGetAllCategoriesQuery = (options: CategoriesQueryOptionsType) => {
   return useQuery<PaginatorInfo<ICategory>, Error>(
     [API_ENDPOINTS.CATEGORIES, options],
-    categoryClient.getCategories,
+    categoryClient.getAllCategories,
     {
       keepPreviousData: true,
     }

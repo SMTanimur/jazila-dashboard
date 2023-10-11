@@ -17,6 +17,7 @@ const classes = {
 type SearchProps = {
   className?: string;
   shadow?: boolean;
+  placeholder?: string;
   variant?: "normal" | "solid" | "outline";
   inputClassName?: string;
   onSearch: (data: SearchValue) => void;
@@ -30,6 +31,7 @@ const Search: React.FC<SearchProps> = ({
   className,
   onSearch,
   variant = "outline",
+  placeholder,
   shadow = false,
   inputClassName,
   ...rest
@@ -90,7 +92,7 @@ const Search: React.FC<SearchProps> = ({
         id="search"
         {...register("searchText")}
         className={rootClassName}
-        placeholder={"Search"}
+        placeholder= {placeholder ? placeholder : 'Search'}
         aria-label="Search"
         autoComplete="off"
         {...rest}

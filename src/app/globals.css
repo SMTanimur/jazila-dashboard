@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
 
 @layer base {
   :root {
@@ -26,7 +25,7 @@
     --ring: 346.8 77.2% 49.8%;
     --radius: 0.3rem;
   }
- 
+
   .dark {
     --background: 20 14.3% 4.1%;
     --foreground: 0 0% 95%;
@@ -50,7 +49,6 @@
   }
 }
 
- 
 @layer base {
   * {
     @apply border-border;
@@ -59,3 +57,4 @@
     @apply bg-background text-foreground;
   }
 }
+@import './custom-plugins.css';

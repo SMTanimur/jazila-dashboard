@@ -120,7 +120,7 @@ export function GroupsTable({
         accessorKey: '_id',
         id: 'index',
         header: ({ column, }) => {
-          return <DataTableColumnHeader column={column} title='ID' />;
+          return <DataTableColumnHeader column={column}  title='ID' />;
         },
       },
 

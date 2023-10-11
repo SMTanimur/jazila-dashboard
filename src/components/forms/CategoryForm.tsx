@@ -33,11 +33,9 @@ import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 import { Icons } from '../ui/icons';
 import { useGetAllTypesQuery } from '@/hooks/group/useGetAllTypes';
-import { useGetCategoriesQuery } from '@/hooks/category/useGetCategories';
 import SelectInput from '../ui/select-input';
 import { Label } from '../ui/label';
-import InputSelect from '../select/select';
-import { MultiSelect } from '../ui/multi-select';
+import { useGetAllCategoriesQuery } from '../../hooks/category/useGetAllCategories';
 
 function SelectCategories({
   control,
@@ -59,7 +57,7 @@ function SelectCategories({
     }
   }, [type?.slug]);
 
-  const { data: categories, isLoading } = useGetCategoriesQuery({
+  const { data: categories, isLoading } = useGetAllCategoriesQuery({
     limit: 999,
   });
 
@@ -78,12 +76,7 @@ function SelectCategories({
     </div>
   );
 }
-type FormValues = {
-  name: string;
-  parent: any;
-  image: any;
-  type: any;
-};
+
 const defaultValues = {};
 interface CategoryFormProps {
   initialValues?: ICategory;

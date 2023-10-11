@@ -45,8 +45,22 @@ export const categoryClient = {
     return HttpClient.get<PaginatorInfo<ICategory>>(url);
   },
 
-  getAllGroups: async () => {
-    return HttpClient.get<IType[]>(`${API_ENDPOINTS.TYPES}/all`);
+  getAllCategories: async ({ queryKey }: QueryParamsType) => {
+    const [_key, params] = queryKey;
+
+    const {
+      page,
+      text,
+      limit = 15,
+      type,
+      orderBy = 'updatedAt',
+      sortedBy = 'desc',
+    } = params as CategoriesQueryOptionsType;
+
+    const url = `${API_ENDPOINTS.CATEGORIES}/all?${text ? `&search=${text}` : ''}${
+      type ? `type=${type}&` : ''
+    }&searchJoin=and&limit=${limit}&page=${page}&orderBy=${orderBy}&sortedBy=${sortedBy}`;
+    return HttpClient.get<PaginatorInfo<ICategory>>(url);
   },
   deleteGroup: async (id: string) => {
     return HttpClient.delete<{ message: string }>(
