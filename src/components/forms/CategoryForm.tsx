@@ -130,7 +130,7 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
       name: values.name!,
       image: values.image,
       type: values.type,
-      parent: values.parent._id,
+      parent: values?.parent?._id,
     };
     console.log(input);
 
