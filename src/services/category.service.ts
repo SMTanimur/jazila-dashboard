@@ -62,9 +62,9 @@ export const categoryClient = {
     }&searchJoin=and&limit=${limit}&page=${page}&orderBy=${orderBy}&sortedBy=${sortedBy}`;
     return HttpClient.get<PaginatorInfo<ICategory>>(url);
   },
-  deleteGroup: async (id: string) => {
+  deleteCategory: async (id: string) => {
     return HttpClient.delete<{ message: string }>(
-      `${API_ENDPOINTS.TYPES}/${id}`
+      `${API_ENDPOINTS.CATEGORIES}/${id}`
     );
   },
 

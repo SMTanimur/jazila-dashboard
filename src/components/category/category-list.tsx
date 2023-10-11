@@ -7,16 +7,20 @@ import { useState } from 'react';
 import TitleWithSort from '@/components/ui/title-with-sort';
 import { PaginatorInfo } from '@/types/utils';
 import { MainTable } from '../table';
+import { Tooltip } from '../common/Tooltip';
+import { Icons } from '../ui/icons';
+import Link from 'next/link';
+import { useGlobalAlertStateStore } from '@/store/alerts';
 
 type IProps = {
   categories: PaginatorInfo<ICategory>;
   onPagination: (key: number) => void;
 };
-const CategoryList = ({
-  categories,
-  onPagination,
-}: IProps) => {
+const CategoryList = ({ categories, onPagination }: IProps) => {
   const rowExpandable = (record: any) => record.children?.length;
+  const setShowCategoryAlert = useGlobalAlertStateStore(
+    state => state.setShowCategoryAlert
+  );
 
   const paginateInfo: IPaginatorInfo = {
     hasNextPage: categories?.hasNextPage,
@@ -29,8 +33,6 @@ const CategoryList = ({
     totalDocs: categories?.totalDocs,
     totalPages: categories?.totalPages,
   };
-
-
 
   const columns = [
     {
@@ -48,7 +50,6 @@ const CategoryList = ({
       key: 'name',
       align: 'left',
       width: 150,
-    
     },
 
     {
@@ -89,22 +90,29 @@ const CategoryList = ({
         </div>
       ),
     },
-    
-    // {
-    //   title: 'Action',
-    //   dataIndex: 'slug',
-    //   key: 'actions',
-    //   align: 'right',
-    //   width: 290,
-    //   render: (slug: string, record: Category) => (
-    //     <LanguageSwitcher
-    //       slug={slug}
-    //       record={record}
-    //       deleteModalView='DELETE_CATEGORY'
-    //       routes={Routes?.category}
-    //     />
-    //   ),
-    // },
+
+    {
+      title: 'Action',
+      dataIndex: '_id',
+      key: 'actions',
+      align: 'center',
+      width: 120,
+      render: (id: string, options: ICategory) => (
+        <div className='flex items-center gap-2'>
+          <Tooltip content={'Delete'} placement='bottom-end'>
+            <Icons.trash
+              className='w-8 text-red-500 cursor-auto'
+              onClick={() => setShowCategoryAlert(true, id)}
+            />
+          </Tooltip>
+          <Tooltip content={'Edit'} placement='bottom-end'>
+            <Link href={`/admin/categories/${options.slug}/edit`}>
+              <Icons.pencil className='w-8 text-stone-300' />
+            </Link>
+          </Tooltip>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -134,8 +142,6 @@ const CategoryList = ({
           />
         </div>
       )}
-
-
     </>
   );
 };
