@@ -68,7 +68,7 @@ export const categoryClient = {
     );
   },
 
-  getGroup: async (slug: string) => {
-    return HttpClient.get<IType>(`${API_ENDPOINTS.TYPES}/${slug}`);
+  getCategory: async (slug: string) => {
+    return HttpClient.get<ICategory>(`${API_ENDPOINTS.CATEGORIES}/${slug}`);
   },
 };

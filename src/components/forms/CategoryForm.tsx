@@ -100,7 +100,6 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
   } = useCategory();
   console.log(categoryForm.getValues('parent'));
   const attemptCategoryUpdate = async (data: TCategory) => {
-
     toast.promise(
       categoryUpdateMutation({
         variables: { id: initialValues?._id as string, input: data },
@@ -109,7 +108,7 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
         loading: 'updating...',
         success: data => {
           queryClient.invalidateQueries(['categories']);
-          router.push('/admin/category');
+          router.push('/admin/categories');
 
           return <b>{data.message}</b>;
         },
@@ -125,15 +124,12 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
   };
 
   const onSubmit = async (values: TCategory) => {
-   
     const input: any = {
       name: values.name!,
       image: values.image,
       type: values.type,
       parent: values?.parent?._id,
     };
-    console.log(input);
-
     attemptCategoryCreate(input);
   };
 
@@ -146,8 +142,7 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
             initialValues
               ? (...args) =>
                   void categoryForm.handleSubmit(attemptCategoryUpdate)(...args)
-              : (...args) =>
-                  void categoryForm.handleSubmit(onSubmit)(...args)
+              : (...args) => void categoryForm.handleSubmit(onSubmit)(...args)
           }
         >
           <div className='flex flex-col items-center gap-4 w-full lg:flex-row'>
@@ -249,46 +244,6 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
                     control={categoryForm.control}
                     setValue={categoryForm.setValue}
                   />
-                 
-                  {/* <FormField
-                    control={categoryForm.control}
-                    name='parent'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Parent</FormLabel>
-
-                     
-                        <Select
-                          disabled={categoryCreateLoading}
-                          onValueChange={field.onChange}
-                          value={field.value as string}
-                          defaultValue={field.value as string}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue
-                                defaultValue={field.value as string}
-                                placeholder='Select a category'
-                              />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectGroup>
-                            {categories?.docs?.map((category: ICategory) => (
-                              <SelectItem
-                                key={category._id}
-                                value={category._id}
-                              >
-                                {category.name}
-                              </SelectItem>
-                            ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
                 </div>
               </Card>
             </div>

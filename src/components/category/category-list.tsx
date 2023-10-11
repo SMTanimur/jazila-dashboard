@@ -57,11 +57,12 @@ const CategoryList = ({ categories, onPagination }: IProps) => {
       dataIndex: 'image',
       key: 'image',
       align: 'center',
+      width:150,
 
       render: (image: ImageInfo, { name }: { name: string }) => {
         if (!image) return null;
-
         return (
+          <div className="flex justify-center items-center">
           <Image
             src={image.img_url ?? '/'}
             alt={name}
@@ -70,6 +71,7 @@ const CategoryList = ({ categories, onPagination }: IProps) => {
             height={30}
             className='rounded overflow-hidden'
           />
+          </div>
         );
       },
     },
@@ -101,7 +103,7 @@ const CategoryList = ({ categories, onPagination }: IProps) => {
         <div className='flex items-center gap-2'>
           <Tooltip content={'Delete'} placement='bottom-end'>
             <Icons.trash
-              className='w-8 text-red-500 cursor-auto'
+              className='w-8 text-red-500 cursor-pointer'
               onClick={() => setShowCategoryAlert(true, id)}
             />
           </Tooltip>
