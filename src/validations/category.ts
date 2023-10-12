@@ -10,6 +10,7 @@ export const categorySchema = z.object({
   type: z.any(),
 
   image: TImage.optional().nullable(),
+  icon: z.any().optional(),
   parent: z.any().optional(),
 });
 

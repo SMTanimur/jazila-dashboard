@@ -36,7 +36,24 @@ import { useGetAllTypesQuery } from '@/hooks/group/useGetAllTypes';
 import SelectInput from '../ui/select-input';
 import { Label } from '../ui/label';
 import { useGetAllCategoriesQuery } from '../../hooks/category/useGetAllCategories';
-
+import { categoryIcons } from '../category/category-icons';
+import { getIcon } from '@/utils/get-icon';
+import * as categoriesIcon from '../icons/category';
+export const updatedIcons = categoryIcons.map((item: any) => {
+  item.label = (
+    <div className='flex items-center space-s-5'>
+      <span className='flex h-5 w-5 items-center justify-center'>
+        {getIcon({
+          iconList: categoriesIcon,
+          iconName: item.value,
+          className: 'max-h-full max-w-full',
+        })}
+      </span>
+      <span>{item.label}</span>
+    </div>
+  );
+  return item;
+});
 function SelectCategories({
   control,
   setValue,
@@ -86,7 +103,16 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
   const router = useRouter();
   const categoryForm = useForm<TCategory>({
     resolver: zodResolver(categorySchema),
-    defaultValues: initialValues ? initialValues : defaultValues,
+    defaultValues: initialValues
+      ? {
+          ...initialValues,
+          icon: initialValues?.icon
+            ? categoryIcons.find(
+                singleIcon => singleIcon.value === initialValues?.icon!
+              )
+            : '',
+        }
+      : defaultValues,
   });
 
   const { data, isLoading } = useGetAllTypesQuery();
@@ -98,7 +124,7 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
     categoryUpdateLoading,
     categoryUpdateMutation,
   } = useCategory();
-  console.log(categoryForm.getValues('parent'));
+
   const attemptCategoryUpdate = async (data: TCategory) => {
     toast.promise(
       categoryUpdateMutation({
@@ -128,9 +154,14 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
       name: values.name!,
       image: values.image,
       type: values.type,
+      icon: values.icon?.value || '',
       parent: values?.parent?._id,
     };
-    attemptCategoryCreate(input);
+    if (initialValues) {
+      attemptCategoryUpdate(input);
+    } else {
+      attemptCategoryCreate(input);
+    }
   };
 
   return (
@@ -138,11 +169,8 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
       <Form {...categoryForm}>
         <form
           className='grid gap-10 w-full'
-          onSubmit={
-            initialValues
-              ? (...args) =>
-                  void categoryForm.handleSubmit(attemptCategoryUpdate)(...args)
-              : (...args) => void categoryForm.handleSubmit(onSubmit)(...args)
+          onSubmit={(...args) =>
+            void categoryForm.handleSubmit(onSubmit)(...args)
           }
         >
           <div className='flex flex-col items-center gap-4 w-full lg:flex-row'>
@@ -203,6 +231,15 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
                         <FormMessage />
                       </FormItem>
                     )}
+                  />
+                </div>
+                <div className='my-4'>
+                  <Label>Icon</Label>
+                  <SelectInput
+                    name='icon'
+                    control={categoryForm.control}
+                    options={updatedIcons}
+                    isClearable={true}
                   />
                 </div>
                 <div className='my-4'>

@@ -31,12 +31,13 @@ import { Button } from '../ui/button';
 import { Icons } from '../ui/icons';
 import { useRouter } from 'next/navigation';
 import FileDialog from '../common/shared/file-dialog';
-
+import SelectInput from '../ui/select-input';
+import { Label } from '../ui/label';
 
 export const updatedIcons = typeIconList.map((item: any) => {
   item.label = (
-    <div className='flex space-s-5 items-center'>
-      <span className='flex w-5 h-5 items-center justify-center'>
+    <div className='flex items-center space-x-5'>
+      <span className='flex h-5 w-5 items-center justify-center'>
         {getIcon({
           iconList: typeIcons,
           iconName: item.value,
@@ -55,11 +56,6 @@ type BannerInput = {
   image: ImageInfo;
 };
 
-type FormValues = {
-  name: string;
-  promotional_sliders: ImageInfo[];
-  banners?: BannerInput[];
-};
 interface GroupFormProps {
   initialData?: IType | null;
 }
@@ -69,13 +65,18 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
     initialData?.promotional_sliders ? initialData.promotional_sliders : null
   );
   const queryClient = useQueryClient();
-  const groupForm  = useForm<TGroup>({
-      resolver: zodResolver(groupsSchema),
-      defaultValues: {
-        ...initialData,
-      },
-    });
-    const {control}=groupForm
+  const groupForm = useForm<TGroup>({
+    resolver: zodResolver(groupsSchema),
+    defaultValues: {
+      ...initialData,
+      icon: initialData?.icon
+        ? typeIconList.find(
+            (singleIcon) => singleIcon.value === initialData?.icon
+          )
+        : '',
+    },
+  });
+  const { control } = groupForm;
   groupForm.control;
   const router = useRouter();
 
@@ -141,21 +142,21 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
           img_url: banner?.image?.img_url,
         },
       })),
+      icon: values.icon?.value,
     };
 
-    attemptGroupCreate(input);
+    if (!initialData) {
+      attemptGroupCreate(input);
+    } else {
+      attemptGroupUpdate(input);
+    }
   };
   return (
     <React.Fragment>
       <Form {...groupForm}>
         <form
           className='grid gap-10 w-full'
-          onSubmit={
-            initialData
-              ? (...args) =>
-                  void groupForm.handleSubmit(attemptGroupUpdate)(...args)
-              : (...args) => void groupForm.handleSubmit(onSubmit)(...args)
-          }
+          onSubmit={(...args) => void groupForm.handleSubmit(onSubmit)(...args)}
         >
           <div className='flex flex-col items-center gap-4 w-full lg:flex-row'>
             <div className='lg:w-1/3 w-full flex flex-col items-start gap-2'>
@@ -179,44 +180,15 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                     )}
                   />
                 </div>
-                {/* <div className='my-4'>
-                  <FormField
-                    control={groupForm.control}
+                <div className='my-4'>
+                  <Label>Icon</Label>
+                  <SelectInput
                     name='icon'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Icon</FormLabel>
-                        <FormControl>
-                          <Select
-                            defaultOpen={false}
-                            value={field.value}
-                            onValueChange={(value: typeof field.value) =>
-                              field.onChange(value)
-                            }
-                          >
-                            <SelectTrigger className='capitalize'>
-                              <SelectValue placeholder={field.value} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                {updatedIcons.map(({ label, value }) => (
-                                  <SelectItem
-                                    key={value}
-                                    value={value}
-                                    className='capitalize'
-                                  >
-                                    {label}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    control={groupForm.control}
+                    options={updatedIcons}
+                    isClearable={true}
                   />
-                </div> */}
+                </div>
               </Card>
             </div>
           </div>
@@ -336,7 +308,7 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                             <FileDialog
                               name={`banners.${index}.image`}
                               value={item.image}
-                             setValue={groupForm.setValue}
+                              setValue={groupForm.setValue}
                               multiple={false}
                             />
                           </FormControl>

@@ -33,6 +33,8 @@ export const groupsSchema = z.object({
 
   banners: z.array(bannerSchema).optional().nullable(),
 
+  icon: z.any().optional(),
+
   promotional_sliders: z.array(TImage).optional().nullable(),
 });
 

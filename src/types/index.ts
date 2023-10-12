@@ -21,7 +21,7 @@ export interface NavItem {
   href?: string;
   disabled?: boolean;
   external?: boolean;
-  icon?: keyof typeof Icons 
+  icon?: keyof typeof Icons;
   label?: string;
   description?: string;
 }
@@ -191,6 +191,7 @@ export interface IProduct {
 export interface ICategory {
   name: string;
   slug: string;
+  icon?: string;
   _id: string;
   image: ImageInfo;
   type: IType;
@@ -198,7 +199,6 @@ export interface ICategory {
   children?: ICategory[];
   createdAt: Date;
   updatedAt: Date;
-  
 }
 export interface IBanner {
   _id: string;
