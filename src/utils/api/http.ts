@@ -1,37 +1,37 @@
-import { AUTH_TOKEN_KEY } from '@/constants';
-import axios, { AxiosResponse } from 'axios';
-import Cookies from 'js-cookie';
+import { AUTH_TOKEN_KEY } from "@/constants";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
-const isServer = typeof window === 'undefined';
+const isServer = typeof window === "undefined";
 const http = axios.create({
   baseURL: `${baseURL}/v1`,
   timeout: 500000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Change request data/error here
-http.interceptors.request.use(config => {
-  const token = Cookies.get(AUTH_TOKEN_KEY);
+http.interceptors.request.use((config) => {
+  const token = Cookies.get(AUTH_TOKEN_KEY as string);
   //@ts-ignore
   config.headers = {
     ...config.headers,
-    Authorization: `Bearer ${token ? token : ''}`,
+    Authorization: `Bearer ${token ? token : ""}`,
   };
   return config;
 });
 
 // Change response data/error here
 http.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     if (
       (error.response && error.response.status === 401) ||
       (error.response && error.response.status === 403) ||
       (error.response &&
-        error.response.data.message === 'PICKBAZAR_ERROR.NOT_AUTHORIZED')
+        error.response.data.message === "PICKBAZAR_ERROR.NOT_AUTHORIZED")
     ) {
       // Cookies.remove(AUTH_TOKEN_KEY);
       // Router.reload();
@@ -83,13 +83,13 @@ export class HttpClient {
     return Object.entries(params)
       .filter(([, value]) => Boolean(value))
       .map(([k, v]) =>
-        ['type', 'categories', 'tags', 'author', 'manufacturer'].includes(k)
+        ["type", "categories", "tags", "author", "manufacturer"].includes(k)
           ? `${k}.slug:${v}`
-          : ['is_approved'].includes(k)
+          : ["is_approved"].includes(k)
           ? formatBooleanSearchParam(k, v as boolean)
           : `${k}:${v}`
       )
-      .join(';');
+      .join(";");
   }
 }
 

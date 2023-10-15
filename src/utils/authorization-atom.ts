@@ -1,12 +1,10 @@
-
-import { AUTH_TOKEN_KEY } from '@/constants';
-import { atom } from 'jotai';
-import Cookies from 'js-cookie';
+import { AUTH_TOKEN_KEY } from "@/constants";
+import { atom } from "jotai";
+import Cookies from "js-cookie";
 
 export function checkIsLoggedIn() {
-  const token = Cookies.get(AUTH_TOKEN_KEY);
+  const token = Cookies.get(AUTH_TOKEN_KEY as string);
   if (!token) return false;
   return true;
 }
 export const authorizationAtom = atom(checkIsLoggedIn());
-

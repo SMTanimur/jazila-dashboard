@@ -1,6 +1,6 @@
-import { QueryKey } from '@tanstack/react-query';
-import { Maybe, SortOrder } from '.';
-
+import { QueryKey } from "@tanstack/react-query";
+import { SortOrder } from ".";
+export declare type Maybe<T> = T | null;
 
 export type CategoriesQueryOptionsType = {
   type?: string;
@@ -73,7 +73,6 @@ export type TypesQueryOptionsType = {
   orderBy?: string;
   sortedBy?: SortOrder;
 };
-
 
 export type QueryOptionsType = {
   page?: number;
