@@ -1,14 +1,21 @@
-'use client';
-
-import { typeIconList } from '@/configs/type-setting';
-import { useGroup } from '@/hooks/group/useGorup';
-import { IType, ImageInfo } from '@/types';
-import { TGroup, groupsSchema } from '@/validations/groups';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
-import React from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+"use client";
+import { typeIconList } from "@/configs/type-setting";
+import { useGroup } from "@/hooks/group/useGorup";
+import { IUploadedImage } from "@/services/upload.service";
+import { IType } from "@/types";
+import { getIcon } from "@/utils/get-icon";
+import { TGroup, groupsSchema } from "@/validations/groups";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import FileDialog from "../common/shared/file-dialog";
+import FilesDialog from "../common/shared/files.dialog";
+import * as typeIcons from "../icons/type";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
 import {
   Form,
   FormControl,
@@ -17,31 +24,21 @@ import {
   FormLabel,
   FormMessage,
   UncontrolledFormMessage,
-} from '../ui/form';
-import { Card } from '../ui/card';
-import { Input } from '../ui/input';
-import * as typeIcons from '../icons/type';
-import { getIcon } from '@/utils/get-icon';
-import { IUploadedImage } from '@/services/upload.service';
-import { Zoom } from '../common/shared/zoom-image';
-import Image from 'next/image';
-import { FilesDialog } from '../common/shared/files-dialog';
-import { Textarea } from '../ui/textarea';
-import { Button } from '../ui/button';
-import { Icons } from '../ui/icons';
-import { useRouter } from 'next/navigation';
-import FileDialog from '../common/shared/file-dialog';
-import SelectInput from '../ui/select-input';
-import { Label } from '../ui/label';
+} from "../ui/form";
+import { Icons } from "../ui/icons";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import SelectInput from "../ui/select-input";
+import { Textarea } from "../ui/textarea";
 
 export const updatedIcons = typeIconList.map((item: any) => {
   item.label = (
-    <div className='flex items-center space-x-5'>
-      <span className='flex h-5 w-5 items-center justify-center'>
+    <div className="flex items-center space-x-5">
+      <span className="flex h-5 w-5 items-center justify-center">
         {getIcon({
           iconList: typeIcons,
           iconName: item.value,
-          className: 'max-h-full max-w-full',
+          className: "max-h-full max-w-full",
         })}
       </span>
       <span>{item.label}</span>
@@ -49,12 +46,6 @@ export const updatedIcons = typeIconList.map((item: any) => {
   );
   return item;
 });
-
-type BannerInput = {
-  title: string;
-  description: string;
-  image: ImageInfo;
-};
 
 interface GroupFormProps {
   initialData?: IType | null;
@@ -73,11 +64,10 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
         ? typeIconList.find(
             (singleIcon) => singleIcon.value === initialData?.icon
           )
-        : '',
+        : "",
     },
   });
   const { control } = groupForm;
-  groupForm.control;
   const router = useRouter();
 
   const {
@@ -89,7 +79,7 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
 
   const { fields, append, remove } = useFieldArray({
     control: groupForm.control,
-    name: 'banners',
+    name: "banners",
   });
 
   const attemptGroupUpdate = async (data: TGroup) => {
@@ -98,14 +88,14 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
         variables: { id: initialData?._id as string, input: data },
       }),
       {
-        loading: 'updating...',
-        success: data => {
-          queryClient.invalidateQueries(['types']);
-          router.push('/admin/groups');
+        loading: "updating...",
+        success: (data) => {
+          queryClient.invalidateQueries(["types"]);
+          router.push("/admin/groups");
 
           return <b>{data.message}</b>;
         },
-        error: error => {
+        error: (error) => {
           const {
             response: { data },
           }: any = error ?? {};
@@ -117,15 +107,12 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
   };
 
   const onSubmit = async (values: TGroup) => {
-    values?.banners?.map(value => {
-      console.log(value?.image, 'banners');
-    });
     const input: any = {
       name: values.name!,
       ...(values.promotional_sliders
         ? {
             promotional_sliders: [
-              ...values.promotional_sliders.map(value => {
+              ...values.promotional_sliders.map((value) => {
                 return {
                   img_id: value?.img_id,
                   img_url: value?.img_url,
@@ -134,7 +121,7 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
             ],
           }
         : {}),
-      banners: values.banners?.map(banner => ({
+      banners: values.banners?.map((banner) => ({
         description: banner?.description,
         title: banner?.title,
         image: {
@@ -155,20 +142,20 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
     <React.Fragment>
       <Form {...groupForm}>
         <form
-          className='grid gap-10 w-full'
+          className="grid gap-10 w-full"
           onSubmit={(...args) => void groupForm.handleSubmit(onSubmit)(...args)}
         >
-          <div className='flex flex-col items-center gap-4 w-full lg:flex-row'>
-            <div className='lg:w-1/3 w-full flex flex-col items-start gap-2'>
-              <h4 className='text-stone-800 font-semibold'>Basic Info</h4>
+          <div className="flex flex-col items-center gap-4 w-full lg:flex-row">
+            <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
+              <h4 className="text-stone-800 font-semibold">Basic Info</h4>
               <p>Add some basic info about your shop from here</p>
             </div>
-            <div className='lg:w-2/3 w-full'>
-              <Card className='p-8  w-full'>
-                <div className='my-4'>
+            <div className="lg:w-2/3 w-full">
+              <Card className="p-8  w-full">
+                <div className="my-4">
                   <FormField
                     control={control}
-                    name='name'
+                    name="name"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Name</FormLabel>
@@ -180,10 +167,10 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                     )}
                   />
                 </div>
-                <div className='my-4'>
+                <div className="my-4">
                   <Label>Icon</Label>
                   <SelectInput
-                    name='icon'
+                    name="icon"
                     control={groupForm.control}
                     options={updatedIcons}
                     isClearable={true}
@@ -193,50 +180,38 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
             </div>
           </div>
 
-          <div className='border-dotted w-full border-2 ' />
-          <div className='flex flex-col items-center gap-4 w-full lg:flex-row'>
-            <div className='lg:w-1/3 w-full flex flex-col items-start gap-2'>
-              <h4 className='text-stone-800 font-semibold'>
+          <div className="border-dotted w-full border-2 " />
+          <div className="flex flex-col items-center gap-4 w-full lg:flex-row">
+            <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
+              <h4 className="text-stone-800 font-semibold">
                 Promotional Sliders
               </h4>
-              <p>
+              <h6>
                 Upload your shop cover image from here Dimension of the cover
                 image should be 1170 x 435px
-              </p>
+              </h6>
             </div>
-            <div className='lg:w-2/3 w-full'>
-              <Card className='p-8  w-full'>
-                <div className='my-4'>
-                  <FormItem className='flex w-full flex-col gap-1.5'>
+            <div className="lg:w-2/3 w-full">
+              <Card className="p-8  w-full">
+                <div className="my-4">
+                  <FormItem className="flex w-full flex-col gap-1.5">
                     <FormLabel>Promotional Sliders</FormLabel>
-                    {imageSlider?.length ? (
-                      <div className='flex items-center gap-2'>
-                        {imageSlider?.map((image, index) => (
-                          <Zoom key={index}>
-                            <Image
-                              src={image.img_url}
-                              alt={image.img_id}
-                              className='h-20 w-20 shrink-0 rounded-md object-cover object-center'
-                              width={80}
-                              height={80}
-                            />
-                          </Zoom>
-                        ))}
-                      </div>
-                    ) : null}
                     <FormControl>
                       <FilesDialog
                         setValue={groupForm.setValue}
-                        name='promotional_sliders'
+                        name="promotional_sliders"
                         maxFiles={5}
                         maxSize={1024 * 1024 * 4}
-                        files={imageSlider as IUploadedImage[]}
-                        setFiles={setImageSlider}
+                        multiple={true}
+                        value={
+                          initialData ? initialData.promotional_sliders : null
+                        }
                       />
                     </FormControl>
                     <UncontrolledFormMessage
                       message={
-                        groupForm.formState.errors.promotional_sliders?.message
+                        groupForm.formState?.errors?.promotional_sliders
+                          ?.message
                       }
                     />
                   </FormItem>
@@ -245,33 +220,33 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
             </div>
           </div>
 
-          <div className='border-dotted w-full border-2 ' />
-          <div className='flex flex-col items-center gap-4 w-full lg:flex-row'>
-            <div className='lg:w-1/3 w-full flex flex-col items-start gap-2'>
-              <h4 className='text-stone-800 font-semibold'>Add Banner</h4>
+          <div className="border-dotted w-full border-2 " />
+          <div className="flex flex-col items-center gap-4 w-full lg:flex-row">
+            <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
+              <h4 className="text-stone-800 font-semibold">Add Banner</h4>
               <p>Add some basic info about your shop from here</p>
             </div>
-            <div className='lg:w-2/3 w-full'>
-              <Card className='w-full sm:w-8/12 md:w-full p-8'>
+            <div className="lg:w-2/3 w-full">
+              <Card className="w-full sm:w-8/12 md:w-full p-8">
                 <div>
                   {fields.map((item: any & { id: string }, index: number) => (
                     <div
-                      className='border-b border-dashed border-border-200 last:border-0 py-5 md:py-8 first:pt-0'
+                      className="border-b border-dashed border-border-200 last:border-0 py-5 md:py-8 first:pt-0"
                       key={item.id}
                     >
-                      <div className='flex items-center justify-between mb-5'>
-                        <h5 className='mb-0'>Banner {index + 1}</h5>
+                      <div className="flex items-center justify-between mb-5">
+                        <h5 className="mb-0">Banner {index + 1}</h5>
                         <button
                           onClick={() => {
                             remove(index);
                           }}
-                          type='button'
-                          className='text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1'
+                          type="button"
+                          className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
                         >
                           Remove banner
                         </button>
                       </div>
-                      <div className='grid grid-cols-1 gap-5'>
+                      <div className="grid grid-cols-1 gap-5">
                         <FormField
                           control={groupForm.control}
                           name={`banners.${index}.title` as const}
@@ -300,8 +275,8 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                         />
                       </div>
 
-                      <div className='w-full mt-5'>
-                        <FormItem className='flex w-full flex-col gap-1.5'>
+                      <div className="w-full mt-5">
+                        <FormItem className="flex w-full flex-col gap-1.5">
                           <FormLabel>Logo</FormLabel>
 
                           <FormControl>
@@ -324,47 +299,39 @@ const GroupForm = ({ initialData }: GroupFormProps) => {
                   ))}
                 </div>
                 <Button
-                  type='button'
+                  type="button"
                   onClick={() =>
                     append({
-                      description: '',
+                      description: "",
                       image: {
-                        img_id: '',
-                        img_url: '',
+                        img_id: "",
+                        img_url: "",
                       },
-                      title: '',
+                      title: "",
                     })
                   }
-                  className='w-full sm:w-auto'
+                  className="w-full sm:w-auto"
                 >
                   Add Banner
                 </Button>
-
-                {/* {errors?.banners?.message ? (
-            <Alert
-              message={t(errors?.banners?.message)}
-              variant="error"
-              className="mt-5"
-            />
-          ) : null} */}
               </Card>
             </div>
           </div>
 
-          <div className='flex items-end justify-end'>
+          <div className="flex items-end justify-end">
             <Button
               disabled={GroupUpdateLoading || GroupCreateLoading}
-              className='md:w-[200px] '
+              className="md:w-[200px] "
             >
               {GroupUpdateLoading || GroupCreateLoading ? (
                 <Icons.spinner
-                  className='mr-2 h-4 w-4 animate-spin'
-                  aria-hidden='true'
+                  className="mr-2 h-4 w-4 animate-spin"
+                  aria-hidden="true"
                 />
               ) : (
-                <React.Fragment>
-                  <span>{initialData ? 'Update' : 'Save'}</span>
-                </React.Fragment>
+                <>
+                  <span>{initialData ? "Update" : "Save"}</span>
+                </>
               )}
             </Button>
           </div>
