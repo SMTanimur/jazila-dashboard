@@ -1,5 +1,5 @@
-import { type Icons } from '@/components/ui/icons';
-import { type FileWithPath } from 'react-dropzone';
+import { type Icons } from "@/components/ui/icons";
+import { type FileWithPath } from "react-dropzone";
 export declare type Maybe<T> = T | null;
 
 export interface Option {
@@ -208,6 +208,16 @@ export interface IBanner {
   image: ImageInfo;
 }
 
+export interface ITag {
+  name: string;
+  slug: string;
+  details: string;
+  image: ImageInfo;
+  type: IType;
+  products: IProduct[];
+  _id: string;
+}
+
 export interface IType {
   _id: string;
   name: string;
@@ -237,7 +247,7 @@ export interface IFileHandler<T> {
 
 export enum SortOrder {
   /** Sort records in ascending order. */
-  Asc = 'asc',
+  Asc = "asc",
   /** Sort records in descending order. */
-  Desc = 'desc',
+  Desc = "desc",
 }

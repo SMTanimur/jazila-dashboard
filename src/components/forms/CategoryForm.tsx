@@ -1,10 +1,23 @@
-'use client';
+"use client";
 
-import { ICategory, IType } from '@/types';
-import { TCategory, categorySchema } from '@/validations/category';
-import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect } from 'react';
-import { Control, useForm, useFormState, useWatch } from 'react-hook-form';
+import { useCategory } from "@/hooks/category/useCategory";
+import { useGetAllTypesQuery } from "@/hooks/group/useGetAllTypes";
+import { IUploadedImage } from "@/services/upload.service";
+import { ICategory, IType } from "@/types";
+import { getIcon } from "@/utils/get-icon";
+import { TCategory, categorySchema } from "@/validations/category";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { Control, useForm, useFormState, useWatch } from "react-hook-form";
+import { toast } from "sonner";
+import { useGetAllCategoriesQuery } from "../../hooks/category/useGetAllCategories";
+import { categoryIcons } from "../category/category-icons";
+import FileDialog from "../common/shared/file-dialog";
+import * as categoriesIcon from "../icons/category";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
 import {
   Form,
   FormControl,
@@ -13,40 +26,26 @@ import {
   FormLabel,
   FormMessage,
   UncontrolledFormMessage,
-} from '../ui/form';
-import { Card } from '../ui/card';
-import FileDialog from '../common/shared/file-dialog';
-import { IUploadedImage } from '@/services/upload.service';
-import { Input } from '../ui/input';
+} from "../ui/form";
+import { Icons } from "../ui/icons";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
-import { useCategory } from '@/hooks/category/useCategory';
-import { toast } from 'sonner';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { Button } from '../ui/button';
-import { Icons } from '../ui/icons';
-import { useGetAllTypesQuery } from '@/hooks/group/useGetAllTypes';
-import SelectInput from '../ui/select-input';
-import { Label } from '../ui/label';
-import { useGetAllCategoriesQuery } from '../../hooks/category/useGetAllCategories';
-import { categoryIcons } from '../category/category-icons';
-import { getIcon } from '@/utils/get-icon';
-import * as categoriesIcon from '../icons/category';
+} from "../ui/select";
+import SelectInput from "../ui/select-input";
 export const updatedIcons = categoryIcons.map((item: any) => {
   item.label = (
-    <div className='flex items-center space-s-5'>
-      <span className='flex h-5 w-5 items-center justify-center'>
+    <div className="flex items-center space-s-5">
+      <span className="flex h-5 w-5 items-center justify-center">
         {getIcon({
           iconList: categoriesIcon,
           iconName: item.value,
-          className: 'max-h-full max-w-full',
+          className: "max-h-full max-w-full",
         })}
       </span>
       <span>{item.label}</span>
@@ -63,14 +62,14 @@ function SelectCategories({
 }) {
   const type = useWatch({
     control,
-    name: 'type',
+    name: "type",
   });
   const { dirtyFields } = useFormState({
     control,
   });
   useEffect(() => {
     if (type?._id && dirtyFields?.type) {
-      setValue('parent', []);
+      setValue("parent", []);
     }
   }, [type?.slug]);
 
@@ -82,7 +81,7 @@ function SelectCategories({
     <div>
       <Label>Parent</Label>
       <SelectInput
-        name='parent'
+        name="parent"
         control={control}
         getOptionLabel={(option: any) => option.name}
         getOptionValue={(option: any) => option._id}
@@ -108,9 +107,9 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
           ...initialValues,
           icon: initialValues?.icon
             ? categoryIcons.find(
-                singleIcon => singleIcon.value === initialValues?.icon!
+                (singleIcon) => singleIcon.value === initialValues?.icon!
               )
-            : '',
+            : "",
         }
       : defaultValues,
   });
@@ -131,14 +130,14 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
         variables: { id: initialValues?._id as string, input: data },
       }),
       {
-        loading: 'updating...',
-        success: data => {
-          queryClient.invalidateQueries(['categories']);
-          router.push('/admin/categories');
+        loading: "updating...",
+        success: (data) => {
+          queryClient.invalidateQueries(["categories"]);
+          router.push("/admin/categories");
 
           return <b>{data.message}</b>;
         },
-        error: error => {
+        error: (error) => {
           const {
             response: { data },
           }: any = error ?? {};
@@ -154,7 +153,7 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
       name: values.name!,
       image: values.image,
       type: values.type,
-      icon: values.icon?.value || '',
+      icon: values.icon?.value || "",
       parent: values?.parent?._id,
     };
     if (initialValues) {
@@ -168,26 +167,26 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
     <React.Fragment>
       <Form {...categoryForm}>
         <form
-          className='grid gap-10 w-full'
+          className="grid gap-10 w-full"
           onSubmit={(...args) =>
             void categoryForm.handleSubmit(onSubmit)(...args)
           }
         >
-          <div className='flex flex-col items-center gap-4 w-full lg:flex-row'>
-            <div className='lg:w-1/3 w-full flex flex-col items-start gap-2'>
-              <h4 className='text-stone-800 font-semibold'>Image</h4>
+          <div className="flex flex-col items-center gap-4 w-full lg:flex-row">
+            <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
+              <h4 className="text-stone-800 font-semibold">Image</h4>
               <p>Upload your shop logo from here</p>
             </div>
-            <div className='lg:w-2/3 w-full'>
-              <Card className='p-8  w-full'>
-                <div className='my-4'>
-                  <FormItem className='flex w-full flex-col gap-1.5'>
+            <div className="lg:w-2/3 w-full">
+              <Card className="p-8  w-full">
+                <div className="my-4">
+                  <FormItem className="flex w-full flex-col gap-1.5">
                     <FormLabel>Image</FormLabel>
 
                     <FormControl>
                       <FileDialog
                         setValue={categoryForm.setValue}
-                        name='image'
+                        name="image"
                         maxFiles={1}
                         maxSize={1024 * 1024 * 4}
                         multiple={false}
@@ -207,21 +206,21 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
             </div>
           </div>
 
-          <div className='border-dotted w-full border-2 ' />
+          <div className="border-dotted w-full border-2 " />
 
-          <div className='flex flex-col items-center gap-4 w-full lg:flex-row'>
-            <div className='lg:w-1/3 w-full flex flex-col items-start gap-2'>
-              <h4 className='text-stone-800 font-semibold'>Description</h4>
+          <div className="flex flex-col items-center gap-4 w-full lg:flex-row">
+            <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
+              <h4 className="text-stone-800 font-semibold">Description</h4>
               <p>
                 Add your category details and necessary information from here
               </p>
             </div>
-            <div className='lg:w-2/3 w-full'>
-              <Card className='p-8  w-full'>
-                <div className='my-4'>
+            <div className="lg:w-2/3 w-full">
+              <Card className="p-8  w-full">
+                <div className="my-4">
                   <FormField
                     control={categoryForm.control}
-                    name='name'
+                    name="name"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Name</FormLabel>
@@ -233,19 +232,19 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
                     )}
                   />
                 </div>
-                <div className='my-4'>
+                <div className="my-4">
                   <Label>Icon</Label>
                   <SelectInput
-                    name='icon'
+                    name="icon"
                     control={categoryForm.control}
                     options={updatedIcons}
                     isClearable={true}
                   />
                 </div>
-                <div className='my-4'>
+                <div className="my-4">
                   <FormField
                     control={categoryForm.control}
-                    name='type'
+                    name="type"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Type</FormLabel>
@@ -259,7 +258,7 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
                             <SelectTrigger>
                               <SelectValue
                                 defaultValue={field.value as string}
-                                placeholder='Select a category'
+                                placeholder="Select a type"
                               />
                             </SelectTrigger>
                           </FormControl>
@@ -276,7 +275,7 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
                     )}
                   />
                 </div>
-                <div className='my-4'>
+                <div className="my-4">
                   <SelectCategories
                     control={categoryForm.control}
                     setValue={categoryForm.setValue}
@@ -286,19 +285,19 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
             </div>
           </div>
 
-          <div className='flex items-end justify-end'>
+          <div className="flex items-end justify-end">
             <Button
               disabled={categoryCreateLoading || categoryUpdateLoading}
-              className='md:w-[200px] '
+              className="md:w-[200px] "
             >
               {categoryCreateLoading || categoryUpdateLoading ? (
                 <Icons.spinner
-                  className='mr-2 h-4 w-4 animate-spin'
-                  aria-hidden='true'
+                  className="mr-2 h-4 w-4 animate-spin"
+                  aria-hidden="true"
                 />
               ) : (
                 <React.Fragment>
-                  <span>{initialValues ? 'Update' : 'Save'}</span>
+                  <span>{initialValues ? "Update" : "Save"}</span>
                 </React.Fragment>
               )}
             </Button>

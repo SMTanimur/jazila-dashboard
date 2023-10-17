@@ -1,23 +1,22 @@
-'use client';
+"use client";
 import {
   PageHeader,
   PageHeaderHeading,
-} from '@/components/common/shared/page-header';
-import Search from '@/components/common/shared/search';
-import { Shell } from '@/components/shells/shell';
-import { ShopsTable } from '@/components/shop/shop-table';
-import { Card } from '@/components/ui/card';
-import Loader from '@/components/ui/loader/loader';
-import { useShopsQuery } from '@/hooks/shops/useGetShops';
-import { IPaginatorInfo, IShop, SortOrder } from '@/types';
+} from "@/components/common/shared/page-header";
+import Search from "@/components/common/shared/search";
+import { Shell } from "@/components/shells/shell";
+import { ShopsTable } from "@/components/shop/shop-table";
+import { Card } from "@/components/ui/card";
+import Loader from "@/components/ui/loader/loader";
+import { useShopsQuery } from "@/hooks/shops/useGetShops";
+import { SortOrder } from "@/types";
 
-
-import React, { useState } from 'react';
+import { useState } from "react";
 
 const ShopsPage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
-  const [orderBy, setOrder] = useState('createdAt');
+  const [orderBy, setOrder] = useState("createdAt");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 
   const { data, isLoading } = useShopsQuery({
@@ -28,7 +27,7 @@ const ShopsPage = () => {
     orderBy,
   });
 
-  if (isLoading) return <Loader text='Loading...' />;
+  if (isLoading) return <Loader text="Loading..." />;
   function handleSearch({ searchText }: { searchText: string }) {
     setSearchTerm(searchText);
   }
@@ -38,12 +37,12 @@ const ShopsPage = () => {
   }
 
   return (
-    <Shell variant={'sidebar'}>
-      <Card className='p-10'>
-        <PageHeader className='flex flex-col md:flex-row gap-4 items-center md:justify-between'>
+    <Shell variant={"sidebar"}>
+      <Card className="p-10">
+        <PageHeader className="flex flex-col md:flex-row gap-4 items-center md:justify-between">
           <PageHeaderHeading>Shops</PageHeaderHeading>
 
-          <Search onSearch={handleSearch} className=' w-full md:w-[70%] ' />
+          <Search onSearch={handleSearch} className=" w-full md:w-[70%] " />
         </PageHeader>
       </Card>
       <ShopsTable

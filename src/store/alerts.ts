@@ -1,5 +1,5 @@
-'use client';
-import { create } from 'zustand';
+"use client";
+import { create } from "zustand";
 
 interface GlobalAlertState {
   showAlert: boolean;
@@ -15,9 +15,13 @@ interface GlobalAlertState {
     showCategoryAlert: boolean,
     categoryAlertData: any
   ) => void;
+
+  showTagAlert: boolean;
+  tagAlertData: any;
+  setShowTagAlert: (showTagAlert: boolean, tagAlertData: any) => void;
 }
 
-export const useGlobalAlertStateStore = create<GlobalAlertState>(set => ({
+export const useGlobalAlertStateStore = create<GlobalAlertState>((set) => ({
   showAlert: false,
   alertData: null,
   forceShop: false,
@@ -32,4 +36,9 @@ export const useGlobalAlertStateStore = create<GlobalAlertState>(set => ({
   categoryAlertData: null,
   setShowCategoryAlert: (showCategoryAlert, categoryAlertData) =>
     set(() => ({ showCategoryAlert, categoryAlertData })),
+
+  showTagAlert: false,
+  tagAlertData: null,
+  setShowTagAlert: (showTagAlert, tagAlertData) =>
+    set(() => ({ showTagAlert, tagAlertData })),
 }));
