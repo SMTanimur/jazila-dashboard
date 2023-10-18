@@ -105,6 +105,12 @@ export const adminDashboardConfig: DashboardConfig = {
       items: [],
     },
     {
+      title: "Groups",
+      href: "/admin/groups",
+      icon: "group",
+      items: [],
+    },
+    {
       title: "Tags",
       href: "/admin/tags",
       icon: "tag",
