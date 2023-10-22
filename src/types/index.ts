@@ -233,6 +233,19 @@ export interface IImage {
   file: File | null;
 }
 
+export interface IAttributeValue {
+  meta: string;
+  value:string;
+  attribute:string
+}
+export interface IAttribute {
+  _id: string;
+  name: string;
+  shop:string;
+  slug: string;
+  values: IAttributeValue[];
+}
+
 export interface IFileHandler<T> {
   imageFile: T;
   setImageFile: React.Dispatch<React.SetStateAction<T>>;

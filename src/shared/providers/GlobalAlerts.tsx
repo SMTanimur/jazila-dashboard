@@ -1,3 +1,4 @@
+import { DeleteAttribute } from '@/components/attribute/attribute-delete';
 import { DeleteCategory } from '@/components/category/category-delete';
 import { DeleteGroup } from '@/components/group/group-delete';
 import { DisApproveShop } from '@/components/shop/disapprove-shop-view';
@@ -9,6 +10,7 @@ const GlobalAlerts: FC = () => {
       <DisApproveShop />
       <DeleteGroup />
       <DeleteCategory />
+      <DeleteAttribute/>
     </div>
   );
 };
