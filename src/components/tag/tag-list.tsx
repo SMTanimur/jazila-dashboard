@@ -1,7 +1,7 @@
 "use client";
 
 import { useGlobalAlertStateStore } from "@/store/alerts";
-import { IPaginatorInfo, ITag, ImageInfo } from "@/types";
+import { IPaginatorInfo, ITag, ImageInfo, SortOrder } from "@/types";
 import { PaginatorInfo } from "@/types/utils";
 import Link from "next/link";
 import { Icons } from "../ui/icons";
@@ -10,16 +10,42 @@ import Image from "next/image";
 import { Tooltip } from "../common/Tooltip";
 import { MainTable } from "../table";
 import Pagination from "../ui/pagination";
+import { useState } from "react";
+import TitleWithSort from "../ui/title-with-sort";
 
 type IProps = {
   tags: PaginatorInfo<ITag>;
   onPagination: (key: number) => void;
+  onSort: (current: any) => void;
+  onOrder: (current: string) => void;
 };
-const TagList = ({ tags, onPagination }: IProps) => {
+const TagList = ({ tags, onPagination,onOrder,onSort }: IProps) => {
   const rowExpandable = (record: any) => record.children?.length;
   const setShowTagAlert = useGlobalAlertStateStore(
     (state) => state.setShowTagAlert
   );
+  const [sortingObj, setSortingObj] = useState<{
+    sort: SortOrder;
+    column: string | null;
+  }>({
+    sort: SortOrder.Desc,
+    column: null,
+  });
+
+  const onHeaderClick = (column: string | null) => ({
+    onClick: () => {
+      onSort((currentSortDirection: SortOrder) =>
+        currentSortDirection === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc
+      );
+      onOrder(column!);
+
+      setSortingObj({
+        sort:
+          sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc,
+        column: column,
+      });
+    },
+  });
 
   const paginateInfo: IPaginatorInfo = {
     hasNextPage: tags?.hasNextPage,
@@ -43,7 +69,16 @@ const TagList = ({ tags, onPagination }: IProps) => {
       width: 100,
     },
     {
-      title: "Name",
+      title: (
+        <TitleWithSort
+          title={'Name'}
+        
+          ascending={
+            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'name'
+          }
+          isActive={sortingObj.column === 'name'}
+        />
+      ),
       className: "cursor-pointer",
       dataIndex: "name",
       key: "name",

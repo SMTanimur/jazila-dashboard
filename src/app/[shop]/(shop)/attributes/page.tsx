@@ -1,7 +1,6 @@
 "use client"
 import AttributeList from '@/components/attribute/attribute-list'
-import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/common/shared/page-header'
-import SortForm from '@/components/common/sort-form'
+import { PageHeader, PageHeaderHeading } from '@/components/common/shared/page-header'
 import { Shell } from '@/components/shells/shell'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -71,35 +70,12 @@ const Attributes = ({params:{shop}}:Params) => {
     
       </Card>
 
-      <div
-          className={cn('w-full flex transition', {
-            'h-auto visible': visible,
-            'h-0 invisible': !visible,
-          })}
-        >
-          <div className="flex flex-col md:flex-row md:items-center mt-5 md:mt-8 border-t border-gray-200 pt-5 md:pt-8 w-full">
-            
-            <SortForm
-              className="w-full md:w-1/2 mt-5 md:mt-0"
-              onSortChange={({ value }: { value: SortOrder }) => {
-                setColumn(value);
-              }}
-              onOrderChange={({ value }: { value: string }) => {
-                setOrder(value);
-              }}
-              options={[
-                { id: 1, value: 'name', label: 'Name' },
-                { id: 2, value: 'createdAt', label: 'Created At' },
-                { id: 3, value: 'updatedAt', label: 'Updated At' },
-              ]}
-            />
-          </div>
-        </div>
-      
       <AttributeList
         attributes={data!}
         shop={shop}
         onPagination={handlePagination}
+        onOrder={setOrder}
+        onSort={setColumn}
        
       />
      

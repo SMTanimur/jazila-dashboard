@@ -4,23 +4,50 @@ import { Tooltip } from '../common/Tooltip';
 import { Icons } from '../ui/icons';
 import Link from 'next/link';
 import Pagination from '../ui/pagination';
-import { IAttribute, IPaginatorInfo, IShop } from '@/types';
+import { IAttribute, IPaginatorInfo, IShop, SortOrder } from '@/types';
 import { useGlobalAlertStateStore } from '@/store/alerts';
 import { PaginatorInfo } from '@/types/utils';
 import { useCurrentUser } from '@/hooks/user/useCurrentUser';
+import { useState } from 'react';
+import TitleWithSort from '../ui/title-with-sort';
 
 type IProps = {
   attributes: PaginatorInfo<IAttribute>;
   onPagination: (key: number) => void;
   shop?:string
+  onSort: (current: any) => void;
+  onOrder: (current: string) => void;
 };
-const AttributeList = ({ attributes, onPagination,shop }: IProps) => {
+const AttributeList = ({ attributes, onPagination,shop,onOrder,onSort }: IProps) => {
   const rowExpandable = (record: any) => record.children?.length;
   const {currentUser}=useCurrentUser()
   const isAdmin = currentUser?.role === 'admin';
   const setShowAttributeAlert = useGlobalAlertStateStore(
     state => state.setShowAttributeAlert
   );
+
+  const [sortingObj, setSortingObj] = useState<{
+    sort: SortOrder;
+    column: string | null;
+  }>({
+    sort: SortOrder.Desc,
+    column: null,
+  });
+
+  const onHeaderClick = (column: string | null) => ({
+    onClick: () => {
+      onSort((currentSortDirection: SortOrder) =>
+        currentSortDirection === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc
+      );
+      onOrder(column!);
+
+      setSortingObj({
+        sort:
+          sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc,
+        column: column,
+      });
+    },
+  });
 
   const paginateInfo: IPaginatorInfo = {
     hasNextPage: attributes?.hasNextPage,
@@ -44,10 +71,19 @@ const AttributeList = ({ attributes, onPagination,shop }: IProps) => {
       width: 100,
     },
     {
-      title: 'Name',
+      title: (
+        <TitleWithSort
+          title={'Name'}
+          ascending={
+            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'name'
+          }
+          isActive={sortingObj.column === 'name'}
+        />
+      ),
       className: 'cursor-pointer',
       dataIndex: 'name',
       key: 'name',
+      onHeaderCell: () => onHeaderClick('name'),
       align: 'left',
       width: 150,
     },
