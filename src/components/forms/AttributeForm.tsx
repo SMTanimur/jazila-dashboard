@@ -1,5 +1,5 @@
 "use client";
-import { IType } from "@/types";
+import { IAttribute, IType } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -18,14 +18,14 @@ import {
 } from "../ui/form";
 import { Icons } from "../ui/icons";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { TAttribute, attributeSchema } from "@/validations/attribute";
 import { useAttribute } from "@/hooks/attribute/useAttribute";
 import { useShopQuery } from "@/hooks/shops/useGetShop";
+import { useCurrentUser } from "@/hooks/user/useCurrentUser";
 
 
 interface AttributeFormProps {
-  initialData?: IType | null;
+  initialData?: IAttribute | null;
     shop?: string
 
 }
@@ -42,6 +42,9 @@ const AttributeForm = ({ initialData,shop }: AttributeFormProps) => {
   const { control } = attributeForm;
   const router = useRouter();
   const {data}=useShopQuery(shop as string)
+  const {currentUser}=useCurrentUser()
+
+  const isAdmin = currentUser?.role === "admin";
 
   const {
     attributeCreateLoading,
@@ -64,7 +67,7 @@ const AttributeForm = ({ initialData,shop }: AttributeFormProps) => {
         loading: "updating...",
         success: (data) => {
           queryClient.invalidateQueries(["attributes"]);
-          router.push("/admin/attributes");
+          router.push(isAdmin ? "/admin/attributes" : `/${shop}/attributes`);
 
           return <b>{data.message}</b>;
         },
@@ -78,7 +81,7 @@ const AttributeForm = ({ initialData,shop }: AttributeFormProps) => {
       }
     );
   };
-console.log(data)
+
   const onSubmit = async (values: TAttribute) => {
     const input: any = {
       name: values.name!,

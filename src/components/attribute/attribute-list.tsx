@@ -7,6 +7,7 @@ import Pagination from '../ui/pagination';
 import { IAttribute, IPaginatorInfo, IShop } from '@/types';
 import { useGlobalAlertStateStore } from '@/store/alerts';
 import { PaginatorInfo } from '@/types/utils';
+import { useCurrentUser } from '@/hooks/user/useCurrentUser';
 
 type IProps = {
   attributes: PaginatorInfo<IAttribute>;
@@ -15,6 +16,8 @@ type IProps = {
 };
 const AttributeList = ({ attributes, onPagination,shop }: IProps) => {
   const rowExpandable = (record: any) => record.children?.length;
+  const {currentUser}=useCurrentUser()
+  const isAdmin = currentUser?.role === 'admin';
   const setShowAttributeAlert = useGlobalAlertStateStore(
     state => state.setShowAttributeAlert
   );
@@ -100,7 +103,7 @@ const AttributeList = ({ attributes, onPagination,shop }: IProps) => {
             />
           </Tooltip>
           <Tooltip content={'Edit'} placement='bottom-end'>
-            <Link href={`/admin/attributs/${options.slug}/edit`}>
+            <Link href={ isAdmin ? `/admin/attributes/${options.slug}/edit` : `/${shop}/attributes/${options.slug}/edit`}>
               <Icons.pencil className='w-8 text-stone-300' />
             </Link>
           </Tooltip>

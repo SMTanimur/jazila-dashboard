@@ -24,7 +24,7 @@ export const attributeClient = {
   },
 
   updateAttribute: ({ variables: { id, input } }: IAttributeUpdateVariables) => {
-    return HttpClient.patch<{ message: string }>(`/attributes/${id}`, input);
+    return HttpClient.put<{ message: string }>(`/attributes/${id}`, input);
   },
 
   getAttributes: async ({ queryKey }: QueryParamsType) => {

@@ -94,6 +94,7 @@ const Attributes = ({params:{shop}}:Params) => {
       
       <AttributeList
         attributes={data!}
+        shop={shop}
         onPagination={handlePagination}
        
       />
