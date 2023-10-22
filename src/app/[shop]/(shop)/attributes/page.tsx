@@ -1,7 +1,6 @@
 "use client"
 import AttributeList from '@/components/attribute/attribute-list'
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/common/shared/page-header'
-import Search from '@/components/common/shared/search'
 import SortForm from '@/components/common/sort-form'
 import { Shell } from '@/components/shells/shell'
 import { Button } from '@/components/ui/button'
@@ -44,7 +43,7 @@ const Attributes = ({params:{shop}}:Params) => {
     orderBy,
   })
 
-  if(isLoading) <Loader text='Loading'/>
+  if(isLoading) return <Loader text='Loading'/>
   return (
     <Shell variant={'sidebar'}>
       <Card className='p-8'>

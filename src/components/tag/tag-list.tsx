@@ -124,7 +124,7 @@ const TagList = ({ tags, onPagination }: IProps) => {
           columns={columns}
           emptyText={"No tags Found"}
           data={tags?.docs!}
-          rowKey="id"
+          rowKey="slug"
           scroll={{ x: 1000 }}
           expandable={{
             expandedRowRender: () => " ",

@@ -52,7 +52,7 @@ const AttributeList = ({ attributes, onPagination,shop }: IProps) => {
     {
       title: 'Shop',
       dataIndex: 'shop',
-      key: 'shop',
+      key: 'slug',
       align: 'center',
       ellipsis: true,
       width: 150,
@@ -117,7 +117,7 @@ const AttributeList = ({ attributes, onPagination,shop }: IProps) => {
           columns={columns}
           emptyText={'No Categories Found'}
           data={attributes?.docs!}
-          rowKey='id'
+          rowKey='slug'
           scroll={{ x: 1000 }}
           expandable={{
             expandedRowRender: () => ' ',

@@ -146,7 +146,7 @@ const CategoryList = ({ categories, onPagination }: IProps) => {
           columns={columns}
           emptyText={'No Categories Found'}
           data={categories.docs!}
-          rowKey='id'
+          rowKey='slug'
           scroll={{ x: 1000 }}
           expandable={{
             expandedRowRender: () => ' ',
