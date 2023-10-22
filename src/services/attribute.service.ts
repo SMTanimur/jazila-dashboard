@@ -34,13 +34,13 @@ export const attributeClient = {
       page,
       text,
       limit = 15,
-      shop_id,
+      shop,
       orderBy = 'updatedAt',
       sortedBy = 'desc',
     } = params as QueryOptionsType
 
     const url = `/attributes?${text ? `&search=${text}` : ''}${
-      shop_id ? `shop_id=${shop_id}&` : ''
+      shop ? `shop=${shop}&` : ''
     }&searchJoin=and&limit=${limit}&page=${page}&orderBy=${orderBy}&sortedBy=${sortedBy}`;
     return HttpClient.get<PaginatorInfo<IAttribute>>(url);
   },

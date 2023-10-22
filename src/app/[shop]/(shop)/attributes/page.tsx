@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card'
 import { Icons } from '@/components/ui/icons'
 import Loader from '@/components/ui/loader/loader'
 import { useGetAttributesQuery } from '@/hooks/attribute/useGetAttributes'
+import { useShopQuery } from '@/hooks/shops/useGetShop'
 import { cn } from '@/lib/utils'
 import { SortOrder } from '@/types'
 import Link from 'next/link'
@@ -34,10 +35,13 @@ const Attributes = ({params:{shop}}:Params) => {
   function handleSearch({ searchText }: { searchText: string }) {
     setSearchTerm(searchText);
   }
+  const {data:shopData}=useShopQuery(shop as string)
+
 
   const {data,isLoading}=useGetAttributesQuery({
     limit: 20,
     page,
+    shop:shopData?._id,
     text: searchTerm,
      sortedBy,
     orderBy,

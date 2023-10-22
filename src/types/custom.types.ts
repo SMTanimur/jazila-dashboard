@@ -77,7 +77,7 @@ export type TypesQueryOptionsType = {
 export type QueryOptionsType = {
   page?: number;
   text?: string;
-  shop_id?: Maybe<string>;
+  shop?: Maybe<string>;
   limit?: number;
   orderBy?: string;
   sortedBy?: SortOrder;
