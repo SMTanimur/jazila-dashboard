@@ -175,19 +175,6 @@ export interface IAddressInfo {
   state: string;
 }
 
-export interface IProduct {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
-  slug: string;
-  is_active: boolean;
-  shop: IShop;
-  images: ImageInfo[];
-  categories: ICategory[];
-}
-
 export interface ICategory {
   name: string;
   slug: string;
@@ -234,17 +221,201 @@ export interface IImage {
 }
 
 export interface IAttributeValue {
+  _id: string;
   meta: string;
-  value:string;
-  attribute:string
+  value: string;
+  attribute: string;
 }
 export interface IAttribute {
   _id: string;
   name: string;
-  shop:string;
+  shop: string;
   slug: string;
   values: IAttributeValue[];
 }
+
+export interface OrderProductPivot {
+  order_quantity?: number;
+  unit_price?: number;
+  subtotal?: number;
+  variation_option_id?: string;
+}
+
+export enum ProductStatus {
+  Publish = "publish",
+  Draft = "draft",
+}
+export enum ProductType {
+  Simple = "simple",
+  Variable = "variable",
+}
+
+export interface VariationOption {
+  name?: string;
+  value?: string;
+}
+
+export interface Variation {
+  id?: string;
+  title?: string;
+  image?: ImageInfo;
+  price?: number;
+  sku?: string;
+  is_disable?: boolean;
+  sale_price?: number;
+  quantity?: number;
+  options?: VariationOption[];
+}
+
+export interface IOrder {
+  id: string;
+  tracking_number: string;
+  customer_contact: string;
+  customer_name: string;
+  customer_id: number;
+  customer?: IUser;
+  amount: number;
+  sales_tax: number;
+  total: number;
+  paid_total: number;
+  payment_id?: string;
+  payment_gateway?: string;
+  // coupon?: ICoupon;
+  discount?: number;
+  delivery_fee?: number;
+  delivery_time: string;
+  products: IProduct[];
+  created_at: string;
+  updated_at: string;
+  address?: IAddress;
+  translated_languages: string[];
+  language: string;
+  order_status: string;
+  payment_status: string;
+  shop_id?: string;
+}
+
+export interface IProduct {
+  _id: string;
+  name: string;
+  shop_id: string;
+  slug: string;
+  type: IType;
+  product_type: ProductType;
+  max_price?: number;
+  min_price?: number;
+  categories: ICategory[];
+  variations?: IAttributeValue[];
+  variation_options?: Variation[];
+  pivot?: OrderProductPivot;
+  orders: IOrder[];
+  description?: string;
+  in_stock?: boolean;
+  is_digital?: boolean;
+  is_external?: boolean;
+  is_taxable?: boolean;
+  sale_price?: number;
+  sku?: string;
+  gallery?: ImageInfo[];
+  image?: ImageInfo;
+  status?: ProductStatus;
+  height?: string;
+  length?: string;
+  width?: string;
+  price: number;
+  quantity?: number;
+  unit?: string;
+  external_product_url?: string;
+  external_product_button_text?: string;
+  created_at: string;
+  updated_at: string;
+  ratings: number;
+}
+
+export interface AttributeProductPivot {
+  id: string;
+  price?: number;
+}
+
+export interface VariationOptionInput {
+  name?: string;
+  value?: string;
+}
+
+export interface UpsertVariationsHasMany {
+  delete?: string[];
+  upsert?: VariationInput[];
+}
+
+export interface VariationInput {
+  id?: string;
+  image?:ImageInfo
+  is_digital?: boolean;
+  is_disable?: boolean;
+  options?: VariationOptionInput[];
+  price: number;
+  quantity: number;
+  sale_price?: number;
+  sku: number;
+  title: number;
+}
+
+
+export interface CreateProduct {
+  name: string;
+  type_id: string;
+  price: number;
+  sale_price?: number;
+  quantity?: number;
+  unit: string;
+  description?: string;
+  categories?: string[];
+  variations?: AttributeProductPivot[];
+  in_stock?: boolean;
+  is_taxable?: boolean;
+  author_id?: string;
+  is_external?: boolean;
+  max_price?: number;
+  min_price?: number;
+  variation_options?: UpsertVariationsHasMany;
+  sku?: string;
+  gallery?: ImageInfo[];
+  image?: ImageInfo
+  status?: ProductStatus;
+  height?: string;
+  length?: string;
+  width?: string;
+  shop_id?: string;
+}
+
+export interface UpdateProduct {
+  name?: string;
+  type_id?: string;
+  price?: number;
+  sale_price?: number;
+  quantity?: number;
+  unit?: string;
+  description?: string;
+  categories?: string[];
+  variations?: AttributeProductPivot[];
+  in_stock?: boolean;
+  is_taxable?: boolean;
+  author_id?: string;
+  is_external?: boolean;
+  max_price?: number;
+  min_price?: number;
+  variation_options?: UpsertVariationsHasMany;
+  sku?: string;
+  gallery?: ImageInfo[];
+  image?: ImageInfo
+  status?: ProductStatus;
+  height?: string;
+  length?: string;
+  width?: string;
+  shop_id?: string;
+}
+
+
 
 export interface IFileHandler<T> {
   imageFile: T;

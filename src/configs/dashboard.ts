@@ -19,7 +19,7 @@ export const dashboardConfig: ShopDashboardConfig = {
     {
       title: "Attributes",
       href: (shop: string) => `/${shop}${ROUTES.ATTRIBUTES}`,
-      icon: "user",
+      icon: "attribute",
       items: [],
     },
     {
@@ -108,6 +108,12 @@ export const adminDashboardConfig: DashboardConfig = {
       title: "Groups",
       href: "/admin/groups",
       icon: "group",
+      items: [],
+    },
+    {
+      title: "Attributes",
+      href: "/admin/attributes",
+      icon: "attribute",
       items: [],
     },
     {
