@@ -1,15 +1,18 @@
 import { z } from "zod";
 
-export const ProductType = z.enum(["simple", "variable"]);
-
+export enum ProductType {
+  Simple = "simple",
+  Variable = "variable",
+}
 
 const productValidationSchema = z.object({
   name: z.string().min(1),
-  productTypeValue: ProductType.or(z.nullable(ProductType)).optional(),
+  descriptions: z.string(),
+  productTypeValue: z.object({}),
   sku: z
     .string()
     .transform((value, ctx: any) => {
-      if (ctx?.productTypeValue?.value === ProductType.Enum.simple) {
+      if (ctx?.productTypeValue?.value === ProductType.Simple) {
         return value.trim() !== "";
       }
       return value;
@@ -19,7 +22,7 @@ const productValidationSchema = z.object({
     .number()
     .min(0)
     .transform((value, ctx: any) => {
-      if (ctx.productTypeValue?.value === ProductType.Enum.simple) {
+      if (ctx.productTypeValue?.value === ProductType.Simple) {
         return value;
       }
       return value;
@@ -44,7 +47,7 @@ const productValidationSchema = z.object({
     .transform((value) => (!isNaN(value) ? value : null))
     .optional(),
   unit: z.string().min(1),
-  type: z.string().optional().nullable(),
+  type: z.any(),
   status: z.string().min(1),
   variation_options: z.array(
     z.object({

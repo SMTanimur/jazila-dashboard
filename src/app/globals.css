@@ -24,6 +24,8 @@
     --input: 240 5.9% 90%;
     --ring: 346.8 77.2% 49.8%;
     --radius: 0.3rem;
+
+
   }
 
   .dark {
@@ -46,6 +48,56 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 346.8 77.2% 49.8%;
+
+    /*
+    * primary color
+    */
+    --color-accent: 160, 79, 145;
+
+    /*
+    * Hover state color of primary color
+    */
+    --color-accent-hover: 128, 63, 116;
+
+    /*
+    * shade of primary color
+    */
+    --color-accent-300: 198, 149, 189;
+
+    /*
+    * shade of primary color
+    */
+    --color-accent-400: 179, 114, 167;
+
+    /*
+    * shade of primary color
+    */
+    --color-accent-500: 160, 79, 145;
+
+    /*
+    * shade of primary color
+    */
+    --color-accent-600: 144, 71, 131;
+
+    /*
+    * shade of primary color
+    */
+    --color-accent-700: 128, 63, 116;
+
+    /*
+    * light color
+    */
+    --color-light: 255, 255, 255;
+
+    /*
+    * dark color
+    */
+    --color-dark: 0, 0, 0;
+
+    /*
+    * Black muted color
+    */
+    --color-muted-black: 17, 17, 17;
   }
 }
 

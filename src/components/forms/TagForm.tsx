@@ -45,7 +45,7 @@ const TagForm = ({ initialValues }: TagFormProps) => {
     defaultValues: initialValues ? initialValues : defaultValues,
   });
 
-  const { data, isLoading } = useGetAllTypesQuery();
+  const { data, isLoading } = useGetAllTypesQuery({limit:100});
 
   const {
     IsTagCreateError,

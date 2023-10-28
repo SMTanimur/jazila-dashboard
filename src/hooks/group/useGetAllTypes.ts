@@ -1,9 +1,10 @@
 import { groupClient } from "@/services/group.service";
 import {  IType } from "@/types";
+import { TypesQueryOptionsType } from "@/types/custom.types";
 import { useQuery } from "@tanstack/react-query";
- export const useGetAllTypesQuery = () => {
+ export const useGetAllTypesQuery = (options: TypesQueryOptionsType) => {
   return useQuery<IType[], Error>(
-    ['types_all'],
+    ['types',options],
     groupClient.getAllGroups,
     {
       keepPreviousData: true,

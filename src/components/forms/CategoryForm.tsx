@@ -114,7 +114,7 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
       : defaultValues,
   });
 
-  const { data, isLoading } = useGetAllTypesQuery();
+  const { data, isLoading } = useGetAllTypesQuery({limit:100});
 
   const {
     IsCategoryCreateError,

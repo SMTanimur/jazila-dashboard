@@ -32,7 +32,7 @@ export function useProduct({shop}:Params) {
       loading: 'creating...',
       success: data => {
         queryClient.invalidateQueries(['products']);
-        router.push(currentUser?.role === 'seller' ? `/${shop}/products` : '/admin/products');
+        router.push(`/${shop}/products` );
         return <b>{data.message}</b>;
       },
       error: error => {

@@ -1,3 +1,13 @@
+function withOpacity(variableName:any) {
+  return ({ opacityValue }:any) => {
+    if (opacityValue !== undefined) {
+      return `rgba(var(${variableName}), ${opacityValue})`;
+    } else {
+      return `rgb(var(${variableName}))`;
+    }
+  };
+}
+
 const { colors } = require('tailwindcss/colors');
 import type { Config } from 'tailwindcss';
 
@@ -30,6 +40,9 @@ const config: Config = {
           900: '#231c6b',
           DEFAULT: '#6152df',
         },
+        "accent-300": withOpacity("--color-accent-300"),
+        "accent-400": withOpacity("--color-accent-400"),
+        "accent-500": withOpacity("--color-accent-500"),
       },
     },
   },

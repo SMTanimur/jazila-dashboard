@@ -13,7 +13,7 @@ type Props = {
 export default function TypeFilter({ onTypeFilter, className }: Props) {
 
 
-  const { data, isLoading: loading } = useGetAllTypesQuery();
+  const { data, isLoading: loading } = useGetAllTypesQuery({limit:100});
   console.log('TYPES', data);
 
   return (
