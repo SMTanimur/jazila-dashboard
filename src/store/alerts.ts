@@ -26,6 +26,13 @@ interface GlobalAlertState {
     showAttributeAlert: boolean,
     attributeAlertData: any
   ) => void;
+
+  showProductAlert: boolean;
+  productAlertData: any;
+  setShowProductAlert: (
+    showProductAlert: boolean,
+    productAlertData: any
+  ) => void;
 }
 
 export const useGlobalAlertStateStore = create<GlobalAlertState>((set) => ({
@@ -52,4 +59,8 @@ export const useGlobalAlertStateStore = create<GlobalAlertState>((set) => ({
     showAttributeAlert: false,
     attributeAlertData: null,
     setShowAttributeAlert: (showAttributeAlert, attributeAlertData) => set(() => ({ showAttributeAlert, attributeAlertData })),
+
+    showProductAlert: false,
+    productAlertData: null,
+    setShowProductAlert: (showProductAlert, productAlertData) => set(() => ({ showProductAlert, productAlertData })),
 }));
