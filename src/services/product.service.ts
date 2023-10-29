@@ -45,5 +45,8 @@ export const productClient = {
       status ? `&status=${status}` : ''
     }&searchJoin=and&limit=${limit}&page=${page}&orderBy=${orderBy}&sortedBy=${sortedBy}`;
     return HttpClient.get<PaginatorInfo<IProduct>>(url)
-  }
+  },
+  getProduct: async (slug: string) => {
+    return HttpClient.get<IProduct>(`/products/${slug}`);
+  },
 }
