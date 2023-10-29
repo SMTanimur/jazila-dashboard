@@ -24,7 +24,7 @@ export const DeleteAttribute: FC = () => {
   return (
     <Alert
       title={`Delete`}
-      description={'Are you sure you want to delete this Category? '}
+      description={'Are you sure you want to delete this Attribute? '}
       confirmText={`Delete`}
       size='sm'
       icon={<Icons.trash className='w-12 h-12 text-2xl text-primary' />}

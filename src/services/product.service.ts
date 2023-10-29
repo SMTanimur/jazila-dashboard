@@ -49,4 +49,10 @@ export const productClient = {
   getProduct: async (slug: string) => {
     return HttpClient.get<IProduct>(`/products/${slug}`);
   },
+
+  deleteProduct: async (id: string) => {
+    return HttpClient.delete<{ message: string }>(
+      `/products/${id}`
+    );
+  },
 }

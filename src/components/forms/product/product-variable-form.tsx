@@ -185,7 +185,11 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
                   <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                   <Input type={'number'} {...field} />
+                  <Input type="number"
+                    inputMode="numeric"
+                    placeholder="Type product quantity here."
+                    value={Number.isNaN(field.value) ? "" : field.value}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)} />
                   </FormControl>
                    <FormMessage />
                       </FormItem>
@@ -201,7 +205,11 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
                   <FormItem>
                   <FormLabel>Sale Price</FormLabel>
                   <FormControl>
-                   <Input type={'number'} {...field} />
+                  <Input type="number"
+                    inputMode="numeric"
+                    placeholder="Type product quantity here."
+                    value={Number.isNaN(field.value) ? "" : field.value}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)} />
                   </FormControl>
                    <FormMessage />
                       </FormItem>
@@ -233,7 +241,11 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
                   <FormItem>
                   <FormLabel>Quantity</FormLabel>
                   <FormControl>
-                   <Input type={'number'} {...field} />
+                  <Input type="number"
+                    inputMode="numeric"
+                    placeholder="Type product quantity here."
+                    value={Number.isNaN(field.value) ? "" : field.value}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)} />
                   </FormControl>
                    <FormMessage />
                       </FormItem>

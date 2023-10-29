@@ -5,12 +5,17 @@ import { toast } from 'sonner';
 import { productClient } from '@/services/product.service';
 import { CreateProduct } from '@/types';
 import { useCurrentUser } from '../user/useCurrentUser';
+import { useGlobalAlertStateStore } from '@/store/alerts';
 
 type  Params ={
   shop?: string
 }
 export function useProduct({shop}:Params) {
  
+  const setShowProductAlert = useGlobalAlertStateStore(
+    state => state.setShowProductAlert
+  );
+
   const router = useRouter();
   const queryClient = useQueryClient();
   const {currentUser}=useCurrentUser()
@@ -25,6 +30,13 @@ export function useProduct({shop}:Params) {
     isLoading: ProductUpdateLoading,
     isError: IsProductUpdateError,
   } = useMutation(productClient.updateProduct);
+
+  const {
+    mutateAsync: ProductDeleleMutation,
+    isLoading: ProductDeleleLoading,
+    isError: IsProductDeleleError,
+  } = useMutation(productClient.deleteProduct);
+  
   
 
   const attemptProductCreate = async (data: CreateProduct) => {
@@ -44,6 +56,25 @@ export function useProduct({shop}:Params) {
       },
     });
   };
+
+  const attemptProductDelete = async (id:string) => {
+    toast.promise(ProductDeleleMutation(id), {
+      loading: 'deleting...',
+      success: data => {
+        queryClient.invalidateQueries(['products']);
+        setShowProductAlert(false,null)
+
+        return <b>{data.message}</b>;
+      },
+      error: error => {
+        const {
+          response: { data },
+        }: any = error ?? {};
+
+        return <b> {data?.message}</b>;
+      },
+    });
+  };
   
   return {
     attemptProductCreate,
@@ -52,5 +83,7 @@ export function useProduct({shop}:Params) {
   ProductUpdateMutation,
      ProductUpdateLoading,
     IsProductUpdateError,
+    attemptProductDelete,
+    ProductDeleleLoading,
   };
 }

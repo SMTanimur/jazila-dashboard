@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const classes = {
-  root: "ps-10 pe-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ",
+  root: "ps-10 pe-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 ",
   normal:
     "bg-gray-100 border border-input bg-background focus:shadow  focus:border-accent",
   solid:
