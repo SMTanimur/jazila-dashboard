@@ -1,8 +1,6 @@
-"use client"
+
 import {  UseFormReturn, useFieldArray } from 'react-hook-form';
 
-
-import isEmpty from 'lodash/isEmpty';
 import { useEffect } from 'react';
 import { IProduct } from '@/types';
 import { useGetAttributesQuery } from '@/hooks/attribute/useGetAttributes';
@@ -12,8 +10,8 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { cartesian } from '@/utils/cartesian';
+
+import { getCartesianProduct ,filterAttributes} from './form-utils';
 
 
 type IProps = {
@@ -22,27 +20,6 @@ type IProps = {
   productForm: UseFormReturn<any, any, undefined>
 
 };
-
-function filteredAttributes(attributes: any, variations: any) {
-  let res = [];
-
-  res = attributes?.filter((el: any) => {
-    return !variations.find((element: any) => {
-      return element?.attribute?._id === el?._id;
-    });
-  });
-  return res;
-}
-
-function getCartesianProduct(values: any) {
-  const formattedValues = values
-    ?.map((v: any) =>
-      v.value?.map((a: any) => ({ name: v.attribute.name, value: a.value }))
-    )
-    .filter((i: any) => i !== undefined);
-  if (isEmpty(formattedValues)) return [];
-  return cartesian(...formattedValues);
-}
 
 export default function ProductVariableForm({ shopId, initialValues,productForm }: IProps) {
   const { data, isLoading } = useGetAttributesQuery({
@@ -55,8 +32,9 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
     control: productForm.control,
     name: 'variations',
   });
-  const cartesianProduct = getCartesianProduct(productForm.getValues('variations'));
+  
   const variations = productForm.watch('variations');
+  const cartesianProduct = getCartesianProduct(productForm.getValues('variations'));
 
   const attributes = data?.docs!
   return (
@@ -104,7 +82,7 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
                         getOptionLabel={(option: any) => option.name}
                         getOptionValue={(option: any) => option?._id}
                         options={
-                          filteredAttributes(attributes, variations)!
+                          filterAttributes(attributes, variations)!
                         }
                         isLoading={isLoading}
                       />
