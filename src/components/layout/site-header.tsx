@@ -18,21 +18,19 @@ import { Icons } from '../ui/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 import { MobileNav } from './mobile-nav';
+import { useCurrentUser } from '../../hooks/user/useCurrentUser';
 
 interface SiteHeaderProps {
-  user: IUser | null;
-  isAdmin: boolean;
   shop?: string;
   isSellerStoreLayout?: boolean;
 }
-
 export function SiteHeader({
-  user,
-  isAdmin,
   shop,
   isSellerStoreLayout,
 }: SiteHeaderProps) {
-
+  const {currentUser } = useCurrentUser()
+  const user = currentUser as IUser
+  const isAdmin = currentUser?.role === 'admin' ? true : false
 
   return (
     <header className='sticky top-0 z-40 w-full border-b bg-background'>

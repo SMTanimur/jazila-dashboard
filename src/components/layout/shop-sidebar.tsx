@@ -1,26 +1,23 @@
-'use client';
-
+"use client"
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { ShopSidebarNavItem, SidebarNavItem } from '@/types';
-
 import { cn } from '@/lib/utils';
 import { Icons } from '../ui/icons';
+import { dashboardConfig } from '@/configs/dashboard';
 
 
 export interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {
-  items: ShopSidebarNavItem[];
   shop:string
 }
 
-export function ShopSidebarNav({ items,shop, className, ...props }: SidebarNavProps) {
+export  function ShopSidebarNav({ shop, className, ...props }: SidebarNavProps) {
   const pathname = usePathname();
 
-  if (!items?.length) return null;
+  if (!dashboardConfig.sidebarNav?.length) return null;
 
   return (
     <div className={cn('flex w-full flex-col gap-2', className)} {...props}>
-      {items.map((item, index) => {
+      {dashboardConfig.sidebarNav.map((item, index) => {
         const Icon = Icons[item.icon ?? 'chevronLeft'];
       
 

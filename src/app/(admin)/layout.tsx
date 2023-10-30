@@ -1,29 +1,20 @@
-'use client';
+
 import { SidebarNav } from '@/components/layout/sidebar-nav';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteHeader } from '@/components/layout/site-header';
-
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { adminDashboardConfig } from '@/configs/dashboard';
-import { useCurrentUser } from '@/hooks/user/useCurrentUser';
-import { IUser } from '@/types';
-
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  // if (!user) {
-  //   redirect('/signin');
-  // }
+ 
 
-  const { currentUser } = useCurrentUser();
 
   return (
     <div className='flex min-h-screen flex-col'>
       <SiteHeader
-        isAdmin={currentUser?.role == 'admin' ? true : false}
-        user={currentUser as IUser}
         isSellerStoreLayout={false}
       />
       <div className='container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10'>

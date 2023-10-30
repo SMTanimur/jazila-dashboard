@@ -52,9 +52,10 @@ export interface TypesIcon {
   label: string
 }
 
+
 export interface ShopSideItem {
   title: string
-  href?: (shop: string) => string
+  href?:  (shop: string) => string
   disabled?: boolean
   external?: boolean
   icon?: keyof typeof Icons

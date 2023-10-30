@@ -7,15 +7,14 @@ import type { ShopSidebarNavItem, SidebarNavItem } from '@/types';
 import { cn } from '@/lib/utils';
 import { Icons } from '../ui/icons';
 import { DropdownMenuItem } from '../ui/dropdown-menu';
+import { dashboardConfig } from '@/configs/dashboard';
 
 export interface SidebarMobileProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  items: ShopSidebarNavItem[];
   shop:string
 }
 
 export function ShopSidebarMobile({
-  items,
   shop,
   className,
   ...props
@@ -23,11 +22,11 @@ export function ShopSidebarMobile({
   const pathname = usePathname();
   console.log(shop)
 
-  if (!items?.length) return null;
+  if (!dashboardConfig.sidebarNav?.length) return null;
 
   return (
     <div className={cn('flex w-full flex-col gap-2', className)} {...props}>
-      {items.map((item, index) => {
+      {dashboardConfig.sidebarNav.map((item, index) => {
         const Icon = Icons[item.icon ?? 'chevronLeft'];
 
         return item.href ? (

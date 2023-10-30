@@ -1,12 +1,10 @@
+"use client"
 import { userClient } from '@/services/user.service';
 import { useQuery } from '@tanstack/react-query';
-import { useAtom } from 'jotai';
-
 
 export function useCurrentUser() {
-
   const { data, isLoading, error } = useQuery(
-    ['currentUser'],
+    ['me'],
     userClient.me,
     {
       retry: false,

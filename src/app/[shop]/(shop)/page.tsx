@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-'use client';
+"use client"
 import {
   PageHeader,
   PageHeaderDescription,
