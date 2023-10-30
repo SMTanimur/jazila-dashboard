@@ -19,6 +19,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import ProductListSkeleton from './loading';
+import Loader from '@/components/ui/loader/loader';
 type Params = {
   params: {
     shop: string;
@@ -39,7 +40,7 @@ const StorePage = ({ params: { shop } }: Params) => {
     }
   );
   if (isLoading) {
-    return ProductListSkeleton();
+    return <Loader text='Loading'/>
   }
   return (
     <Shell variant={'sidebar'}>
@@ -68,7 +69,7 @@ const StorePage = ({ params: { shop } }: Params) => {
                 <div className='w-36 h-36 relative rounded-full mb-5'>
                   <div className='w-full h-full relative overflow-hidden flex items-center justify-center border border-gray-100 rounded-full'>
                     <Image
-                      src={data?.logo.img_url as any}
+                      src={data?.logo?.img_url as any}
                       layout='fill'
                       alt={'avatar'}
                     />

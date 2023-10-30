@@ -29,11 +29,10 @@ export default async function DashboardLayout({
 
 
   return (
-    <div className='flex min-h-screen flex-col'>
+    <div className='flex min-h-screen flex-col bg-gray-100'>
       <SiteHeader
-
         shop={shop}
-        isSellerStoreLayout={true}
+        isShopLayout={true}
       />
       <div className='container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10'>
         <DropdownMenu>
@@ -48,6 +47,7 @@ export default async function DashboardLayout({
       
                 shop={shop as string}
                 className='p-1'
+
               />
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -69,7 +69,7 @@ export default async function DashboardLayout({
     
           </ScrollArea>
         </aside>
-        <main className='flex w-full flex-col overflow-hidden'>{children}</main>
+        <main className='flex w-full flex-col overflow-hidden '>{children}</main>
       </div>
       <SiteFooter />
     </div>

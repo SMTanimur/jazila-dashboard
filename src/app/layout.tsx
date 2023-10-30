@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import RouterProvider from '@/shared/providers/router-provider';
 import GlobalAlerts from '@/shared/providers/GlobalAlerts';
 import GlobalModals from '@/shared/providers/GlobalModals';
+import { StyledComponentsRegistry } from './registry';
 
 export const metadata: Metadata = defaultMetadata;
 
@@ -31,6 +32,7 @@ export default function RootLayout({
           fontMono.variable
         )}
       >
+        <StyledComponentsRegistry>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <GoogleProvider>
             <QueryProvider>
@@ -45,6 +47,7 @@ export default function RootLayout({
           </GoogleProvider>
         </ThemeProvider>
         <Toaster />
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

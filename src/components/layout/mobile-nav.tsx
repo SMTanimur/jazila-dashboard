@@ -16,13 +16,13 @@ import { useCurrentUser } from '@/hooks/user/useCurrentUser';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 type MobileNavProps = {
-  isAdmin: boolean;
+  isAdminLayout?: boolean;
   shop?: string;
-  isSellerStoreLayout?: boolean;
+  isShopLayout?:boolean;
 };
 export function MobileNav({
-  isAdmin,
-  isSellerStoreLayout,
+  isAdminLayout=false,
+  isShopLayout= false,
   shop,
 }: MobileNavProps) {
   const { currentUser } = useCurrentUser();
@@ -52,7 +52,7 @@ export function MobileNav({
         </div>
         <ScrollArea className='my-4 h-[calc(100vh-8rem)] pb-10 pl-6'>
           <div className='pl-1 pr-7'>
-            {isAdmin ? (
+            {isAdminLayout ? (
               <div className={cn('flex w-full flex-col gap-2')}>
                 {adminDashboardConfig.sidebarNav.map((item, index) => {
                   const Icon = Icons[item.icon ?? 'chevronLeft'];
@@ -94,7 +94,7 @@ export function MobileNav({
               </div>
             ) : (
               <React.Fragment>
-                {isSellerStoreLayout ? (
+                {isShopLayout ? (
                   <React.Fragment>
                     <div className={cn('flex w-full flex-col gap-2')}>
                       {dashboardConfig.sidebarNav.map((item, index) => {

@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Icons } from '../ui/icons';
 import { dashboardConfig } from '@/configs/dashboard';
+import { Card } from '../ui/card';
 
 
 export interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -16,11 +17,10 @@ export  function ShopSidebarNav({ shop, className, ...props }: SidebarNavProps) 
   if (!dashboardConfig.sidebarNav?.length) return null;
 
   return (
+    <Card className='p-6 bg-white rounded-lg'>
     <div className={cn('flex w-full flex-col gap-2', className)} {...props}>
       {dashboardConfig.sidebarNav.map((item, index) => {
         const Icon = Icons[item.icon ?? 'chevronLeft'];
-      
-
         return item.href ? (
           <Link
             aria-label={item.title}
@@ -57,5 +57,6 @@ export  function ShopSidebarNav({ shop, className, ...props }: SidebarNavProps) 
         );
       })}
     </div>
+    </Card>
   );
 }

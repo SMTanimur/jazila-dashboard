@@ -2,11 +2,8 @@
 import SellerSideBar from '@/components/layout/SellerSideBar';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteHeader } from '@/components/layout/site-header';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
-
 import { ScrollArea } from '@/components/ui/scroll-area';
-
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -17,7 +14,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className='flex min-h-screen flex-col'>
       <SiteHeader
-        isSellerStoreLayout={false}
+        
       />
       <div className='container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-10'>
       
