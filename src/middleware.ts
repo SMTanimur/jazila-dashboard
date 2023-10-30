@@ -36,7 +36,10 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(`${host}/`))
   }
   // Add a closing bracket here
-  if (!userToken && req.nextUrl.pathname.includes("/admin" || "/seller")) {
+  if (!userToken && req.nextUrl.pathname.includes("/admin")) {
+    return NextResponse.redirect(new URL(`${host}/signin`))
+  }
+  if (!userToken && req.nextUrl.pathname.includes("/seller")) {
     return NextResponse.redirect(new URL(`${host}/signin`))
   }
 
