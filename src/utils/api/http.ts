@@ -2,7 +2,7 @@ import { AUTH_TOKEN_KEY } from "@/constants";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
+export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const isServer = typeof window === "undefined";
 const http = axios.create({
   baseURL: `${baseURL}/v1`,
