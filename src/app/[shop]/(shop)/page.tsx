@@ -64,7 +64,7 @@ const StorePage = ({ params: { shop } }: Params) => {
           )}
           {/* about Shop */}
           <div className='order-2 xl:order-1 col-span-12 sm:col-span-6 xl:col-span-4 3xl:col-span-3'>
-            <Card className='shadow-md h-[450px]'>
+            <Card className='shadow-md h-[450px] border-none'>
               <div className='py-8 px-6  rounded flex flex-col items-center'>
                 <div className='w-36 h-36 relative rounded-full mb-5'>
                   <div className='w-full h-full relative overflow-hidden flex items-center justify-center border border-gray-100 rounded-full'>
@@ -108,50 +108,39 @@ const StorePage = ({ params: { shop } }: Params) => {
                       : 'No contact found'}
                   </Link>
                 </div>
-
-                {/* <div className='grid grid-cols-1 w-full mt-7'>
-                <a
-                  href={`${process.env.NEXT_PUBLIC_SHOP_URL}/${locale}/shops/${slug}`}
-                  target='_blank'
-                  rel='noreferrer'
-                  className='inline-flex items-center justify-center flex-shrink-0 leading-none rounded outline-none transition duration-300 ease-in-out focus:outline-none focus:shadow focus:ring-1 focus:ring-accent-700 !bg-gray-100 hover:!bg-accent !text-heading hover:!text-light !font-normal px-5 py-0 h-12'
-                >
-                  {t('common:text-visit-shop')}
-                </a>
-              </div> */}
               </div>
             </Card>
           </div>
 
           {/* Cover Photo */}
-
-          <div className='order-1 xl:order-2 col-span-12 xl:col-span-8 3xl:col-span-9 rounded h-full overflow-hidden'>
-            <Card className='shadow-md p-4 h-[450px]'>
-              <div className=' relative bg-light min-h-[400px]'>
+          <Card className='shadow-md p-4  border-0 order-1 xl:order-2 col-span-12 xl:col-span-8 3xl:col-span-9 rounded h-full'>
+          <div className=' overflow-hidden relative grid justify-items-stretch'>
+            <Button size={'lg'} className='justify-self-end'>
+                  <Link href={`/${shop}/edit`} className='flex items-center'>
+                    <Icons.edit className='w-4 me-2' />
+                    <span> Edit Shop</span>
+                  </Link>
+                </Button>
+              <div className=' relative  min-h-[300px] mt-3'>
+                
                 {data?.cover_image && (
                   <Image
                     src={data?.cover_image.img_url}
                     layout='fill'
                     alt={'cover image'}
                     objectFit='contain'
+                    className='w-full'
                   />
                 )}
 
-                {/* {hasAccess(adminAndOwnerOnly, permissions) && ( */}
-                <Button size={'lg'} className='absolute top-1 end-1'>
-                  <Link href={`/${shop}/edit`} className='flex items-center'>
-                    <Icons.edit className='w-4 me-2' />
-                    <span> Edit Shop</span>
-                  </Link>
-                </Button>
-
-                {/* )} */}
               </div>
-            </Card>
+
+            
           </div>
+          </Card>
 
           {/* Mini Dashboard */}
-          <div className='order-4 xl:order-3 col-span-12 xl:col-span-9 '>
+          <Card className='order-4 xl:order-3 col-span-12 xl:col-span-9 p-6 border-none'>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-5 bg-light p-4 rounded h-full'>
               <div className='space-y-3'>
                 <h2 className='text-heading text-lg font-semibold '>
@@ -249,10 +238,10 @@ const StorePage = ({ params: { shop } }: Params) => {
                 </div>
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Misc. Information */}
-          <div className='order-3 xl:order-4 bg-light rounded col-span-12 sm:col-span-6 xl:col-span-3'>
+          <Card className='order-3 xl:order-4  rounded col-span-12 sm:col-span-6 xl:col-span-3 p-6 border-none'>
             <div className='flex flex-col p-6 2xl:p-7 border-b border-gray-200'>
               <span className='text-slate-400 text-sm mb-2'>
                 registered-since
@@ -296,7 +285,7 @@ const StorePage = ({ params: { shop } }: Params) => {
                 </p>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
       </section>
     </Shell>

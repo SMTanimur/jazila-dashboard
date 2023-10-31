@@ -17,7 +17,7 @@ export  function ShopSidebarNav({ shop, className, ...props }: SidebarNavProps) 
   if (!dashboardConfig.sidebarNav?.length) return null;
 
   return (
-    <Card className='p-6 bg-white rounded-lg'>
+    <Card className='p-6  rounded-lg'>
     <div className={cn('flex w-full flex-col gap-2', className)} {...props}>
       {dashboardConfig.sidebarNav.map((item, index) => {
         const Icon = Icons[item.icon ?? 'chevronLeft'];

@@ -29,12 +29,13 @@ export default async function DashboardLayout({
 
 
   return (
-    <div className='flex min-h-screen flex-col bg-gray-100'>
+    <div className='flex min-h-screen flex-col '>
       <SiteHeader
         shop={shop}
         isShopLayout={true}
       />
-      <div className='container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10'>
+      <div className='bg-gray-100 dark:bg-background'>
+      <div className='container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10  '>
         <DropdownMenu>
           <DropdownMenuContent className='w-56' align='end' forceMount>
             <DropdownMenuLabel className='font-normal'>
@@ -59,7 +60,7 @@ export default async function DashboardLayout({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <aside className='fixed top-14 z-10 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block'>
+        <aside className='fixed top-14 z-10 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block '>
           <ScrollArea className='py-6 pr-6 lg:py-8'>
           
             <ShopSidebarNav
@@ -70,6 +71,7 @@ export default async function DashboardLayout({
           </ScrollArea>
         </aside>
         <main className='flex w-full flex-col overflow-hidden '>{children}</main>
+      </div>
       </div>
       <SiteFooter />
     </div>

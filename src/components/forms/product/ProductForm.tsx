@@ -26,6 +26,7 @@ import ProductSimpleForm from './product-simple-form';
 import ProductVariableForm from './product-variable-form';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/icons';
+import { getFormattedVariations } from './form-utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { productValidationSchema } from '@/validations/product';
 
@@ -90,15 +91,7 @@ const productType = [
   { name: 'Simple Product', value: ProductType.Simple },
   { name: 'Variable Product', value: ProductType.Variable },
 ];
-function getFormattedVariations(variations?: IAttributeValue[]) {
-  const variationGroup = groupBy(variations, 'attribute.slug');
-  return Object.values(variationGroup)?.map((vg) => {
-    return {
-      attribute: vg?.[0]?.attribute,
-      value: vg?.map((v) => ({ id: v?._id, value: v?.value })),
-    };
-  });
-}
+
 
 
 function processOptions(options: any) {
@@ -138,24 +131,24 @@ function calculateQuantity(variationOptions: any) {
 interface ProductFormProps {
   initialValues?: IProduct | null;
     shop?: string
+    isShop?:boolean
 
 }
-
-
-const ProductForm = ({initialValues,shop}:ProductFormProps) => {
-
+const ProductForm = ({initialValues,shop,isShop=true}:ProductFormProps) => {
+  console.log(isShop,'kd')
   const {data}=useShopQuery(shop as string)
   const shopId=data?._id
-const {currentUser}=useCurrentUser()
 const queryClient=useQueryClient()
 const router = useRouter()
   const {ProductCreateLoading,attemptProductCreate,ProductUpdateLoading,ProductUpdateMutation}=useProduct({shop})
+
+
    const attemptProductUpdate=async (data:UpdateProduct)=>{
       toast.promise(ProductUpdateMutation({variables:{id:initialValues?._id as string,input:data}}),{
         loading: 'updating...',
       success:( data:any) => {
         queryClient.invalidateQueries(['products']);
-        router.push(currentUser?.role === 'seller' ? `/${shop}/products` : '/admin/products');
+        router.push( isShop ? `/${shop}/products`  : '/admin/products');
         return <b>{data.message}</b>;
       },
       error: error => {
@@ -184,18 +177,20 @@ const router = useRouter()
                 (type) => initialValues.product_type === type.value
               )
             : productType[0],
-          variations: getFormattedVariations(initialValues?.variations),
+            ...(initialValues.product_type === ProductType.Variable && {
+              variations: getFormattedVariations(initialValues.variations),
+              variation_options: initialValues.variation_options?.map(({ ...option }: any) => {
+                return {
+                  ...option,
+                };
+              }),
+            }),
         })
       : defaultValues,
   });
 
 
-console.log(productForm.getValues())
-
-
   const onSubmit = async (values: FormValues) => {
-    console.log(values.image, 'values')
-
     const { type } = values;
     const inputValues: any = {
       description: values.description,

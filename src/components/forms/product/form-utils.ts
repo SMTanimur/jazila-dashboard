@@ -11,7 +11,7 @@ export function getFormattedVariations(variations: any) {
   return Object.values(variationGroup)?.map((vg) => {
     return {
       attribute: vg?.[0]?.attribute,
-      value: vg?.map((v) => ({ id: v.id, value: v.value })),
+      value: vg?.map((v) => ({ id: v._id, value: v.value })),
     };
   });
 }

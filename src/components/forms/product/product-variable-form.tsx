@@ -74,16 +74,12 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
                     <div className="mt-5">
                       <Label>Attribute Name*</Label>
                       <SelectInput
-                        name={`variations[${index}].attribute`}
-                        defaultValue={attributes?.find(
-                          (attr) => attr._id === field.attribute
-                        )}
+                        name={`variations.${index}.attribute`}
                         control={productForm.control}
+                        defaultValue={field.attribute}
                         getOptionLabel={(option: any) => option.name}
-                        getOptionValue={(option: any) => option?._id}
-                        options={
-                          filterAttributes(attributes, variations)!
-                        }
+                        getOptionValue={(option: any) => option._id}
+                        options={filterAttributes(attributes, variations)!}
                         isLoading={isLoading}
                       />
                     </div>
@@ -92,14 +88,12 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
                       <Label>Attribute value*</Label>
                       <SelectInput
                         isMulti
-                        name={`variations[${index}].value`}
+                        name={`variations.${index}.value`}
                         control={productForm.control}
                         defaultValue={field.value}
                         getOptionLabel={(option: any) => option.value}
                         getOptionValue={(option: any) => option._id}
-                        options={
-                          productForm.watch(`variations[${index}].attribute`)?.values
-                        }
+                        options={productForm.watch(`variations.${index}.attribute`)?.values}
                       />
                     </div>
                   </div>
