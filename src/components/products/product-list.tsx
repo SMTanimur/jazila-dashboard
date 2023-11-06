@@ -15,9 +15,11 @@ type IProps = {
   products: PaginatorInfo<IProduct>;
   onPagination: (key: number) => void;
   onSort: (current: any) => void;
+  shop?:string
+  isShop:boolean;
   onOrder: (current: string) => void;
 };
-const ProductsList = ({ products, onPagination,onOrder,onSort }: IProps) => {
+const ProductsList = ({ products, onPagination,onOrder,onSort,isShop=true,shop }: IProps) => {
   const rowExpandable = (record: any) => record.children?.length;
   const setShowProductAlert = useGlobalAlertStateStore(
     state => state.setShowProductAlert
@@ -116,38 +118,7 @@ const ProductsList = ({ products, onPagination,onOrder,onSort }: IProps) => {
         <span className="whitespace-nowrap truncate">{product_type}</span>
       ),
     },
-    // {
-    //   title: t('table:table-item-unit'),
-    //   dataIndex: 'price',
-    //   key: 'price',
-    //   align: alignRight,
-    //   width: 100,
-    //   render: (value: number, record: Product) => {
-    //     const { price } = usePrice({
-    //       amount: value,
-    //     });
-    //     const { price: max_price } = usePrice({
-    //       amount: record?.max_price as number,
-    //     });
-    //     const { price: min_price } = usePrice({
-    //       amount: record?.min_price as number,
-    //     });
-    //     if (record?.product_type === ProductType.Variable) {
-    //       return (
-    //         <span
-    //           className="whitespace-nowrap"
-    //           title={`${min_price} - ${max_price}`}
-    //         >{`${min_price} - ${max_price}`}</span>
-    //       );
-    //     } else {
-    //       return (
-    //         <span className="whitespace-nowrap" title={price}>
-    //           {price}
-    //         </span>
-    //       );
-    //     }
-    //   },
-    // },
+
     {
       title: 'Quantity',
       dataIndex: 'quantity',
@@ -190,7 +161,7 @@ const ProductsList = ({ products, onPagination,onOrder,onSort }: IProps) => {
             />
           </Tooltip>
           <Tooltip content={'Edit'} placement='bottom-end'>
-            <Link href={`/admin/products/${options.slug}/edit`}>
+            <Link href={isShop ? `/${shop}/products/${options.slug}/edit` : `/admin/products/${options.slug}/edit`}>
               <Icons.pencil className='w-8 text-stone-300' />
             </Link>
           </Tooltip>

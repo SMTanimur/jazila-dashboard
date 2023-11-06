@@ -135,7 +135,6 @@ interface ProductFormProps {
 
 }
 const ProductForm = ({initialValues,shop,isShop=true}:ProductFormProps) => {
-  console.log(isShop,'kd')
   const {data}=useShopQuery(shop as string)
   const shopId=data?._id
 const queryClient=useQueryClient()
@@ -148,7 +147,7 @@ const router = useRouter()
         loading: 'updating...',
       success:( data:any) => {
         queryClient.invalidateQueries(['products']);
-        router.push( isShop ? `/${shop}/products`  : '/admin/products');
+        router.push( isShop ?  `/${shop}/products` : `/admin/products`);
         return <b>{data.message}</b>;
       },
       error: error => {

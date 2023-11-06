@@ -15,13 +15,13 @@ type IProps = {
   attributes: PaginatorInfo<IAttribute>;
   onPagination: (key: number) => void;
   shop?:string
+  isShop:boolean;
   onSort: (current: any) => void;
   onOrder: (current: string) => void;
 };
-const AttributeList = ({ attributes, onPagination,shop,onOrder,onSort }: IProps) => {
+const AttributeList = ({ attributes, onPagination,shop,onOrder,onSort ,isShop=true}: IProps) => {
   const rowExpandable = (record: any) => record.children?.length;
   const {currentUser}=useCurrentUser()
-  const isAdmin = currentUser?.role === 'admin';
   const setShowAttributeAlert = useGlobalAlertStateStore(
     state => state.setShowAttributeAlert
   );
@@ -139,7 +139,7 @@ const AttributeList = ({ attributes, onPagination,shop,onOrder,onSort }: IProps)
             />
           </Tooltip>
           <Tooltip content={'Edit'} placement='bottom-end'>
-            <Link href={ isAdmin ? `/admin/attributes/${options.slug}/edit` : `/${shop}/attributes/${options.slug}/edit`}>
+            <Link href={ isShop ?  `/${shop}/attributes/${options.slug}/edit` :`/admin/attributes/${options.slug}/edit`}>
               <Icons.pencil className='w-8 text-stone-300' />
             </Link>
           </Tooltip>

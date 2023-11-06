@@ -50,6 +50,7 @@ const Attributes = () => {
       </Card>
 
       <AttributeList
+        isShop={false}
         attributes={data!}
         onPagination={handlePagination}
         onOrder={setOrder}

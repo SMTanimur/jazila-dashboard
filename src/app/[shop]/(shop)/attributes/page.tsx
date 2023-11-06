@@ -73,6 +73,7 @@ const Attributes = ({params:{shop}}:Params) => {
       <AttributeList
         attributes={data!}
         shop={shop}
+        isShop
         onPagination={handlePagination}
         onOrder={setOrder}
         onSort={setColumn}

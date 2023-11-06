@@ -29,7 +29,7 @@ if(isLoading) return <Loader  text='Loading'/>
     </PageHeader>
 
      <section>
-      <ProductForm shop={shop} initialValues={data!}/>
+      <ProductForm shop={shop} initialValues={data!} isShop={true}/>
      </section>
     </Shell>
   )

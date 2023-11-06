@@ -25,7 +25,7 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
   const { data, isLoading } = useGetAttributesQuery({
     shop: initialValues ? initialValues.shop._id : shopId,
   });
- 
+  const variations = productForm.watch('variations');
   // This field array will keep all the attribute dropdown fields
   const { fields, append, remove } = useFieldArray({
     shouldUnregister: true,
@@ -33,7 +33,7 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
     name: 'variations',
   });
   
-  const variations = productForm.watch('variations');
+
   const cartesianProduct = getCartesianProduct(productForm.getValues('variations'));
 
   const attributes = data?.docs!
@@ -52,6 +52,7 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
           </CardHeader>
           <div>
             {fields?.map((field: any, index: number) => {
+           
               return (
                 <div
                   key={field.id}
@@ -71,7 +72,7 @@ export default function ProductVariableForm({ shopId, initialValues,productForm 
                   </div>
 
                   <div className="grid grid-cols-fit gap-5">
-                    <div className="mt-5">
+                    <div className="mt-5 col-span-2">
                       <Label>Attribute Name*</Label>
                       <SelectInput
                         name={`variations.${index}.attribute`}

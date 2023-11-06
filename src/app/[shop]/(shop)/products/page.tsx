@@ -144,6 +144,8 @@ function handlePagination(current: any) {
       </Card>
 
       <ProductsList
+      isShop 
+      shop={shop}
         products={data!}
         onPagination={handlePagination}
         onOrder={setOrder}
