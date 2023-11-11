@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: ' Admin Login',
-  description: 'Sign in to your account',
+  title: 'Categories',
+  description: 'Manage your Categories settings',
 };
 export default function RootLayout({
   children,

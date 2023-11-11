@@ -19,6 +19,7 @@ import { Icons } from '@/components/ui/icons';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/auth/useAuth';
 
+
 export default  function SignInPage() {
 
   const {adminLoginForm,attemptToAdminLogin,LoginLoading}=useAuth()
@@ -32,7 +33,6 @@ export default  function SignInPage() {
         
         </CardHeader>
         <CardContent className='grid gap-4'>
-        {/* <OAuthSignIn/> */}
          
         <Form {...adminLoginForm}>
       <form
