@@ -23,14 +23,14 @@
   box-shadow: none;
   border-color: rgb(var(--color-accent));
 }
-.react-datepicker-popper[data-placement^='bottom'] {
+.react-datepicker-popper[data-placement^="bottom"] {
   margin-top: 5px !important;
 }
-.react-datepicker-popper[data-placement^='top'] {
+.react-datepicker-popper[data-placement^="top"] {
   margin-bottom: 5px !important;
 }
 .react-datepicker {
-  font-family: 'Open Sans' !important;
+  font-family: "Open Sans" !important;
   font-size: 13px !important;
   background-color: #fff !important;
   color: #6b7280 !important;
@@ -63,11 +63,11 @@
   box-shadow: none;
 }
 .react-datepicker .react-datepicker__navigation--previous {
-  background-image: url('/arrow-previous.svg');
+  background-image: url("/arrow-previous.svg");
   left: 19px;
 }
 .react-datepicker .react-datepicker__navigation--next {
-  background-image: url('/arrow-next.svg');
+  background-image: url("/arrow-next.svg");
   right: 19px;
 }
 .react-datepicker .react-datepicker__month-container {
@@ -418,9 +418,8 @@
 
 .rc-pagination .rc-pagination-prev svg,
 .rc-pagination .rc-pagination-next svg {
-  @apply w-4 h-4 rtl:transform rtl:rotate-180;
+  @apply w-4 h-4 transform rotate-180;
 }
-
 
 .rc-pagination .rc-pagination-item:focus a,
 .rc-pagination .rc-pagination-item:hover a {
@@ -462,12 +461,11 @@
 
 .rc-table tr th,
 .rc-table tr td {
-  @apply  border-0 border-b border-border;
+  @apply border-0 border-b border-border;
 }
 
 .rc-table thead.rc-table-thead th {
   @apply py-3 px-3  text-sm font-semibold text-stone-600 border-border whitespace-nowrap first:ps-4 last:pe-4 bg-[#f7f8f9];
-
 }
 
 .rc-table tr.rc-table-row:hover {
@@ -529,7 +527,7 @@ Overlay Scrollbar - os-theme-thin-dark
 }
 .os-theme-thin-dark > .os-scrollbar-horizontal > .os-scrollbar-track:before,
 .os-theme-thin-dark > .os-scrollbar-vertical > .os-scrollbar-track:before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   background: rgba(0, 0, 0, 0.15);
@@ -560,7 +558,7 @@ Overlay Scrollbar - os-theme-thin-dark
   > .os-scrollbar
   > .os-scrollbar-track
   > .os-scrollbar-handle:before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   background: rgba(0, 0, 0, 0.5);
