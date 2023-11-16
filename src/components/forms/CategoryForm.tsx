@@ -114,10 +114,11 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
       : defaultValues,
   });
 
+  console.log(categoryForm.getValues("image"))
+
   const { data, isLoading } = useGetAllTypesQuery({limit:100});
 
   const {
-    IsCategoryCreateError,
     attemptCategoryCreate,
     categoryCreateLoading,
     categoryUpdateLoading,
@@ -186,15 +187,11 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
                     <FormControl>
                       <FileDialog
                         setValue={categoryForm.setValue}
-                        name="image"
+                        name='image'
                         maxFiles={1}
                         maxSize={1024 * 1024 * 4}
                         multiple={false}
-                        value={
-                          initialValues
-                            ? (initialValues.image as IUploadedImage)
-                            : null
-                        }
+                        value={initialValues ? initialValues.image as IUploadedImage : null}
                       />
                     </FormControl>
                     <UncontrolledFormMessage
