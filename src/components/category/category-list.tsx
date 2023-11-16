@@ -108,6 +108,21 @@ const CategoryList = ({ categories, onPagination,onOrder,onSort }: IProps) => {
     },
 
     {
+      title: 'Total Products',
+      dataIndex: 'products_count',
+      key: 'products_count',
+      align: 'center',
+      render: (products_count: number) => {
+       
+        return (
+          <span className="flex items-center justify-center">
+            {products_count}
+          </span>
+        );
+      },
+    },
+
+    {
       title: 'Image',
       dataIndex: 'image',
       key: 'image',
