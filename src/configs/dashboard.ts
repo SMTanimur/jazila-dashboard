@@ -135,9 +135,9 @@ export const adminDashboardConfig: DashboardConfig = {
       items: [],
     },
     {
-      title: "Author",
-      href: "/admin/author",
-      icon: "author",
+      title: "Users",
+      href: "/admin/users",
+      icon: "user",
       items: [],
     },
     {

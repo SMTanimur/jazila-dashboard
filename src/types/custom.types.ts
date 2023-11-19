@@ -11,6 +11,13 @@ export type CategoriesQueryOptionsType = {
   orderBy?: string;
   sortedBy?: SortOrder;
 };
+export type UserQueryOptionsType = {
+  text?: string;
+  page?: number;
+  limit?: number;
+  orderBy?: string;
+  sortedBy?: SortOrder;
+};
 export type TagsQueryOptionsType = {
   type?: string;
   text?: string;

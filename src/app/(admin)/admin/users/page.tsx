@@ -1,9 +1,16 @@
-import React from 'react'
 
-const UserPage = () => {
+import { Shell } from "@/components/shells/shell";
+import UserScreenComponent from "./screens/UsersPageScreen";
+
+const UserPage = async() => {
   return (
-    <div>UserPage</div>
-  )
-}
+    <Shell variant={"sidebar"}>
+      
+         <UserScreenComponent/>
+  
+      
+    </Shell>
+  );
+};
 
-export default UserPage
+export default UserPage;

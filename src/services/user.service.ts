@@ -7,10 +7,11 @@ import {
   TSignup,
   TVerify,
   loginResponseSchema,
-  mutationActivationResponse,
   mutationResponseSchema,
 } from '@/validations/auth';
 import { IUser } from '@/types';
+import { QueryOptionsType, QueryParamsType } from '@/types/custom.types';
+import { PaginatorInfo } from '@/types/utils';
 
 export const userClient = {
   me: () => {
@@ -56,4 +57,20 @@ export const userClient = {
       variables
     );
   },
+
+  getUsers:({ queryKey }: QueryParamsType) => {
+    const [_key, params] = queryKey;
+    const {
+      page,
+      text,
+      limit = 15,
+      orderBy = 'updatedAt',
+      sortedBy = 'desc',
+    } = params as QueryOptionsType;
+    const url = `${API_ENDPOINTS.USERS}?${
+      text ? `search=${text}` : ''
+    }&limit=${limit}&page=${page}&orderBy=${orderBy}&sortedBy=${sortedBy}`;
+
+    return HttpClient.get<PaginatorInfo<IUser>>(url);
+  }
 };
