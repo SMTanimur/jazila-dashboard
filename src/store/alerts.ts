@@ -1,4 +1,4 @@
-"use client";
+
 import { create } from "zustand";
 
 interface GlobalAlertState {
@@ -33,6 +33,13 @@ interface GlobalAlertState {
     showProductAlert: boolean,
     productAlertData: any
   ) => void;
+
+  showQuestionAlert: boolean;
+  questionAlertData: any;
+  setShowQuestionAlert: (
+    showQuestionAlert: boolean,
+    questionAlertData: any
+  ) => void;
 }
 
 export const useGlobalAlertStateStore = create<GlobalAlertState>((set) => ({
@@ -56,11 +63,17 @@ export const useGlobalAlertStateStore = create<GlobalAlertState>((set) => ({
   setShowTagAlert: (showTagAlert, tagAlertData) =>
     set(() => ({ showTagAlert, tagAlertData })),
 
-    showAttributeAlert: false,
-    attributeAlertData: null,
-    setShowAttributeAlert: (showAttributeAlert, attributeAlertData) => set(() => ({ showAttributeAlert, attributeAlertData })),
+  showAttributeAlert: false,
+  attributeAlertData: null,
+  setShowAttributeAlert: (showAttributeAlert, attributeAlertData) =>
+    set(() => ({ showAttributeAlert, attributeAlertData })),
 
-    showProductAlert: false,
-    productAlertData: null,
-    setShowProductAlert: (showProductAlert, productAlertData) => set(() => ({ showProductAlert, productAlertData })),
+  showProductAlert: false,
+  productAlertData: null,
+  setShowProductAlert: (showProductAlert, productAlertData) =>
+    set(() => ({ showProductAlert, productAlertData })),
+
+  showQuestionAlert: false,
+  questionAlertData: null,
+  setShowQuestionAlert:(showQuestionAlert: boolean,questionAlertData: any) => set(()=>({showQuestionAlert,questionAlertData}))
 }));

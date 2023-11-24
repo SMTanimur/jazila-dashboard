@@ -47,6 +47,12 @@ export const dashboardConfig: ShopDashboardConfig = {
       icon: "gem",
       items: [],
     },
+    {
+      title: "Questions",
+      href: (shop: string) => `/${shop}/questions`,
+      icon: "question",
+      items: [],
+    },
   ],
 };
 export const sellerAccountConfig: DashboardConfig = {
@@ -70,6 +76,8 @@ export const sellerAccountConfig: DashboardConfig = {
       icon: "message",
       items: [],
     },
+
+  
   ],
 };
 export const adminDashboardConfig: DashboardConfig = {

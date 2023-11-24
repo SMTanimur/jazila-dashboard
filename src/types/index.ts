@@ -436,3 +436,23 @@ export enum SortOrder {
   /** Sort records in descending order. */
   Desc = "desc",
 }
+
+export declare type AnswerQuestionInput = {
+  id: string;
+  answer: string;
+};
+
+export interface IQuestion {
+  _id?: string;
+  user?: IUser;
+  shop?: IShop;
+  product?: IProduct;
+  question?: string;
+  answer?: string;
+  positive_feedbacks_count?: number;
+  negative_feedbacks_count?: number;
+  abusive_reports_count?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+}
