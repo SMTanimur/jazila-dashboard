@@ -3,22 +3,25 @@ import { QueryParamsType, QuestionsQueryOptionsType, TagsQueryOptionsType } from
 import { PaginatorInfo } from "@/types/utils";
 import { API_ENDPOINTS } from "@/utils/api/api-endpoints";
 import { HttpClient } from "@/utils/api/http";
-import { TTag } from "@/validations/tag";
 import { IQuestion } from "../types";
 
-export interface ITagUpdateVariables {
+type TData ={
+  answer:string
+}
+export interface AnswerQuestion {
   variables: {
     id: string;
-    input: TTag;
+    answer:TData
   };
 }
-
 export const questionClient = {
-  questionReply: ({id,answer}: AnswerQuestionInput) => {
-    return HttpClient.post<{ message: string }>(`/questions/${id}`, answer);
-  },
 
- 
+  questionReply:async ({variables:{id,answer}}: AnswerQuestion) => {
+
+    const responst = await HttpClient.put<{ message: string }>(`/questions/${id}`, answer);
+   console.log(responst,'response');
+    return responst
+  },
 
   getQuestions: async ({ queryKey }: QueryParamsType) => {
     const [_key, params] = queryKey;

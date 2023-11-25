@@ -437,9 +437,9 @@ export enum SortOrder {
   Desc = "desc",
 }
 
-export declare type AnswerQuestionInput = {
+export interface AnswerQuestionInput  {
   id: string;
-  answer: string;
+  answer:string;
 };
 
 export interface IQuestion {

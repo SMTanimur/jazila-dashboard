@@ -4,6 +4,7 @@ import { DeleteGroup } from '@/components/group/group-delete';
 import { DeleteProduct } from '@/components/products/product-delete';
 import { DisApproveShop } from '@/components/shop/disapprove-shop-view';
 import type { FC } from 'react';
+import { DeletezQuestion } from '@/components/question/question-delete';
 
 const GlobalAlerts: FC = () => {
   return (
@@ -13,6 +14,7 @@ const GlobalAlerts: FC = () => {
       <DeleteCategory />
       <DeleteAttribute/>
       <DeleteProduct/>
+      <DeletezQuestion/>
     </div>
   );
 };
