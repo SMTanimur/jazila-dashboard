@@ -17,7 +17,6 @@ import { useState } from "react";
 const UserScreenComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
-
   const [orderBy, setOrder] = useState("createdAt");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
   const [visible, setVisible] = useState(false);
@@ -27,7 +26,7 @@ const UserScreenComponent = () => {
     isLoading: loading,
     error,
   } = useGetUsersQuery({
-    limit: 20,
+    limit: 10,
     page,
     text: searchTerm,
     orderBy,

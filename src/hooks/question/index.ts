@@ -1,5 +1,4 @@
 import { questionClient } from "@/services/question.service";
-import { useGlobalModalStateStore } from "@/store/modal";
 import { IQuestion } from "@/types";
 import { QuestionsQueryOptionsType } from "@/types/custom.types";
 import { PaginatorInfo } from "@/types/utils";
