@@ -18,7 +18,7 @@ export function SidebarNav({ items, className, ...props }: SidebarNavProps) {
   if (!items?.length) return null;
 
   return (
-    <div className={cn('flex w-full flex-col gap-2', className)} {...props}>
+    <div className={cn('flex w-full flex-col gap-2 bg', className)} {...props}>
       {items.map((item, index) => {
         const Icon = Icons[item.icon ?? 'chevronLeft'];
 
