@@ -160,7 +160,7 @@ const router = useRouter()
       })
    }
   const productForm = useForm<FormValues>({
-    // resolver: zodResolver(productValidationSchema),
+    resolver: zodResolver(productValidationSchema),
     shouldUnregister: true,
     //@ts-ignore
     defaultValues: initialValues

@@ -36,7 +36,6 @@ export default function ProductSimpleForm({ initialValues,control }: IProps) {
                    type="number"
                    inputMode="numeric"
                    placeholder="Type product Price here."
-                   value={Number.isNaN(field.value) ? "" : field.value}
                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
                    
                    />
@@ -58,7 +57,6 @@ export default function ProductSimpleForm({ initialValues,control }: IProps) {
                    type="number"
                    inputMode="numeric"
                     placeholder="Type product sale price here."
-                    value={Number.isNaN(field.value) ? "" : field.value}
                     onChange={(e) => field.onChange(e.target.valueAsNumber)} />
                   </FormControl>
                    <FormMessage />
@@ -78,7 +76,6 @@ export default function ProductSimpleForm({ initialValues,control }: IProps) {
                    <Input type="number"
                     inputMode="numeric"
                     placeholder="Type product quantity here."
-                    value={Number.isNaN(field.value) ? "" : field.value}
                     onChange={(e) => field.onChange(e.target.valueAsNumber)} />
                   </FormControl>
                    <FormMessage />
