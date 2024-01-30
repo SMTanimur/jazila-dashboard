@@ -75,6 +75,7 @@ export default function ProductSimpleForm({ initialValues,control }: IProps) {
                   <FormControl>
                    <Input type="number"
                     inputMode="numeric"
+                    
                     placeholder="Type product quantity here."
                     onChange={(e) => field.onChange(e.target.valueAsNumber)} />
                   </FormControl>

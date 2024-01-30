@@ -50,25 +50,42 @@ const productValidationSchema = z.object({
     })
     .optional(),
   price: z.coerce
-    .number({
-      invalid_type_error: "Amount must be a number",
-      required_error: "Amount is required",
-    })
-    .optional(),
-  sale_price: z.coerce
-    .number({
-      invalid_type_error: "Amount must be a number",
-      required_error: "Amount is required",
-    })
-    .optional(),
+  .number({
+    invalid_type_error: 'Price must be a number',
+    required_error: 'Price is required'
+  })
+  .nonnegative({
+    message: 'Price must be a postive number'
+  })
+  
+  .optional(),
+  sale_price:  z.coerce
+  .number({
+    invalid_type_error: 'Price must be a number',
+    required_error: 'Price is required'
+  })
+  .nonnegative({
+    message: 'Price must be a postive number'
+  })
+  
+  .optional(),
 
-  quantity: z.coerce
-    .number({
-      invalid_type_error: "Amount must be a number",
-      required_error: "Amount is required",
-    })
-    .optional(),
-  unit: z.string().min(1),
+  quantity:  z.coerce
+  .number({
+    invalid_type_error: 'Quantity must be a number',
+    required_error: 'Quantity is required'
+  })
+  .nonnegative({
+    message: 'Quantity must be a postive number'
+  })
+  
+  .optional(),
+
+  categories: z.array(z.string({
+    invalid_type_error: "Category must be a string",
+    required_error: "Category is required",
+  }))
+  
 });
 
 export { productValidationSchema };
