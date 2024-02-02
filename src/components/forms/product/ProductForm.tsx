@@ -1,34 +1,32 @@
 "use client"
-import React from 'react'
-import { Card } from '../../ui/card'
-import { IAttributeValue, ICategory, IProduct, ITag, IType, ImageInfo, ProductStatus, ProductType, UpdateProduct, VariationOption } from '@/types';
-import { useForm } from 'react-hook-form';
-import groupBy from 'lodash/groupBy';
-import { cloneDeep, orderBy, sum } from 'lodash';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, UncontrolledFormMessage } from '../../ui/form';
-import { useProduct } from '@/hooks/product/useProduct';
-import { toast } from 'sonner';
-import { useCurrentUser } from '@/hooks/user/useCurrentUser';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { useShopQuery } from '@/hooks/shops/useGetShop';
 import FileDialog from '@/components/common/shared/file-dialog';
-import { IUploadedImage } from '@/services/upload.service';
 import FilesDialog from '@/components/common/shared/files.dialog';
-import ProductGroupInput from './product-group-input';
-import ProductCategoryInput from './product-category-input';
-import ProductTagInput from './product-tag-input';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import ProductTypeInput from './product-type-input';
-import ProductSimpleForm from './product-simple-form';
-import ProductVariableForm from './product-variable-form';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/icons';
-import { getFormattedVariations } from './form-utils';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Input } from '@/components/ui/input';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Textarea } from '@/components/ui/textarea';
+import { useProduct } from '@/hooks/product/useProduct';
+import { useShopQuery } from '@/hooks/shops/useGetShop';
+import { IUploadedImage } from '@/services/upload.service';
+import { ICategory, IProduct, ITag, IType, ImageInfo, ProductStatus, ProductType, UpdateProduct, VariationOption } from '@/types';
 import { productValidationSchema } from '@/validations/product';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
+import { cloneDeep, orderBy, sum } from 'lodash';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { Card } from '../../ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, UncontrolledFormMessage } from '../../ui/form';
+import { getFormattedVariations } from './form-utils';
+import ProductCategoryInput from './product-category-input';
+import ProductGroupInput from './product-group-input';
+import ProductSimpleForm from './product-simple-form';
+import ProductTagInput from './product-tag-input';
+import ProductTypeInput from './product-type-input';
+import ProductVariableForm from './product-variable-form';
 
 type Variation = {
   formName: number;
@@ -135,6 +133,7 @@ interface ProductFormProps {
 
 }
 const ProductForm = ({initialValues,shop,isShop=true}:ProductFormProps) => {
+  
   const {data}=useShopQuery(shop as string)
   const shopId=data?._id
 const queryClient=useQueryClient()
@@ -188,6 +187,7 @@ const router = useRouter()
       : defaultValues,
   });
 
+  console.log(productForm.watch('gallery'),"galleryfd")
 
   const onSubmit = async (values: FormValues) => {
     const { type } = values;
@@ -216,7 +216,7 @@ const router = useRouter()
       categories: values?.categories?.map((c) => c._id),
       tags: values?.tags?.map((t) => t._id),
       image: values?.image,
-      gallery: values.gallery,
+      gallery: productForm.watch('gallery') ? productForm.watch('gallery') : values.gallery,
       ...(productTypeValue?.value === ProductType.Variable
         ? {
             variations: values?.variations?.flatMap(({ value }: any) => {
@@ -339,9 +339,9 @@ const router = useRouter()
                         maxSize={1024 * 1024 * 4}
                         multiple={true}
                         value={
-                          initialValues
-                            ? (initialValues.gallery as IUploadedImage[])
-                            : null
+                         productForm.watch("gallery")  ?  productForm.watch("gallery")  :
+                          (initialValues?.gallery as IUploadedImage[])
+                        
                         }
                       />
                     </FormControl>

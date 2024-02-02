@@ -233,7 +233,7 @@ function FileCard({ files, setFiles, file, i }: FileCardProps) {
 
   const handleDelete = async (image: IUploadedImage) => {
     const images = files?.filter((file) => file.img_id !== image.img_id);
-
+    
     try {
       setFiles(images as IUploadedImage[]);
       await deleteImages({ public_id: image.img_id });
