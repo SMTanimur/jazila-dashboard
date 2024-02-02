@@ -81,10 +81,7 @@ const productValidationSchema = z.object({
   
   .optional(),
 
-  categories: z.array(z.string({
-    invalid_type_error: "Category must be a string",
-    required_error: "Category is required",
-  }))
+ 
   
 });
 
