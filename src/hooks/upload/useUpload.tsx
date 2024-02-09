@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { uploadImage, uploadImages } from '@/services/upload.service';
 
 export const useUploadMutation = (multiple: boolean) => {
-  const queryClient = useQueryClient();
 
   return useMutation(
    async (input: any) => {

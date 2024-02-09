@@ -60,7 +60,7 @@ export default function FilesDialog<TFieldValues extends FieldValues>({
         formData, // it will be an array of uploaded attachments
         {
           onSuccess: (data: any) => {
-            console.log(files);
+    
             if (!files) {
               setFiles(data);
             } else if (multiple) {
@@ -97,13 +97,7 @@ export default function FilesDialog<TFieldValues extends FieldValues>({
   });
   files;
 
-  // Revoke preview url when component unmounts
-  // React.useEffect(() => {
-  //   return () => {
-  //     if (!files) return;
-  //     files.forEach(file => URL.revokeObjectURL(file.img_url));
-  //   };
-  // }, [files]);
+
 
   React.useEffect(() => {
     setValue(name, files as PathValue<TFieldValues, Path<TFieldValues>>);

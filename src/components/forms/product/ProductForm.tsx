@@ -1,32 +1,50 @@
-"use client"
-import FileDialog from '@/components/common/shared/file-dialog';
-import FilesDialog from '@/components/common/shared/files.dialog';
-import { Button } from '@/components/ui/button';
-import { Icons } from '@/components/ui/icons';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Textarea } from '@/components/ui/textarea';
-import { useProduct } from '@/hooks/product/useProduct';
-import { useShopQuery } from '@/hooks/shops/useGetShop';
-import { IUploadedImage } from '@/services/upload.service';
-import { ICategory, IProduct, ITag, IType, ImageInfo, ProductStatus, ProductType, UpdateProduct, VariationOption } from '@/types';
-import { productValidationSchema } from '@/validations/product';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
-import { cloneDeep, orderBy, sum } from 'lodash';
-import { useRouter } from 'next/navigation';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { Card } from '../../ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, UncontrolledFormMessage } from '../../ui/form';
-import { getFormattedVariations } from './form-utils';
-import ProductCategoryInput from './product-category-input';
-import ProductGroupInput from './product-group-input';
-import ProductSimpleForm from './product-simple-form';
-import ProductTagInput from './product-tag-input';
-import ProductTypeInput from './product-type-input';
-import ProductVariableForm from './product-variable-form';
+"use client";
+import FileDialog from "@/components/common/shared/file-dialog";
+import FilesDialog from "@/components/common/shared/files.dialog";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/ui/icons";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { useProduct } from "@/hooks/product/useProduct";
+import { useShopQuery } from "@/hooks/shops/useGetShop";
+import { IUploadedImage } from "@/services/upload.service";
+import {
+  ICategory,
+  IProduct,
+  ITag,
+  IType,
+  ImageInfo,
+  ProductStatus,
+  ProductType,
+  UpdateProduct,
+  VariationOption,
+} from "@/types";
+import { productValidationSchema } from "@/validations/product";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { cloneDeep, orderBy, sum } from "lodash";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { Card } from "../../ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  UncontrolledFormMessage,
+} from "../../ui/form";
+import { getFormattedVariations } from "./form-utils";
+import ProductCategoryInput from "./product-category-input";
+import ProductGroupInput from "./product-group-input";
+import ProductSimpleForm from "./product-simple-form";
+import ProductTagInput from "./product-tag-input";
+import ProductTypeInput from "./product-type-input";
+import ProductVariableForm from "./product-variable-form";
 
 type Variation = {
   formName: number;
@@ -47,7 +65,7 @@ export type FormValues = {
   tags: ITag[];
   in_stock: boolean;
   is_taxable: boolean;
-  image:ImageInfo
+  image: ImageInfo;
   gallery: ImageInfo[];
   status: ProductStatus;
   width: string;
@@ -55,42 +73,40 @@ export type FormValues = {
   length: string;
   isVariation: boolean;
   variations: Variation[];
-  variation_options: IProduct['variation_options'];
+  variation_options: IProduct["variation_options"];
   [key: string]: any;
 };
 const defaultValues = {
-  sku: '',
-  name: '',
-  type: '',
-  productTypeValue: { name: 'Simple Product', value: ProductType.Simple },
-  description: '',
-  unit: '',
-  price: '',
+  sku: "",
+  name: "",
+  type: "",
+  productTypeValue: { name: "Simple Product", value: ProductType.Simple },
+  description: "",
+  unit: "",
+  price: "",
   min_price: 0.0,
   max_price: 0.0,
-  sale_price: '',
-  quantity: '',
+  sale_price: "",
+  quantity: "",
   categories: [],
   tags: [],
   in_stock: true,
   is_taxable: false,
-  image: [],
+  image: null ,
   gallery: [],
   status: ProductStatus.Publish,
-  width: '',
-  height: '',
-  length: '',
+  width: "",
+  height: "",
+  length: "",
   isVariation: false,
   variations: [],
   variation_options: [],
 };
 
 const productType = [
-  { name: 'Simple Product', value: ProductType.Simple },
-  { name: 'Variable Product', value: ProductType.Variable },
+  { name: "Simple Product", value: ProductType.Simple },
+  { name: "Variable Product", value: ProductType.Variable },
 ];
-
-
 
 function processOptions(options: any) {
   try {
@@ -107,8 +123,8 @@ function calculateMaxMinPrice(variationOptions: any) {
       max_price: null,
     };
   }
-  const sortedVariationsByPrice = orderBy(variationOptions, ['price']);
-  const sortedVariationsBySalePrice = orderBy(variationOptions, ['sale_price']);
+  const sortedVariationsByPrice = orderBy(variationOptions, ["price"]);
+  const sortedVariationsBySalePrice = orderBy(variationOptions, ["sale_price"]);
   return {
     min_price:
       sortedVariationsBySalePrice?.[0].sale_price <
@@ -128,36 +144,47 @@ function calculateQuantity(variationOptions: any) {
 }
 interface ProductFormProps {
   initialValues?: IProduct | null;
-    shop?: string
-    isShop?:boolean
-
+  shop?: string;
+  isShop?: boolean;
 }
-const ProductForm = ({initialValues,shop,isShop=true}:ProductFormProps) => {
-  
-  const {data}=useShopQuery(shop as string)
-  const shopId=data?._id
-const queryClient=useQueryClient()
-const router = useRouter()
-  const {ProductCreateLoading,attemptProductCreate,ProductUpdateLoading,ProductUpdateMutation}=useProduct({shop})
+const ProductForm = ({
+  initialValues,
+  shop,
+  isShop = true,
+}: ProductFormProps) => {
+  const { data } = useShopQuery(shop as string);
+  const shopId = data?._id;
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const {
+    ProductCreateLoading,
+    attemptProductCreate,
+    ProductUpdateLoading,
+    ProductUpdateMutation,
+  } = useProduct({ shop });
 
+  const attemptProductUpdate = async (data: UpdateProduct) => {
+    toast.promise(
+      ProductUpdateMutation({
+        variables: { id: initialValues?._id as string, input: data },
+      }),
+      {
+        loading: "updating...",
+        success: (data: any) => {
+          queryClient.invalidateQueries(["products"]);
+          router.push(isShop ? `/${shop}/products` : `/admin/products`);
+          return <b>{data.message}</b>;
+        },
+        error: (error) => {
+          const {
+            response: { data },
+          }: any = error ?? {};
 
-   const attemptProductUpdate=async (data:UpdateProduct)=>{
-      toast.promise(ProductUpdateMutation({variables:{id:initialValues?._id as string,input:data}}),{
-        loading: 'updating...',
-      success:( data:any) => {
-        queryClient.invalidateQueries(['products']);
-        router.push( isShop ?  `/${shop}/products` : `/admin/products`);
-        return <b>{data.message}</b>;
-      },
-      error: error => {
-        const {
-          response: { data },
-        }: any = error ?? {};
-
-        return <b> {data?.message}</b>;
-      },
-      })
-   }
+          return <b> {data?.message}</b>;
+        },
+      }
+    );
+  };
   const productForm = useForm<FormValues>({
     resolver: zodResolver(productValidationSchema),
     shouldUnregister: true,
@@ -175,19 +202,21 @@ const router = useRouter()
                 (type) => initialValues.product_type === type.value
               )
             : productType[0],
-            ...(initialValues.product_type === ProductType.Variable && {
-              variations: getFormattedVariations(initialValues.variations),
-              variation_options: initialValues.variation_options?.map(({ ...option }: any) => {
+          ...(initialValues.product_type === ProductType.Variable && {
+            variations: getFormattedVariations(initialValues.variations),
+            variation_options: initialValues.variation_options?.map(
+              ({ ...option }: any) => {
                 return {
                   ...option,
                 };
-              }),
-            }),
+              }
+            ),
+          }),
         })
       : defaultValues,
   });
 
-  console.log(productForm.watch('gallery'),"galleryfd")
+  console.log(productForm.watch("gallery"), "galleryfd");
 
   const onSubmit = async (values: FormValues) => {
     const { type } = values;
@@ -215,8 +244,12 @@ const router = useRouter()
         : {}),
       categories: values?.categories?.map((c) => c._id),
       tags: values?.tags?.map((t) => t._id),
-      image: values?.image,
-      gallery: productForm.watch('gallery') ? productForm.watch('gallery') : values.gallery,
+      image: productForm.watch("image")
+        ? productForm.watch("image")
+        : values?.image,
+      gallery: productForm.watch("gallery")
+        ? productForm.watch("gallery")
+        : values.gallery,
       ...(productTypeValue?.value === ProductType.Variable
         ? {
             variations: values?.variations?.flatMap(({ value }: any) => {
@@ -241,7 +274,7 @@ const router = useRouter()
               delete: initialValues?.variation_options
                 ?.map((initialVariationOption) => {
                   const find = values?.variation_options?.find(
-                    (variationOption:any) =>
+                    (variationOption: any) =>
                       variationOption?._id === initialVariationOption?._id
                   );
                   if (!find) {
@@ -271,19 +304,17 @@ const router = useRouter()
       attemptProductCreate(inputValues);
     }
   };
-  const productTypeValue = productForm.watch('productTypeValue');
+  const productTypeValue = productForm.watch("productTypeValue");
   return (
     <React.Fragment>
-        <Form {...productForm}>
+      <Form {...productForm}>
         <form
           className="grid gap-10 w-full"
-          onSubmit={  (...args) =>
-            void productForm.handleSubmit( onSubmit)(...args)
-          
+          onSubmit={(...args) =>
+            void productForm.handleSubmit(onSubmit)(...args)
           }
         >
-
-      <div className="flex flex-col items-center gap-4 w-full lg:flex-row">
+          <div className="flex flex-col items-center gap-4 w-full lg:flex-row">
             <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
               <h4 className="text-stone-800 font-semibold">Feature Image</h4>
               <p>Upload your product feature image from here</p>
@@ -302,14 +333,16 @@ const router = useRouter()
                         maxSize={1024 * 1024 * 4}
                         multiple={false}
                         value={
-                          initialValues
-                            ? (initialValues.image as IUploadedImage)
-                            : null
+                          productForm.watch("image")
+                            ? productForm.watch("image")
+                            : (initialValues?.image as IUploadedImage)
                         }
                       />
                     </FormControl>
                     <UncontrolledFormMessage
-                      message={productForm.formState.errors.image?.message as string}
+                      message={
+                        productForm.formState.errors.image?.message as string
+                      }
                     />
                   </FormItem>
                 </div>
@@ -317,8 +350,7 @@ const router = useRouter()
             </div>
           </div>
 
-          <div className='border-dotted w-full border-2 ' />
-
+          <div className="border-dotted w-full border-2 " />
 
           <div className="flex flex-col items-center gap-4 w-full lg:flex-row">
             <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
@@ -339,14 +371,16 @@ const router = useRouter()
                         maxSize={1024 * 1024 * 4}
                         multiple={true}
                         value={
-                         productForm.watch("gallery")  ?  productForm.watch("gallery")  :
-                          (initialValues?.gallery as IUploadedImage[])
-                        
+                          productForm.watch("gallery")
+                            ? productForm.watch("gallery")
+                            : (initialValues?.gallery as IUploadedImage[])
                         }
                       />
                     </FormControl>
                     <UncontrolledFormMessage
-                      message={productForm.formState.errors?.gallery?.message as string}
+                      message={
+                        productForm.formState.errors?.gallery?.message as string
+                      }
                     />
                   </FormItem>
                 </div>
@@ -354,150 +388,155 @@ const router = useRouter()
             </div>
           </div>
 
-          <div className='border-dotted w-full border-2 ' />
+          <div className="border-dotted w-full border-2 " />
 
           <div className="flex  flex-col items-center gap-4 w-full lg:flex-row">
             <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
-              <h4 className="text-stone-800 font-semibold">Groups & Categories</h4>
+              <h4 className="text-stone-800 font-semibold">
+                Groups & Categories
+              </h4>
               <p>Select products groups and categories from here</p>
             </div>
             <div className="lg:w-2/3 w-full">
               <Card className="p-8  w-full ">
-              
                 <ProductGroupInput
-                
-                control={productForm.control}
-                error={productForm.formState.errors?.type?.message as string}
-              />
+                  control={productForm.control}
+                  error={productForm.formState.errors?.type?.message as string}
+                />
 
-              <ProductCategoryInput control={productForm.control} setValue={productForm.setValue} />
+                <ProductCategoryInput
+                  control={productForm.control}
+                  setValue={productForm.setValue}
+                />
 
-              <ProductTagInput control={productForm.control} setValue={productForm.setValue} />
-  
+                <ProductTagInput
+                  control={productForm.control}
+                  setValue={productForm.setValue}
+                />
               </Card>
             </div>
           </div>
 
+          <div className="border-dotted w-full border-2 " />
 
-          <div className='border-dotted w-full border-2 ' />
-
-<div className="flex  flex-col items-center gap-4 w-full lg:flex-row">
-  <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
-    <h4 className="text-stone-800 font-semibold">Descriptons</h4>
-    <p>Add your product description and necessary information from here</p>
-  </div>
-  <div className="lg:w-2/3 w-full">
-    <Card className="p-8  w-full ">
-    
-    <div className="my-4">
+          <div className="flex  flex-col items-center gap-4 w-full lg:flex-row">
+            <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
+              <h4 className="text-stone-800 font-semibold">Descriptons</h4>
+              <p>
+                Add your product description and necessary information from here
+              </p>
+            </div>
+            <div className="lg:w-2/3 w-full">
+              <Card className="p-8  w-full ">
+                <div className="my-4">
                   <FormField
-                  control={productForm.control}
-                  name="name"
-                  render={({ field }) => (
-                  <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                   <Input {...field} />
-                  </FormControl>
-                   <FormMessage />
+                    control={productForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
-          </div>
+                </div>
 
-          <div className="my-4">
+                <div className="my-4">
                   <FormField
-                  control={productForm.control}
-                  name="unit"
-                  render={({ field }) => (
-                  <FormItem>
-                  <FormLabel>Unit</FormLabel>
-                  <FormControl>
-                   <Input {...field} />
-                  </FormControl>
-                   <FormMessage />
+                    control={productForm.control}
+                    name="unit"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Unit</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
-          </div>
-          <div className="my-4">
+                </div>
+                <div className="my-4">
                   <FormField
-                  control={productForm.control}
-                  name="description"
-                  render={({ field }) => (
-                  <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                   <Textarea {...field} />
-                  </FormControl>
-                   <FormMessage />
+                    control={productForm.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
+                </div>
+
+                <div className="my-4">
+                  <FormField
+                    control={productForm.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem className="space-y-3">
+                        <FormLabel>Status</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col space-y-1"
+                          >
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="publish" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Publish
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="draft" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Draft
+                              </FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </Card>
+            </div>
           </div>
 
-          <div className='my-4'>
-          <FormField
-          control={productForm.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel>Status</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex flex-col space-y-1"
-                >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="publish" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      Publish
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="draft" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                    Draft
-                    </FormLabel>
-                  </FormItem>
-                
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          <div className="border-dotted w-full border-2 " />
+          <div className="flex flex-col items-center gap-4 w-full lg:flex-row">
+            <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
+              <h4 className="text-stone-800 font-semibold">Product Type</h4>
+              <p>Select product type form here</p>
+            </div>
+            <div className="lg:w-2/3 w-full">
+              <ProductTypeInput />
+            </div>
+          </div>
+          <div className="border-dotted w-full border-2 " />
+
+          {/* Simple Type */}
+          {productTypeValue?.value === ProductType.Simple && (
+            <ProductSimpleForm
+              initialValues={initialValues}
+              control={productForm.control}
+            />
           )}
-        />
 
-          </div>
-    </Card>
-  </div>
-</div>
-   
-<div className='border-dotted w-full border-2 ' />
-<div className="flex flex-col items-center gap-4 w-full lg:flex-row">
-  <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">
-    <h4 className="text-stone-800 font-semibold">Product Type</h4>
-    <p>Select product type form here</p>
-  </div>
-  <div className="lg:w-2/3 w-full">
-  <ProductTypeInput />
-    
-  </div>
-</div>
-<div className='border-dotted w-full border-2 ' />
-
- {/* Simple Type */}
- {productTypeValue?.value === ProductType.Simple && (
-            <ProductSimpleForm initialValues={initialValues} control={productForm.control} />
-          )}
-
-           {/* Variation Type */}
-           {productTypeValue?.value === ProductType.Variable && (
+          {/* Variation Type */}
+          {productTypeValue?.value === ProductType.Variable && (
             <ProductVariableForm
               shopId={shopId}
               productForm={productForm}
@@ -505,14 +544,13 @@ const router = useRouter()
             />
           )}
 
-<div className="flex items-end justify-end">
+          <div className="flex items-end justify-end">
             <Button
               disabled={ProductCreateLoading || ProductUpdateLoading}
               className="md:w-[200px] "
             >
               {ProductCreateLoading || ProductUpdateLoading ? (
-                <Icons
-                .spinner
+                <Icons.spinner
                   className="mr-2 h-4 w-4 animate-spin"
                   aria-hidden="true"
                 />
@@ -523,15 +561,10 @@ const router = useRouter()
               )}
             </Button>
           </div>
-          </form>
-
-         
-
-        </Form>
-
-    
+        </form>
+      </Form>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default ProductForm
+export default ProductForm;
