@@ -84,7 +84,7 @@ export default function FilesDialog<TFieldValues extends FieldValues>({
           errors[0]?.message && toast.error(errors[0].message);
         });
       }
-    },
+},
 
     [maxSize, setFiles]
   );
@@ -134,12 +134,12 @@ export default function FilesDialog<TFieldValues extends FieldValues>({
           </p>
           <div
             {...getRootProps()}
-            className={cn(
+                      className={cn(
               "group relative mt-8 grid h-48 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition hover:bg-muted/25",
               "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               isDragActive && "border-muted-foreground/50",
               isLoading && "pointer-events-none opacity-60",
-              className
+                            className
             )}
             {...props}
           >
