@@ -11,7 +11,7 @@ import GradientLogo from '../common/shared/gradient-logo';
 
 export function SiteFooter() {
   return (
-    <footer className='w-full border-t bg-background'>
+    <footer className='w-full border-t bg-background z-50'>
       <Shell as='div'>
         <section
           id='footer-content'
