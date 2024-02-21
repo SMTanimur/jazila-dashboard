@@ -1,19 +1,18 @@
 
 import { Control } from "react-hook-form";
 
-import { FormValues } from "./ProductForm";
 import { Card } from "@/components/ui/card";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ProductFormValues } from "./ProductForm";
 
 type IProps = {
   initialValues: any;
-  control: Control<FormValues>
+  control: Control<ProductFormValues>
 };
 
 export default function ProductSimpleForm({ initialValues,control }: IProps) {
   
-
   return (
     <div className="flex flex-col items-center gap-4 w-full lg:flex-row">
      <div className="lg:w-1/3 w-full flex flex-col items-start gap-2">

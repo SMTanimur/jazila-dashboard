@@ -25,7 +25,7 @@ const ProductTypeInput = () => {
       <div className="mb-5">
         <Label>Product type</Label>
         <SelectInput
-          name="productTypeValue"
+          name="product_type"
           control={control}
           getOptionLabel={(option: any) => option.name}
           getOptionValue={(option: any) => option.value}

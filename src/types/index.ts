@@ -316,7 +316,10 @@ export interface IOrder {
   payment_status: string;
   shop_id?: string;
 }
-
+export interface GetParams {
+  slug: string;
+  userId: string;
+}
 export interface IProduct {
   _id: string;
   name: string;
@@ -373,49 +376,34 @@ export interface VariationInput {
   title: number;
 }
 
-export declare type CreateProduct = {
-  name: Scalars["String"];
-  type_id: Scalars["String"];
-  price: Scalars["Float"];
-  sale_price?: Maybe<Scalars["Float"]>;
-  quantity: Scalars["Int"];
-  unit: Scalars["String"];
-  description?: Maybe<Scalars["String"]>;
-  categories?: Maybe<Array<Scalars["ID"]>>;
-  variations?: Maybe<Array<AttributeProductPivot>>;
-  in_stock?: Maybe<Scalars["Boolean"]>;
-  is_taxable?: Maybe<Scalars["Boolean"]>;
-  sku?: Maybe<Scalars["String"]>;
-  gallery?: Maybe<Array<Maybe<ImageInfo>>>;
-  image: ImageInfo;
-  status?: Maybe<ProductStatus>;
-  height?: Maybe<Scalars["String"]>;
-  length?: Maybe<Scalars["String"]>;
-  width?: Maybe<Scalars["String"]>;
-};
+export interface CreateProduct {
+  name: string;
+  slug?: string;
+  type: string;
+  price: number;
+  sale_price?: number;
+  quantity?: number;
+  unit: string;
+  description?: string;
+  categories?: string[];
+  variations?: AttributeProductPivot[];
+  in_stock?: boolean;
+  is_taxable?: boolean;
+  max_price?: number;
+  min_price?: number;
+  variation_options?: UpsertVariationsHasMany;
+  sku?: string;
+  gallery?: ImageInfo[];
+  image: ImageInfo
+  status?: ProductStatus;
+  height?: string;
+  length?: string;
+  width?: string;
+  shop_id?: string;
+}
 export declare type AttributeProductPivot = {
   _id: Scalars["ID"];
   price?: Maybe<Scalars["Float"]>;
-};
-export declare type UpdateProduct = {
-  name: Scalars["String"];
-  type_id: Scalars["String"];
-  price: Scalars["Float"];
-  sale_price?: Maybe<Scalars["Float"]>;
-  quantity: Scalars["Int"];
-  unit: Scalars["String"];
-  description?: Maybe<Scalars["String"]>;
-  categories?: Maybe<Array<Scalars["ID"]>>;
-  variations?: Maybe<Array<AttributeProductPivot>>;
-  in_stock?: Maybe<Scalars["Boolean"]>;
-  is_taxable?: Maybe<Scalars["Boolean"]>;
-  sku?: Maybe<Scalars["String"]>;
-  gallery?: Maybe<Array<Maybe<ImageInfo>>>;
-  image?: Maybe<ImageInfo>;
-  status?: Maybe<ProductStatus>;
-  height?: Maybe<Scalars["String"]>;
-  length?: Maybe<Scalars["String"]>;
-  width?: Maybe<Scalars["String"]>;
 };
 
 export interface IFileHandler<T> {

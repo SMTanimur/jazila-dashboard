@@ -23,13 +23,13 @@ export function useProduct({shop}:Params) {
     mutateAsync: ProductCreateMutation,
     isLoading: ProductCreateLoading,
     isError: IsProductCreateError,
-  } = useMutation(productClient.productCreate);
+  } = useMutation(productClient.create);
 
   const {
     mutateAsync: ProductUpdateMutation,
     isLoading: ProductUpdateLoading,
     isError: IsProductUpdateError,
-  } = useMutation(productClient.updateProduct);
+  } = useMutation(productClient.update);
 
   const {
     mutateAsync: ProductDeleleMutation,
@@ -39,10 +39,10 @@ export function useProduct({shop}:Params) {
   
   
 
-  const attemptProductCreate = async (data: CreateProduct) => {
+  const attemptProductCreate = async (data:CreateProduct) => {
     toast.promise(ProductCreateMutation(data), {
       loading: 'creating...',
-      success: data => {
+      success: (data) => {
         queryClient.invalidateQueries(['products']);
         router.push(`/${shop}/products` );
         return <b>{data.message}</b>;

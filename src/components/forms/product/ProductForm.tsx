@@ -10,6 +10,7 @@ import { useProduct } from "@/hooks/product/useProduct";
 import { useShopQuery } from "@/hooks/shops/useGetShop";
 import { IUploadedImage } from "@/services/upload.service";
 import {
+  CreateProduct,
   ICategory,
   IProduct,
   ITag,
@@ -17,7 +18,6 @@ import {
   ImageInfo,
   ProductStatus,
   ProductType,
-  UpdateProduct,
   VariationOption,
 } from "@/types";
 import { productValidationSchema } from "@/validations/product";
@@ -38,7 +38,7 @@ import {
   FormMessage,
   UncontrolledFormMessage,
 } from "../../ui/form";
-import { getFormattedVariations } from "./form-utils";
+import { ProductTypeOption, getFormattedVariations, getProductDefaultValues, getProductInputValues } from "./form-utils";
 import ProductCategoryInput from "./product-category-input";
 import ProductGroupInput from "./product-group-input";
 import ProductSimpleForm from "./product-simple-form";
@@ -46,102 +46,23 @@ import ProductTagInput from "./product-tag-input";
 import ProductTypeInput from "./product-type-input";
 import ProductVariableForm from "./product-variable-form";
 
-type Variation = {
-  formName: number;
-};
-export type FormValues = {
-  sku: string;
-  name: string;
-  type: IType;
-  product_type: ProductType;
-  description: string;
-  unit: string;
-  price: number;
-  min_price: number;
-  max_price: number;
-  sale_price: number;
-  quantity: number;
-  categories: ICategory[];
-  tags: ITag[];
-  in_stock: boolean;
-  is_taxable: boolean;
-  image: ImageInfo;
-  gallery: ImageInfo[];
-  status: ProductStatus;
-  width: string;
-  height: string;
-  length: string;
-  isVariation: boolean;
-  variations: Variation[];
-  variation_options: IProduct["variation_options"];
-  [key: string]: any;
-};
-const defaultValues = {
-  sku: "",
-  name: "",
-  type: "",
-  productTypeValue: { name: "Simple Product", value: ProductType.Simple },
-  description: "",
-  unit: "",
-  price: "",
-  min_price: 0.0,
-  max_price: 0.0,
-  sale_price: "",
-  quantity: "",
-  categories: [],
-  tags: [],
-  in_stock: true,
-  is_taxable: false,
-  image: null ,
-  gallery: [],
-  status: ProductStatus.Publish,
-  width: "",
-  height: "",
-  length: "",
-  isVariation: false,
-  variations: [],
-  variation_options: [],
+
+
+export type ProductFormValues = Omit<
+  CreateProduct,
+  | 'type'
+  | 'shop_id'
+  | 'categories'
+  | 'tags'
+> & {
+  type: Pick<IType, '_id' | 'name'>;
+  product_type: ProductTypeOption;
+  categories: Pick<ICategory, '_id' | 'name'>[];
+  tags: Pick<ITag, '_id' | 'name'>[];
 };
 
-const productType = [
-  { name: "Simple Product", value: ProductType.Simple },
-  { name: "Variable Product", value: ProductType.Variable },
-];
 
-function processOptions(options: any) {
-  try {
-    return JSON.parse(options);
-  } catch (error) {
-    return options;
-  }
-}
 
-function calculateMaxMinPrice(variationOptions: any) {
-  if (!variationOptions || !variationOptions.length) {
-    return {
-      min_price: null,
-      max_price: null,
-    };
-  }
-  const sortedVariationsByPrice = orderBy(variationOptions, ["price"]);
-  const sortedVariationsBySalePrice = orderBy(variationOptions, ["sale_price"]);
-  return {
-    min_price:
-      sortedVariationsBySalePrice?.[0].sale_price <
-      sortedVariationsByPrice?.[0]?.price
-        ? Number(sortedVariationsBySalePrice?.[0].sale_price)
-        : Number(sortedVariationsByPrice?.[0]?.price),
-    max_price: Number(
-      sortedVariationsByPrice?.[sortedVariationsByPrice?.length - 1]?.price
-    ),
-  };
-}
-
-function calculateQuantity(variationOptions: any) {
-  return sum(
-    variationOptions?.map(({ quantity }: { quantity: number }) => quantity)
-  );
-}
 interface ProductFormProps {
   initialValues?: IProduct | null;
   shop?: string;
@@ -163,10 +84,11 @@ const ProductForm = ({
     ProductUpdateMutation,
   } = useProduct({ shop });
 
-  const attemptProductUpdate = async (data: UpdateProduct) => {
+  const attemptProductUpdate = async (data: CreateProduct) => {
     toast.promise(
       ProductUpdateMutation({
-        variables: { id: initialValues?._id as string, input: data },
+        id: initialValues?._id as string,
+        ...data,
       }),
       {
         loading: "updating...",
@@ -185,126 +107,28 @@ const ProductForm = ({
       }
     );
   };
-  const productForm = useForm<FormValues>({
-    resolver: zodResolver(productValidationSchema),
+  const productForm = useForm<ProductFormValues>({
+    // resolver: zodResolver(productValidationSchema),
     shouldUnregister: true,
     //@ts-ignore
-    defaultValues: initialValues
-      ? cloneDeep({
-          ...initialValues,
-          isVariation:
-            initialValues.variations?.length &&
-            initialValues.variation_options?.length
-              ? true
-              : false,
-          productTypeValue: initialValues.product_type
-            ? productType.find(
-                (type) => initialValues.product_type === type.value
-              )
-            : productType[0],
-          ...(initialValues.product_type === ProductType.Variable && {
-            variations: getFormattedVariations(initialValues.variations),
-            variation_options: initialValues.variation_options?.map(
-              ({ ...option }: any) => {
-                return {
-                  ...option,
-                };
-              }
-            ),
-          }),
-        })
-      : defaultValues,
+    defaultValues: getProductDefaultValues(initialValues!)
   });
 
   console.log(productForm.watch("gallery"), "galleryfd");
-
-  const onSubmit = async (values: FormValues) => {
-    const { type } = values;
-    const inputValues: any = {
-      description: values.description,
-      height: values.height,
-      length: values.length,
-      name: values.name,
-      sku: values.sku,
-      status: values.status,
-      unit: values.unit,
-      width: values.width,
-      quantity:
-        values?.productTypeValue?.value === ProductType.Simple
-          ? values?.quantity
-          : calculateQuantity(values?.variation_options),
-      product_type: values.productTypeValue?.value,
-      type: type?._id,
-      ...(initialValues ? { shop: initialValues?.shop._id } : { shop: shopId }),
-      ...(productTypeValue?.value === ProductType.Simple
-        ? {
-            price: Number(values.price),
-            sale_price: values.sale_price ? Number(values.sale_price) : null,
-          }
-        : {}),
-      categories: values?.categories?.map((c) => c._id),
-      tags: values?.tags?.map((t) => t._id),
-      image: productForm.watch("image")
-        ? productForm.watch("image")
-        : values?.image,
-      gallery: productForm.watch("gallery")
-        ? productForm.watch("gallery")
-        : values.gallery,
-      ...(productTypeValue?.value === ProductType.Variable
-        ? {
-            variations: values?.variations?.flatMap(({ value }: any) => {
-              return value?.map(({ id, _id }: any) => id ?? _id);
-            }),
-          }
-        : {}),
-      ...(productTypeValue?.value === ProductType.Variable
-        ? {
-            variation_options: {
-              upsert: values?.variation_options
-                ?.map(({ options, ...rest }: any) => ({
-                  ...rest,
-                  options: processOptions(options).map(
-                    ({ name, value }: VariationOption) => ({
-                      name,
-                      value,
-                    })
-                  ),
-                }))
-                .filter((val) => val !== null),
-              delete: initialValues?.variation_options
-                ?.map((initialVariationOption) => {
-                  const find = values?.variation_options?.find(
-                    (variationOption: any) =>
-                      variationOption?._id === initialVariationOption?._id
-                  );
-                  if (!find) {
-                    return initialVariationOption?._id;
-                  }
-                })
-                .filter((item) => item !== undefined),
-            },
-          }
-        : {
-            variations: [],
-            variation_options: {
-              upsert: [],
-              delete: initialValues?.variation_options?.map(
-                (variation) => variation?._id
-              ),
-            },
-          }),
-      ...(productTypeValue?.value === ProductType.Variable && {
-        ...calculateMaxMinPrice(values?.variation_options),
-      }),
+ console.log(productForm.watch("variations"), "variationfd");
+  const onSubmit = async (values: ProductFormValues) => {
+    console.log(values,"values")
+    const inputValues:CreateProduct = {
+      ...getProductInputValues(values, initialValues),
     };
-
+    
     if (initialValues) {
       attemptProductUpdate(inputValues);
     } else {
       attemptProductCreate(inputValues);
     }
   };
-  const productTypeValue = productForm.watch("productTypeValue");
+  const productTypeValue = productForm.watch("product_type");
   return (
     <React.Fragment>
       <Form {...productForm}>

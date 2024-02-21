@@ -1,29 +1,19 @@
-import { CreateProduct, IProduct, UpdateProduct } from "@/types"
-import { ProductsQueryOptionsType, QueryParamsType } from "@/types/custom.types"
+import { IMessage } from '@/utils/api/curd-factory';
+import { CreateProduct, IProduct, } from "@/types"
+import { ProductsQueryOptionsType, QueryOptions, QueryParamsType } from "@/types/custom.types"
 import { PaginatorInfo } from "@/types/utils"
 import { API_ENDPOINTS } from "@/utils/api/api-endpoints"
+import { crudFactory } from "@/utils/api/curd-factory"
 import { HttpClient } from "@/utils/api/http"
 
-export interface IProductUpdateVariables {
-  variables: {
-    id: string
-    input: UpdateProduct
-  }
+
+
+const  ProductType={
+  
 }
-
 export const productClient = {
-  productCreate: (variables: CreateProduct) => {
-    console.log(variables, "vari")
-    return HttpClient.post<{ message: string }>(`/products`, variables)
-  },
-
-  updateProduct: ({ variables }: IProductUpdateVariables) => {
-    return HttpClient.put<UpdateProduct>(
-      `/products/${variables.id}`,
-      variables.input
-    )
-  },
-
+  ...crudFactory<IProduct, QueryOptions, CreateProduct> ("/products"),
+  
   getProducts: async ({ queryKey }: QueryParamsType)=>{
     const [_key, params] = queryKey;
     const {

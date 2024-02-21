@@ -94,3 +94,10 @@ export type QueryParamsType = {
   queryKey: QueryKey;
   pageParam?: string;
 };
+
+export interface QueryOptions {
+  limit?: number;
+  page?: number;
+  orderBy?: string;
+  sortedBy?: SortOrder;
+}
