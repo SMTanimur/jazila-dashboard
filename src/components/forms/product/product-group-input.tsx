@@ -20,7 +20,6 @@ const ProductGroupInput = ({ control, error }: Props) => {
     <div className="mb-5 ">
       <Label>Group*</Label>
       <SelectInput
-       
        name="type"
        control={control}
        getOptionLabel={(option: any) => option.name}

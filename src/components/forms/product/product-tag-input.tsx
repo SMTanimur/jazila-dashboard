@@ -4,11 +4,12 @@ import { useEffect } from "react";
 import { useGetTagsQuery } from "@/hooks/tag/useGetTags";
 import { Label } from "@/components/ui/label";
 import SelectInput from "@/components/ui/select-input";
-import { FormValues } from "./ProductForm";
+import { ProductFormValues } from "./ProductForm";
+
 
 
 interface Props {
-  control: Control<FormValues>;
+  control: Control<ProductFormValues>;
   setValue: any;
 }
 
@@ -22,14 +23,14 @@ const ProductTagInput = ({ control, setValue }: Props) => {
     control,
   });
   useEffect(() => {
-    if (type?.slug && dirtyFields?.type) {
+    if (type?._id && dirtyFields?.type) {
       setValue("tags", []);
     }
-  }, [type?.slug]);
+  }, [type?._id]);
 
   const { data, isLoading: loading } = useGetTagsQuery({
     limit: 999,
-    type: type?.slug,
+    type: type?._id,
   });
 
   return (

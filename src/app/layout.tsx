@@ -14,7 +14,7 @@ import RouterProvider from '@/shared/providers/router-provider';
 import GlobalAlerts from '@/shared/providers/GlobalAlerts';
 import GlobalModals from '@/shared/providers/GlobalModals';
 import { StyledComponentsRegistry } from './registry';
-
+import NextTopLoader from "nextjs-toploader";
 export const metadata: Metadata = defaultMetadata;
 
 export default function RootLayout({
@@ -34,6 +34,7 @@ export default function RootLayout({
       >
         <StyledComponentsRegistry>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+        <NextTopLoader color="#ff3366" />
           <GoogleProvider>
             <QueryProvider>
             <RouterProvider>

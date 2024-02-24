@@ -108,7 +108,7 @@ const ProductForm = ({
     );
   };
   const productForm = useForm<ProductFormValues>({
-    // resolver: zodResolver(productValidationSchema),
+    resolver: zodResolver(productValidationSchema),
     shouldUnregister: true,
     //@ts-ignore
     defaultValues: getProductDefaultValues(initialValues!)

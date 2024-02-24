@@ -4,11 +4,13 @@ import { useEffect } from 'react';
 import { useGetAllCategoriesQuery } from '@/hooks/category/useGetAllCategories';
 import { Label } from '@/components/ui/label';
 import SelectInput from '@/components/ui/select-input';
-import { FormValues } from './ProductForm';
+import { ProductFormValues } from './ProductForm';
+
+
 
 
 interface Props {
-  control: Control<FormValues, any>;
+  control: Control<ProductFormValues, any>;
   setValue: any;
 }
 
@@ -24,7 +26,7 @@ const ProductCategoryInput = ({ control, setValue }: Props) => {
     if (type?._id && dirtyFields?.type) {
       setValue('categories', []);
     }
-  }, [type?._id]);
+  }, [dirtyFields?.type, setValue, type?._id]);
 
   const { data, isLoading: loading } = useGetAllCategoriesQuery({
     limit: 999,

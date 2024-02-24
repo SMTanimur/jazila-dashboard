@@ -14,7 +14,6 @@ import sum from 'lodash/sum';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import omit from 'lodash/omit';
-import { omitTypename } from '@/utils/omit-typename';
 import { cartesian } from '@/utils/cartesian';
 
 export type ProductFormValues = Omit<
