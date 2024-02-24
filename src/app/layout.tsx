@@ -1,6 +1,5 @@
 import './globals.css';
 import type { Metadata } from 'next';
-
 import { TailwindIndicator } from '@/components/common/shared/tailwind-indicator';
 import { ThemeProvider } from '@/shared/providers/theme-provider';
 import GoogleProvider from '@/shared/providers/google.provider';
@@ -10,10 +9,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { defaultMetadata } from '@/lib/seo';
 import { fontMono, fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
-import RouterProvider from '@/shared/providers/router-provider';
 import GlobalAlerts from '@/shared/providers/GlobalAlerts';
 import GlobalModals from '@/shared/providers/GlobalModals';
-import { StyledComponentsRegistry } from './registry';
 import NextTopLoader from "nextjs-toploader";
 export const metadata: Metadata = defaultMetadata;
 
@@ -32,23 +29,22 @@ export default function RootLayout({
           fontMono.variable
         )}
       >
-        <StyledComponentsRegistry>
+    
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
         <NextTopLoader color="#ff3366" />
           <GoogleProvider>
             <QueryProvider>
-            <RouterProvider>
+
               <GlobalAlerts/>
               <GlobalModals/>
               {children}
-             </RouterProvider>
+         
               <TailwindIndicator />
               <Analytics />
             </QueryProvider>
           </GoogleProvider>
         </ThemeProvider>
         <Toaster />
-        </StyledComponentsRegistry>
       </body>
     </html>
   );
