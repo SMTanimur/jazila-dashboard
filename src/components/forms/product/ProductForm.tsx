@@ -15,15 +15,9 @@ import {
   IProduct,
   ITag,
   IType,
-  ImageInfo,
-  ProductStatus,
   ProductType,
-  VariationOption,
 } from "@/types";
-import { productValidationSchema } from "@/validations/product";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { cloneDeep, orderBy, sum } from "lodash";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -38,7 +32,11 @@ import {
   FormMessage,
   UncontrolledFormMessage,
 } from "../../ui/form";
-import { ProductTypeOption, getFormattedVariations, getProductDefaultValues, getProductInputValues } from "./form-utils";
+import {
+  ProductTypeOption,
+  getProductDefaultValues,
+  getProductInputValues,
+} from "./form-utils";
 import ProductCategoryInput from "./product-category-input";
 import ProductGroupInput from "./product-group-input";
 import ProductSimpleForm from "./product-simple-form";
@@ -46,22 +44,15 @@ import ProductTagInput from "./product-tag-input";
 import ProductTypeInput from "./product-type-input";
 import ProductVariableForm from "./product-variable-form";
 
-
-
 export type ProductFormValues = Omit<
   CreateProduct,
-  | 'type'
-  | 'shop_id'
-  | 'categories'
-  | 'tags'
+  "type" | "shop_id" | "categories" | "tags"
 > & {
-  type: Pick<IType, '_id' | 'name'>;
+  type: Pick<IType, "_id" | "name">;
   product_type: ProductTypeOption;
-  categories: Pick<ICategory, '_id' | 'name'>[];
-  tags: Pick<ITag, '_id' | 'name'>[];
+  categories: Pick<ICategory, "_id" | "name">[];
+  tags: Pick<ITag, "_id" | "name">[];
 };
-
-
 
 interface ProductFormProps {
   initialValues?: IProduct | null;
@@ -108,24 +99,30 @@ const ProductForm = ({
     );
   };
   const productForm = useForm<ProductFormValues>({
-    resolver: zodResolver(productValidationSchema),
+    // resolver: zodResolver(productValidationSchema),
     shouldUnregister: true,
     //@ts-ignore
-    defaultValues: getProductDefaultValues(initialValues!)
+    defaultValues: getProductDefaultValues(initialValues!),
   });
 
-  console.log(productForm.watch("gallery"), "galleryfd");
- console.log(productForm.watch("variations"), "variationfd");
+  console.log(productForm.watch("categories"), "galleryfd");
+  console.log(productForm.watch("variations"), "variationfd");
   const onSubmit = async (values: ProductFormValues) => {
-    console.log(values,"values")
-    const inputValues:CreateProduct = {
+    console.log(values, "values");
+    const inputValues: CreateProduct = {
       ...getProductInputValues(values, initialValues),
     };
-    
+
     if (initialValues) {
-      attemptProductUpdate(inputValues);
+      attemptProductUpdate({
+        ...inputValues,
+        shop: shopId,
+      });
     } else {
-      attemptProductCreate(inputValues);
+      attemptProductCreate({
+        ...inputValues,
+        shop: shopId,
+      });
     }
   };
   const productTypeValue = productForm.watch("product_type");

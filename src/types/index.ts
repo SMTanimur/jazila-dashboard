@@ -346,7 +346,7 @@ export interface IProduct {
   length?: string;
   width?: string;
   price: number;
-  quantity?: number;
+  quantity: number;
   unit?: string;
   created_at: string;
   updated_at: string;
@@ -399,7 +399,7 @@ export interface CreateProduct {
   height?: string;
   length?: string;
   width?: string;
-  shop_id?: string;
+  shop?: string;
 }
 export declare type AttributeProductPivot = {
   _id: Scalars["ID"];

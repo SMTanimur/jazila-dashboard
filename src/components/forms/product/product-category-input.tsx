@@ -23,10 +23,10 @@ const ProductCategoryInput = ({ control, setValue }: Props) => {
     control,
   });
   useEffect(() => {
-    if (type?._id && dirtyFields?.type) {
+    if (type?._id && dirtyFields?.type?._id) {
       setValue('categories', []);
     }
-  }, [dirtyFields?.type, setValue, type?._id]);
+  }, [dirtyFields?.type?._id, setValue, type?._id]);
 
   const { data, isLoading: loading } = useGetAllCategoriesQuery({
     limit: 999,

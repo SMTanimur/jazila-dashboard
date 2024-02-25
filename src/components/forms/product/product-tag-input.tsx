@@ -23,7 +23,7 @@ const ProductTagInput = ({ control, setValue }: Props) => {
     control,
   });
   useEffect(() => {
-    if (type?._id && dirtyFields?.type) {
+    if (type?._id && dirtyFields?.type?._id) {
       setValue("tags", []);
     }
   }, [type?._id]);

@@ -99,7 +99,7 @@ export function getProductDefaultValues(
       tags: [],
       in_stock: true,
       is_taxable: false,
-      image: [],
+      image: null,
       gallery: [],
       // isVariation: false,
       variations: [],
