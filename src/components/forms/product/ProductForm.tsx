@@ -105,8 +105,6 @@ const ProductForm = ({
     defaultValues: getProductDefaultValues(initialValues!),
   });
 
-  console.log(productForm.watch("categories"), "galleryfd");
-  console.log(productForm.watch("variations"), "variationfd");
   const onSubmit = async (values: ProductFormValues) => {
     console.log(values, "values");
     const inputValues: CreateProduct = {
