@@ -5,15 +5,16 @@ import { useGetTagsQuery } from "@/hooks/tag/useGetTags";
 import { Label } from "@/components/ui/label";
 import SelectInput from "@/components/ui/select-input";
 import { ProductFormValues } from "./ProductForm";
-
+import { UncontrolledFormMessage } from '@/components/ui/form';
 
 
 interface Props {
   control: Control<ProductFormValues>;
   setValue: any;
+  error: string | undefined;
 }
 
-const ProductTagInput = ({ control, setValue }: Props) => {
+const ProductTagInput = ({ control, setValue,error }: Props) => {
 
   const type = useWatch({
     control,
@@ -46,6 +47,9 @@ const ProductTagInput = ({ control, setValue }: Props) => {
         options={data?.docs!}
         isLoading={loading}
       />
+      <UncontrolledFormMessage
+                      message={error}
+                    />
     </div>
   );
 };

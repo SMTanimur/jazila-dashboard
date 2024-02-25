@@ -179,6 +179,7 @@ export function getProductInputValues(
     type,
     quantity,
     image,
+    gallery,
     categories,
     tags,
     variation_options,
@@ -195,8 +196,8 @@ export function getProductInputValues(
     product_type: product_type?.value,
     categories: categories?.map((category) => category?._id),
     tags: tags?.map((tag) => tag?._id),
-    image: values?.image,
-    gallery: values.gallery,
+    image: image,
+    gallery: gallery,
     ...(product_type?.value === ProductType?.Simple && {
       quantity,
      

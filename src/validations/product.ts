@@ -42,7 +42,12 @@ const productValidationSchema = z.object({
     })
     .min(3),
   image: TImage,
-  gallary: TImage.array().optional(),
+  gallary: z.array(TImage).optional(),
+  unit:z.string({
+    required_error: "Unit is required",
+    invalid_type_error: "Unit must be a string",
+  
+  }).min(3),
   sku: z
     .string({
       required_error: "SKU is required",
@@ -50,39 +55,64 @@ const productValidationSchema = z.object({
     })
     .optional(),
   price: z.coerce
-  .number({
-    invalid_type_error: 'Price must be a number',
-    required_error: 'Price is required'
-  })
-  .nonnegative({
-    message: 'Price must be a postive number'
-  })
-  
-  .optional(),
-  sale_price:  z.coerce
-  .number({
-    invalid_type_error: 'Price must be a number',
-    required_error: 'Price is required'
-  })
-  .nonnegative({
-    message: 'Price must be a postive number'
-  })
-  
-  .optional(),
+    .number({
+      invalid_type_error: "Price must be a number",
+      required_error: "Price is required",
+    })
+    .nonnegative({
+      message: "Price must be a postive number",
+    }).optional(),
+  sale_price: z.coerce
+    .number({
+      invalid_type_error: "Price must be a number",
+      required_error: "Price is required",
+    })
+    .nonnegative({
+      message: "Price must be a postive number",
+    }).optional(),
 
-  quantity:  z.coerce
-  .number({
-    invalid_type_error: 'Quantity must be a number',
-    required_error: 'Quantity is required'
-  })
-  .nonnegative({
-    message: 'Quantity must be a postive number'
-  })
-  
-  .optional(),
+  quantity: z.coerce
+    .number({
+      invalid_type_error: "Quantity must be a number",
+      required_error: "Quantity is required",
+    })
+    .nonnegative({
+      message: "Quantity must be a postive number",
+    }).optional(),
 
- 
-  
+  categories:z.array(z.any()).nonempty({
+    message: "Category is required",
+  }),
+  type:z.any(),
+  tags:z.array(z.any()).optional(),
+  variations:z.array(z.any()),
+  variation_options:z.array(z.object({
+    price: z.coerce
+    .number({
+      invalid_type_error: "Price must be a number",
+      required_error: "Price is required",
+    })
+    .nonnegative({
+      message: "Price must be a postive number",
+    }),
+    sale_price: z.coerce
+    .number({
+      invalid_type_error: "Price must be a number",
+      required_error: "Price is required",
+    })
+    .nonnegative({
+      message: "Price must be a postive number",
+    }),
+    quantity: z.coerce
+    .number({
+      invalid_type_error: "Quantity must be a number",
+      required_error: "Quantity is required",
+    })
+    .nonnegative({
+      message: "Quantity must be a postive number",
+    }),
+   
+  }))
 });
 
 export { productValidationSchema };

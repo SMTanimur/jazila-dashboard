@@ -5,16 +5,15 @@ import { useGetAllCategoriesQuery } from '@/hooks/category/useGetAllCategories';
 import { Label } from '@/components/ui/label';
 import SelectInput from '@/components/ui/select-input';
 import { ProductFormValues } from './ProductForm';
-
-
-
+import { UncontrolledFormMessage } from '@/components/ui/form';
 
 interface Props {
   control: Control<ProductFormValues, any>;
   setValue: any;
+  error: string | undefined;
 }
 
-const ProductCategoryInput = ({ control, setValue }: Props) => {
+const ProductCategoryInput = ({ control, setValue ,error}: Props) => {
   const type = useWatch({
     control,
     name: 'type',
@@ -47,6 +46,9 @@ const ProductCategoryInput = ({ control, setValue }: Props) => {
         options={data?.docs!}
         isLoading={loading}
       />
+       <UncontrolledFormMessage
+                      message={error}
+                    />
     </div>
   );
 };

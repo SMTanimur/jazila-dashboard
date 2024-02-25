@@ -19,7 +19,7 @@ import {
 } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Card } from "../../ui/card";
@@ -43,6 +43,8 @@ import ProductSimpleForm from "./product-simple-form";
 import ProductTagInput from "./product-tag-input";
 import ProductTypeInput from "./product-type-input";
 import ProductVariableForm from "./product-variable-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { productValidationSchema } from "@/validations/product";
 
 export type ProductFormValues = Omit<
   CreateProduct,
@@ -99,12 +101,26 @@ const ProductForm = ({
     );
   };
   const productForm = useForm<ProductFormValues>({
-    // resolver: zodResolver(productValidationSchema),
+    resolver: zodResolver(productValidationSchema),
     shouldUnregister: true,
     //@ts-ignore
     defaultValues: getProductDefaultValues(initialValues!),
   });
 
+  const productTypeValue = productForm.watch("product_type");
+
+  useEffect(()=>{
+    if(productTypeValue?.value === ProductType.Simple){
+      productForm.unregister("variation_options")
+      productForm.unregister("variations")
+    }else{
+      productForm.unregister("sale_price")
+      productForm.unregister("price")
+      productForm.unregister("length")
+    }
+  },[])
+console.log(productForm.watch("quantity"),"productForm")
+console.log(productForm.watch("gallery"),"produc")
   const onSubmit = async (values: ProductFormValues) => {
     console.log(values, "values");
     const inputValues: CreateProduct = {
@@ -115,15 +131,21 @@ const ProductForm = ({
       attemptProductUpdate({
         ...inputValues,
         shop: shopId,
+        gallery:productForm.watch("gallery")
+        ? productForm.watch("gallery")
+        : values.gallery
       });
     } else {
       attemptProductCreate({
         ...inputValues,
+        gallery:productForm.watch("gallery")
+        ? productForm.watch("gallery")
+        : values.gallery,
         shop: shopId,
       });
     }
   };
-  const productTypeValue = productForm.watch("product_type");
+  
   return (
     <React.Fragment>
       <Form {...productForm}>
@@ -226,11 +248,13 @@ const ProductForm = ({
                 <ProductCategoryInput
                   control={productForm.control}
                   setValue={productForm.setValue}
+                  error={productForm.formState.errors?.categories?.message as string}
                 />
 
                 <ProductTagInput
                   control={productForm.control}
                   setValue={productForm.setValue}
+                  error={productForm.formState.errors?.tags?.message as string}
                 />
               </Card>
             </div>
