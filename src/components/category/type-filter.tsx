@@ -14,7 +14,7 @@ export default function TypeFilter({ onTypeFilter, className }: Props) {
 
 
   const { data, isLoading: loading } = useGetAllTypesQuery({limit:100});
-  console.log('TYPES', data);
+
 
   return (
     <div className={cn('flex w-full', className)}>

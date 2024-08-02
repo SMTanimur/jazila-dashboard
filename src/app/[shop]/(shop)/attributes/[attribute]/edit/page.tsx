@@ -14,7 +14,6 @@ type Params ={
   }
 }
 const AttributeCreatePage = ({params:{shop,attribute}}:Params) => {
-  console.log(shop)
   const {data,isLoading}=useAttributeQuery(attribute as string)
 
 if(isLoading) return <Loader  text='Loading'/>

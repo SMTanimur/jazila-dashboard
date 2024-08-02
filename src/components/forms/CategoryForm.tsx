@@ -114,8 +114,6 @@ const CategoryForm = ({ initialValues }: CategoryFormProps) => {
       : defaultValues,
   });
 
-  console.log(categoryForm.getValues("image"))
-
   const { data, isLoading } = useGetAllTypesQuery({limit:100});
 
   const {

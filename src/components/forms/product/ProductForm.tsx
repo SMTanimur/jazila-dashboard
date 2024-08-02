@@ -119,10 +119,8 @@ const ProductForm = ({
       productForm.unregister("length")
     }
   },[])
-console.log(productForm.watch("quantity"),"productForm")
-console.log(productForm.watch("gallery"),"produc")
+
   const onSubmit = async (values: ProductFormValues) => {
-    console.log(values, "values");
     const inputValues: CreateProduct = {
       ...getProductInputValues(values, initialValues),
     };

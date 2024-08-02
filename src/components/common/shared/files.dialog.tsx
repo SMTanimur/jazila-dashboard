@@ -199,7 +199,6 @@ export default function FilesDialog<TFieldValues extends FieldValues>({
               onClick={async () => {
                 let images = [];
                 images = files.map((file) => file.img_id);
-                console.log(images, "images");
                 await deleteAllImages({ public_id: images });
                 setFiles(null);
               }}

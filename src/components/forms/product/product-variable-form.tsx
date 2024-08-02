@@ -40,7 +40,6 @@ export default function ProductVariableForm({
   });
 
   const variations = productForm.watch("variations");
-  console.log(variations, "variations")
   const cartesianProduct = getCartesianProduct(
     productForm.getValues("variations")
   );
