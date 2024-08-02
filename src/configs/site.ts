@@ -65,17 +65,6 @@ export const siteConfig = {
       title: "Credits",
       items: [
         {
-          title: "Acme Corp",
-          href: "https://acme-corp.jumr.dev",
-          external: true,
-        },
-       
-        {
-          title: "Taxonomy",
-          href: "https://tx.shadcn.com/",
-          external: true,
-        },
-        {
           title: "shadcn/ui",
           href: "https://ui.shadcn.com",
           external: true,
