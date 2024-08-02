@@ -20,7 +20,7 @@ export function ShopSidebarMobile({
   ...props
 }: SidebarMobileProps) {
   const pathname = usePathname();
-  console.log(shop)
+
 
   if (!dashboardConfig.sidebarNav?.length) return null;
 

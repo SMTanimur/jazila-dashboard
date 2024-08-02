@@ -57,7 +57,7 @@ export default function ProductVariableForm({
             <CardHeader>Option</CardHeader>
             <div>
               {fields?.map((field: any, index: number) => {
-                console.log(productForm.watch(`variations[${index}].attribute`)?.values,"val")
+               
                 return (
                   <div
                     key={field.id}

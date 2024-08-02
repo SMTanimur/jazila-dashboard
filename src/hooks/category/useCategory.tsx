@@ -29,7 +29,6 @@ export function useCategory() {
   } = useMutation(categoryClient.deleteCategory);
 
   const attemptCategoryCreate = async (data: TCategory) => {
-    console.log(data);
     toast.promise(categoryCreateMutation(data), {
       loading: 'creating...',
       success: data => {

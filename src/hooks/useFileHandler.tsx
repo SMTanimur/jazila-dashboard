@@ -26,7 +26,6 @@ export const useFileHandler = <T extends unknown>(
     event: React.ChangeEvent<HTMLInputElement>,
     callback?: (file?: IImage) => void
   ) => {
-    console.log(event);
     if (!event.target.files) return;
     if (event.target.files.length + (imageFile as IImage[]).length > 5) {
       return toast.error('Maximum of 5 photos per post allowed.');

@@ -19,7 +19,6 @@ export const questionClient = {
   questionReply:async ({variables:{id,answer}}: AnswerQuestion) => {
 
     const responst = await HttpClient.put<{ message: string }>(`/questions/${id}`, answer);
-   console.log(responst,'response');
     return responst
   },
 
